@@ -18,7 +18,7 @@ private val retrofit = Retrofit.Builder()
 
 interface LoginApiService {
     @POST("login")
-    fun userLogin(
+    suspend fun userLogin(
         @Query("email")email: String,
         @Query("haslo")password: String) : Response<AuthResponse>
 }

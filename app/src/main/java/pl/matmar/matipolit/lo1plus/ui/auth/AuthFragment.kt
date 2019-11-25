@@ -44,9 +44,9 @@ class AuthFragment : Fragment() {
         })
 
         viewModel.onSuccessEvent.observe(this, Observer {
-            if(!it.isNullOrEmpty()) {
+            if(it!=null) {
                 progressSpinner.hide()
-                context?.toast(it)
+                context?.toast(it.userID!!)
                 viewModel.onSuccessEventFinished()
             }
         })

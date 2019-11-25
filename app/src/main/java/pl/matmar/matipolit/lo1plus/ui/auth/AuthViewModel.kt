@@ -7,7 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import pl.matmar.matipolit.lo1plus.data.network.AuthResponse
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
+import pl.matmar.matipolit.lo1plus.utils.Coroutines
 import timber.log.Timber
 
 class AuthViewModel : ViewModel(){
@@ -29,8 +31,8 @@ class AuthViewModel : ViewModel(){
     val onStartedEvent : LiveData<Boolean>
         get() = _onStartedEvent
 
-    private val _onSuccessEvent = MutableLiveData<String>()
-    val onSuccessEvent : LiveData<String>
+    private val _onSuccessEvent = MutableLiveData<AuthResponse>()
+    val onSuccessEvent : LiveData<AuthResponse>
         get() = _onSuccessEvent
 
     private val _onFailureEvent = MutableLiveData<Boolean>()
@@ -63,7 +65,9 @@ class AuthViewModel : ViewModel(){
 
         viewModelScope.launch {
             val loginResponse = UserRepository().userLogin(email.value!!, password.value!!)
-            _onSuccessEvent.value = loginResponse.value
+            if (loginResponse.isSuccessful) {
+                _onSuccessEvent.value = loginResponse.body()
+            }
         }
 
 
