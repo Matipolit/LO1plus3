@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LO1+</string>
+    <string name="login_email_hint">E-mail</string>
+    <string name="login_password_hint">Hasło</string>
+    <string name="login_agreement">Logując się akceptujesz politykę prywatności</string>
+    <string name="login_button">Zaloguj się</string>
+</resources>
