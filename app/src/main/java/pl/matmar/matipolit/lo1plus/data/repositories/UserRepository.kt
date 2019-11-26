@@ -19,8 +19,8 @@ class UserRepository {
             }
         }
          */
-        withContext(Dispatchers.Main){
-            val x = LoginApi.retrofitService.userLogin(email, password)
+        withContext(Dispatchers.IO){
+            loginResponse = LoginApi.login.userLogin(email, password)
         }
         return loginResponse
     }

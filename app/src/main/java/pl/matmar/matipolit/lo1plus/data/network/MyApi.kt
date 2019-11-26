@@ -24,7 +24,8 @@ interface LoginApiService {
 }
 
 object LoginApi {
-    val retrofitService: LoginApiService by lazy {
+    /*val retrofitService: LoginApiService by lazy {
         retrofit.create(LoginApiService::class.java)
-    }
+    }*/
+    val login = retrofit.create(LoginApiService::class.java)
 }
