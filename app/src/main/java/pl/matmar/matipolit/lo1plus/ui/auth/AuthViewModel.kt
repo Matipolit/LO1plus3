@@ -1,22 +1,24 @@
 package pl.matmar.matipolit.lo1plus.ui.auth
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import pl.matmar.matipolit.lo1plus.data.database.getDatabase
 import pl.matmar.matipolit.lo1plus.data.network.AuthResponse
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
 import timber.log.Timber
 
-class AuthViewModel : ViewModel(){
+class AuthViewModel(application: Application) : AndroidViewModel(application){
     //For coroutines
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val database = getDatabase(application)
+    private val repository = UserRepository(database)
 
     val _email = MutableLiveData<String>()
     val email : LiveData<String>
@@ -59,14 +61,14 @@ class AuthViewModel : ViewModel(){
         _onStartedEvent.value = true
         if (email.value.isNullOrEmpty() || password.value.isNullOrEmpty()){
             //TODO: implement error message
-            _onFailureEvent.value = "Email or password cannot be empty"
+            _onFailureEvent.value = "E-mail lub hasło nie mogą być puste"
 
             return
         }
 
         viewModelScope.launch {
             try{
-                val loginResponse = UserRepository().userLogin(email.value!!, password.value!!)
+                val loginResponse = repository.userLogin(email.value!!, password.value!!)
                 Timber.d("Got the response from repository")
                 if(loginResponse.correct=="true"){
                     _onSuccessEvent.value = loginResponse
@@ -79,7 +81,7 @@ class AuthViewModel : ViewModel(){
                 _onFailureEvent.value = e.message
                 return@launch
             }
-            _onFailureEvent.value = "No errors but nothing happened"
+            _onFailureEvent.value = "Błąd logowania"
         }
 
 
@@ -88,5 +90,16 @@ class AuthViewModel : ViewModel(){
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    //factory
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return AuthViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
+        }
     }
 }

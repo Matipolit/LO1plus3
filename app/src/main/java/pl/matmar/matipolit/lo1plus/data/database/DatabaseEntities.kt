@@ -7,9 +7,10 @@ const val CURRENT_USERDB_ID = 0
 
 @Entity
 data class User(
-    var userID: Int? = null,
+    var userID: String? = null,
     var admin: Boolean? = null,
-    var obiadyAdmin: Boolean? = null
+    var obiadyAdmin: Boolean? = null,
+    var email: String?
 ){
     @PrimaryKey(autoGenerate = false)
     var databaseId: Int = CURRENT_USERDB_ID
