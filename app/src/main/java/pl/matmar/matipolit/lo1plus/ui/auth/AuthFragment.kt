@@ -46,15 +46,15 @@ class AuthFragment : Fragment() {
         viewModel.onSuccessEvent.observe(this, Observer {
             if(it!=null) {
                 progressSpinner.hide()
-                context?.toast(it.correct.toString())
+                context?.toast(it.correct)
                 viewModel.onSuccessEventFinished()
             }
         })
 
         viewModel.onFailureEvent.observe(this, Observer {
-            if(it) {
+            if(it!=null) {
                 progressSpinner.hide()
-                context?.toast("Login failure")
+                context?.toast(it)
                 viewModel.onFailureEventFinished()
             }
         })

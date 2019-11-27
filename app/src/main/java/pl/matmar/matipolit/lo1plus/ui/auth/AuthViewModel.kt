@@ -9,6 +9,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.matmar.matipolit.lo1plus.data.network.AuthResponse
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
+import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
 import timber.log.Timber
 
@@ -35,8 +36,8 @@ class AuthViewModel : ViewModel(){
     val onSuccessEvent : LiveData<AuthResponse>
         get() = _onSuccessEvent
 
-    private val _onFailureEvent = MutableLiveData<Boolean>()
-    val onFailureEvent : LiveData<Boolean>
+    private val _onFailureEvent = MutableLiveData<String>()
+    val onFailureEvent : LiveData<String>
         get() = _onFailureEvent
 
     //Event functions
@@ -50,7 +51,7 @@ class AuthViewModel : ViewModel(){
     }
 
     fun onFailureEventFinished(){
-        _onFailureEvent.value = false
+        _onFailureEvent.value = null
     }
 
     fun onLoginButtonClick(){
@@ -58,16 +59,27 @@ class AuthViewModel : ViewModel(){
         _onStartedEvent.value = true
         if (email.value.isNullOrEmpty() || password.value.isNullOrEmpty()){
             //TODO: implement error message
-            _onFailureEvent.value = true
+            _onFailureEvent.value = "Email or password cannot be empty"
 
             return
         }
 
         viewModelScope.launch {
-            val loginResponse = UserRepository().userLogin(email.value!!, password.value!!)
-            if (loginResponse.isSuccessful) {
-                _onSuccessEvent.value = loginResponse.body()
+            try{
+                val loginResponse = UserRepository().userLogin(email.value!!, password.value!!)
+                Timber.d("Got the response from repository")
+                if(loginResponse.correct=="true"){
+                    _onSuccessEvent.value = loginResponse
+                    return@launch
+                }else{
+                    _onFailureEvent.value = loginResponse.info
+                    return@launch
+                }
+            }catch (e: ApiException){
+                _onFailureEvent.value = e.message
+                return@launch
             }
+            _onFailureEvent.value = "No errors but nothing happened"
         }
 
 
