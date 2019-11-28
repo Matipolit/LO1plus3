@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.data.database.UserDatabase
 import pl.matmar.matipolit.lo1plus.databinding.AuthFragmentBinding
 import pl.matmar.matipolit.lo1plus.utils.hide
@@ -37,6 +40,13 @@ class AuthFragment : Fragment() {
         val progressSpinner = binding.progressSpinner
 
         //observers
+
+        viewModel.user.observe(this, Observer {
+            Timber.d("user changed")
+            it?.let {
+                this.findNavController().navigate(R.id.action_authFragment_to_homeFragment)
+            }
+        })
 
         viewModel.onStartedEvent.observe(this, Observer {
             Timber.d("onStartedEvent")

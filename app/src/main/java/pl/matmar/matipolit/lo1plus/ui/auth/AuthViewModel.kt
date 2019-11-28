@@ -20,6 +20,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application){
     private val database = getDatabase(application)
     private val repository = UserRepository(database)
 
+    //Livedata
     val _email = MutableLiveData<String>()
     val email : LiveData<String>
         get() = _email
@@ -27,6 +28,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application){
     val _password = MutableLiveData<String>()
     val password : LiveData<String>
         get() = _password
+
+    val user = repository.user
 
     //Events
 
@@ -60,7 +63,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application){
         Timber.d("Login click")
         _onStartedEvent.value = true
         if (email.value.isNullOrEmpty() || password.value.isNullOrEmpty()){
-            //TODO: implement error message
             _onFailureEvent.value = "E-mail lub hasło nie mogą być puste"
 
             return

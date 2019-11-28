@@ -1,5 +1,6 @@
 package pl.matmar.matipolit.lo1plus.data.repositories
 
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pl.matmar.matipolit.lo1plus.data.database.User
@@ -28,16 +29,23 @@ class UserRepository(private val database: UserDatabase) : SafeApiRequest(){
             loginResponse = apiRequest{LoginApi.login.userLogin(email, password)}
         }
         if(loginResponse.correct.equals("true")){
-            val user = User(loginResponse.userID, loginResponse.admin, loginResponse.obiadyAdmin)
-            saveUser()
+            val user = User(loginResponse.userID, loginResponse.admin, loginResponse.obiadyAdmin, email)
+            withContext(Dispatchers.IO){
+                saveUser(user)
+            }
             return loginResponse
         }else{
             loginResponse.info?.let {
                 throw ApiException(loginResponse.info!!)
             }
+            if(loginResponse.correct.equals("notLO1")){
+                throw ApiException("Nie jesteś uczniem LO1")
+            }
             throw ApiException("Zły email lub hasło")
         }
     }
+
+    val user: LiveData<User> = database.userDao.getUser()
 
     private suspend fun saveUser(user: User) = database.userDao.upsert(user)
 }
