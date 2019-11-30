@@ -9,7 +9,6 @@ import pl.matmar.matipolit.lo1plus.data.network.AuthResponse
 import pl.matmar.matipolit.lo1plus.data.network.LoginApi
 import pl.matmar.matipolit.lo1plus.data.network.SafeApiRequest
 import pl.matmar.matipolit.lo1plus.utils.ApiException
-import retrofit2.Response
 
 class UserRepository(private val database: UserDatabase) : SafeApiRequest(){
     suspend fun userLogin(email: String, password: String) : AuthResponse {

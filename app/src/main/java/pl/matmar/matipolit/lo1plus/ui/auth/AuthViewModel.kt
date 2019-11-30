@@ -10,7 +10,7 @@ import pl.matmar.matipolit.lo1plus.data.database.getDatabase
 import pl.matmar.matipolit.lo1plus.data.network.AuthResponse
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.utils.ApiException
-import pl.matmar.matipolit.lo1plus.utils.Coroutines
+import pl.matmar.matipolit.lo1plus.utils.NoInternetException
 import timber.log.Timber
 
 class AuthViewModel(application: Application) : AndroidViewModel(application){
@@ -82,6 +82,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application){
             }catch (e: ApiException){
                 _onFailureEvent.value = e.message
                 return@launch
+            }catch (e: NoInternetException){
+                _onFailureEvent.value = e.message
             }
             _onFailureEvent.value = "Błąd logowania"
         }

@@ -9,22 +9,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.POST
 import retrofit2.http.Query
 
+val okHttpClient = OkHttpClient.Builder()
+    .addInterceptor(getInterceptor(context))
+    .build()
+
 private val retrofit = Retrofit.Builder()
     .client(okHttpClient)
     .baseUrl(BASE_URL)
     .addConverterFactory(GsonConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .build()
-
-val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(networkConnectionInterceptor)
-    .build()
-
-lateinit var networkConnectionInterceptor : NetworkConnectionInterceptor
-
-fun setInterceptor(mNetworkConnectionInterceptor: NetworkConnectionInterceptor){
-    networkConnectionInterceptor = mNetworkConnectionInterceptor
-}
 
 interface LoginApiService {
     @POST("login")
