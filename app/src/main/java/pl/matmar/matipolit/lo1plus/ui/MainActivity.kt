@@ -1,7 +1,7 @@
 package pl.matmar.matipolit.lo1plus.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import pl.matmar.matipolit.lo1plus.R
 
 class MainActivity : AppCompatActivity() {

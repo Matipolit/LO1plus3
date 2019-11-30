@@ -7,22 +7,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.R
-import pl.matmar.matipolit.lo1plus.data.database.UserDatabase
 import pl.matmar.matipolit.lo1plus.databinding.AuthFragmentBinding
 import pl.matmar.matipolit.lo1plus.utils.hide
 import pl.matmar.matipolit.lo1plus.utils.show
 import pl.matmar.matipolit.lo1plus.utils.snackbar
-import pl.matmar.matipolit.lo1plus.utils.toast
 import timber.log.Timber
 
-class AuthFragment : Fragment() {
 
+class AuthFragment : Fragment(), KodeinAware {
+
+    override val kodein by kodein()
+    private val factory: AuthViewModelFactory by instance()
     private val viewModel: AuthViewModel by lazy {
         val activity = requireNotNull(this.activity){}
-        ViewModelProviders.of(this, AuthViewModel.Factory(activity.application))
+        ViewModelProviders.of(this, factory)
             .get(AuthViewModel::class.java)
     }
 

@@ -1,24 +1,24 @@
 package pl.matmar.matipolit.lo1plus.ui.auth
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import pl.matmar.matipolit.lo1plus.data.database.getDatabase
 import pl.matmar.matipolit.lo1plus.data.network.AuthResponse
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.NoInternetException
 import timber.log.Timber
 
-class AuthViewModel(application: Application) : AndroidViewModel(application){
+class AuthViewModel(mRepository: UserRepository) : ViewModel(){
+
+    val repository = mRepository
     //For coroutines
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-    private val database = getDatabase(application)
-    private val repository = UserRepository(database)
 
     //Livedata
     val _email = MutableLiveData<String>()
@@ -94,16 +94,5 @@ class AuthViewModel(application: Application) : AndroidViewModel(application){
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
-    }
-
-    //factory
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return AuthViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
     }
 }

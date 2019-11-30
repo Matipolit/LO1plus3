@@ -3,14 +3,15 @@ package pl.matmar.matipolit.lo1plus.data.repositories
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import pl.matmar.matipolit.lo1plus.data.database.LO1Database
 import pl.matmar.matipolit.lo1plus.data.database.User
-import pl.matmar.matipolit.lo1plus.data.database.UserDatabase
 import pl.matmar.matipolit.lo1plus.data.network.AuthResponse
-import pl.matmar.matipolit.lo1plus.data.network.LoginApi
+import pl.matmar.matipolit.lo1plus.data.network.MyApi
 import pl.matmar.matipolit.lo1plus.data.network.SafeApiRequest
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 
-class UserRepository(private val database: UserDatabase) : SafeApiRequest(){
+class UserRepository(private val api: MyApi,
+                     private val database: LO1Database) : SafeApiRequest(){
     suspend fun userLogin(email: String, password: String) : AuthResponse {
         lateinit var loginResponse: AuthResponse
         /*withContext(Dispatchers.Main){
@@ -25,7 +26,7 @@ class UserRepository(private val database: UserDatabase) : SafeApiRequest(){
          */
         withContext(Dispatchers.IO){
             //loginResponse = LoginApi.login.userLogin(email, password)
-            loginResponse = apiRequest{LoginApi.login.userLogin(email, password)}
+            loginResponse = apiRequest{api.userLogin(email, password)}
         }
         if(loginResponse.correct.equals("true")){
             val user = User(loginResponse.userID, loginResponse.admin, loginResponse.obiadyAdmin, email)

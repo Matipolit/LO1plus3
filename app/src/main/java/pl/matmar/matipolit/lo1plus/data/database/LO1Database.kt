@@ -4,6 +4,31 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+@Database(
+    entities = [User::class],
+    version = 2
+)
+
+abstract class LO1Database : RoomDatabase() {
+
+    abstract val userDao : UserDao
+    companion object{
+        @Volatile
+        private var INSTANCE : LO1Database? = null
+        private val LOCK = Any()
+        operator fun invoke(context: Context) = INSTANCE ?: synchronized(LOCK) {
+            INSTANCE ?: buildDatabase(context).also {
+                INSTANCE = it
+            }
+        }
+        private fun buildDatabase(context: Context) =
+            Room.databaseBuilder(context.applicationContext,
+                LO1Database::class.java,
+                "user").build()
+    }
+}
+
+
 @Dao
 interface UserDao{
 
@@ -15,14 +40,7 @@ interface UserDao{
     fun getUser() : LiveData<User>
 }
 
-@Database(
-    entities = [User::class],
-    version = 2
-)
-abstract class UserDatabase : RoomDatabase() {
-    abstract val userDao: UserDao
-}
-private lateinit var INSTANCE: UserDatabase
+/*private lateinit var INSTANCE: UserDatabase
 
 fun getDatabase(context: Context): UserDatabase {
     synchronized(UserDatabase::class.java) {
@@ -33,4 +51,4 @@ fun getDatabase(context: Context): UserDatabase {
         }
     }
     return INSTANCE
-}
+}*/
