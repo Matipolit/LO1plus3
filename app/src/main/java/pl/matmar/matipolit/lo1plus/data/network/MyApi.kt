@@ -1,9 +1,8 @@
 package pl.matmar.matipolit.lo1plus.data.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import okhttp3.ResponseBody
+import okhttp3.OkHttpClient
 import pl.matmar.matipolit.lo1plus.utils.BASE_URL
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,10 +10,21 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 private val retrofit = Retrofit.Builder()
+    .client(okHttpClient)
     .baseUrl(BASE_URL)
     .addConverterFactory(GsonConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .build()
+
+val okHttpClient = OkHttpClient.Builder()
+    .addInterceptor(networkConnectionInterceptor)
+    .build()
+
+lateinit var networkConnectionInterceptor : NetworkConnectionInterceptor
+
+fun setInterceptor(mNetworkConnectionInterceptor: NetworkConnectionInterceptor){
+    networkConnectionInterceptor = mNetworkConnectionInterceptor
+}
 
 interface LoginApiService {
     @POST("login")
