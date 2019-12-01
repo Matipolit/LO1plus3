@@ -17,4 +17,8 @@
         android:id="@+id/homeFragment"
         android:name="pl.matmar.matipolit.lo1plus.ui.home.HomeFragment"
         android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/gradesFragment"
+        android:name="pl.matmar.matipolit.lo1plus.ui.grades.GradesFragment"
+        android:label="GradesFragment" />
 </navigation>

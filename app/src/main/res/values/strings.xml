@@ -4,4 +4,7 @@
     <string name="login_password_hint">Hasło</string>
     <string name="login_agreement">Logując się akceptujesz politykę prywatności</string>
     <string name="login_button">Zaloguj się</string>
+    <string name="drawer_menu_settings_item">Ustawienia</string>
+    <string name="drawer_menu_home_item">Home</string>
+    <string name="drawer_menu_grades_item">Oceny</string>
 </resources>
