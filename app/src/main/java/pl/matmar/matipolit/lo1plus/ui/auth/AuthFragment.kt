@@ -49,6 +49,7 @@ class AuthFragment : Fragment(), KodeinAware {
             it?.let {
                 val navController = this.findNavController()
                 navController.navigate(R.id.action_authFragment_to_homeFragment)
+
             }
         })
 

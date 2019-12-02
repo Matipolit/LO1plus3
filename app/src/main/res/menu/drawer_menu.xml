@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:title="@string/drawer_menu_home_item"
-        android:id="@+id/home_item"/>
+        android:id="@+id/homeFragment"/>
 
     <item
         android:title="@string/drawer_menu_grades_item"
-        android:id="@+id/grades_item"/>
+        android:id="@+id/gradesFragment"/>
 
 </menu>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -23,9 +24,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
+        val topLevelDestinations = setOf(R.id.homeFragment,
+            R.id.gradesFragment)
+
+        val appBarConfiguration = AppBarConfiguration.Builder(topLevelDestinations)
+            .setDrawerLayout(binding.drawerLayout)
+            .build()
+
         val navController = findNavController(R.id.navHost_fragment)
         setSupportActionBar(binding.mainToolbar)
-        setupActionBarWithNavController(navController, binding.drawerLayout)
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.navView.setupWithNavController(navController)
     }
