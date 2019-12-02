@@ -13,6 +13,7 @@ import pl.matmar.matipolit.lo1plus.data.network.MyApi
 import pl.matmar.matipolit.lo1plus.data.network.NetworkConnectionInterceptor
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.ui.auth.AuthViewModelFactory
+import pl.matmar.matipolit.lo1plus.ui.home.HomeViewModelFactory
 import timber.log.Timber
 
 class LO1App : Application(), KodeinAware {
@@ -32,5 +33,6 @@ class LO1App : Application(), KodeinAware {
             bind() from singleton { UserRepository(instance(), instance()) }
 
             bind() from provider { AuthViewModelFactory(instance()) }
+            bind() from provider { HomeViewModelFactory(instance()) }
         }
 }

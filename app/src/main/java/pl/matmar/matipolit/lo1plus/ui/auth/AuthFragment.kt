@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -20,6 +21,8 @@ import timber.log.Timber
 
 
 class AuthFragment : Fragment(), KodeinAware {
+
+    lateinit var navController: NavController
 
     override val kodein by kodein()
     private val factory: AuthViewModelFactory by instance()
@@ -37,17 +40,24 @@ class AuthFragment : Fragment(), KodeinAware {
         val binding = AuthFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        navController = this.findNavController()
+
+
+
 
         //views
 
         val progressSpinner = binding.progressSpinner
+
+        binding.agreementText.setOnClickListener(View.OnClickListener {
+            privacyTextClick()
+        })
 
         //observers
 
         viewModel.user.observe(this, Observer {
             Timber.d("user changed")
             it?.let {
-                val navController = this.findNavController()
                 navController.navigate(R.id.action_authFragment_to_homeFragment)
 
             }
@@ -83,5 +93,9 @@ class AuthFragment : Fragment(), KodeinAware {
         })
 
         return binding.root
+    }
+    fun privacyTextClick(){
+        Timber.d("PrivacyTextClick")
+        navController.navigate(R.id.privacyPolicy_endpoint)
     }
 }

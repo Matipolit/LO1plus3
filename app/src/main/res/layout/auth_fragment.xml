@@ -6,6 +6,9 @@
         <variable
             name="viewModel"
             type="pl.matmar.matipolit.lo1plus.ui.auth.AuthViewModel" />
+        <variable
+            name="fragment"
+            type="pl.matmar.matipolit.lo1plus.ui.auth.AuthFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,9 +68,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:text="@string/login_agreement"
+            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:focusable="true" />
 
         <ProgressBar
             android:id="@+id/progress_spinner"
