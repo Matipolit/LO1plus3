@@ -1,5 +1,7 @@
 package pl.matmar.matipolit.lo1plus.data.network
 
+import org.json.JSONObject
+
 data class AuthResponse(
     val correct : String,
     val home: HomeResponse?,
@@ -18,5 +20,6 @@ data class HomeResponse(
     val obiady: String?,
     val ogloszenia: String?,
     val terminySprawdzianow: String?,
-    val godziny: String?
-)
+    val godziny: JSONObject?
+){
+}

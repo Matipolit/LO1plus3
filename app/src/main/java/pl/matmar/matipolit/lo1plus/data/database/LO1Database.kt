@@ -40,6 +40,13 @@ interface UserDao{
     fun getUser() : LiveData<User>
 }
 
+@Dao
+interface HomeDao{
+
+    @Insert
+    fun saveHome(cards: List<Pair<String, String>>)
+}
+
 /*private lateinit var INSTANCE: UserDatabase
 
 fun getDatabase(context: Context): UserDatabase {
