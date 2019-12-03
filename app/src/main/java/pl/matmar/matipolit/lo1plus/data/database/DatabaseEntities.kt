@@ -15,3 +15,10 @@ data class User(
     @PrimaryKey(autoGenerate = false)
     var databaseId: Int = CURRENT_USERDB_ID
 }
+
+/*@Entity
+data class Card(
+    @PrimaryKey(autoGenerate = false)
+    var name: String? = null,
+    var content: String? = null
+)*/
