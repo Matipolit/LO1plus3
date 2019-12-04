@@ -3,4 +3,18 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!-- HOME CARDS -->
+    <color name="colorSN">#4DAC59</color>
+    <color name="colorPlanLekcji">#76b5e5</color>
+    <color name="colorOstatnieOceny">#8d5ee5</color>
+    <color name="colorWiadomosci">#D0A714</color>
+    <color name="colorObiady">#e56462</color>
+    <color name="colorOgloszenia">#e18722</color>
+    <color name="colorTerminySprawdzianow">#b7476b</color>
+    <color name="godzinyColor">#4DAC59</color>
+    <color name="colorWakacje">#643CA0</color>
+    <color name="colorRowery">(#1B4993</color>
+    <color name="colorDniWolne">#16b89b</color>
+    <color name="colorNieobecnosci">#2B67B8</color>
 </resources>

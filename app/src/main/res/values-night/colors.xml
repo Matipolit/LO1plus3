@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- HOME CARDS -->
+    <color name="colorSN">#4DAC59</color>
+    <color name="colorPlanLekcji">#4E8DBD</color>
+    <color name="colorOstatnieOceny">#6536BD</color>
+    <color name="colorWiadomosci">#A87F00</color>
+    <color name="colorObiady">#BD3C3A</color>
+    <color name="colorOgloszenia">#B95F00</color>
+    <color name="colorTerminySprawdzianow">#8B2047</color>
+    <color name="godzinyColor">#258431</color>
+    <color name="colorWakacje">#3C1478</color>
+    <color name="colorRowery">#00216B</color>
+    <color name="colorDniWolne">#16b89b</color>
+    <color name="colorNieobecnosci">#2B67B8</color>
+</resources>
