@@ -12,6 +12,7 @@ import androidx.room.*
 abstract class LO1Database : RoomDatabase() {
 
     abstract val userDao : UserDao
+    abstract val homeDao: HomeDao
     companion object{
         @Volatile
         private var INSTANCE : LO1Database? = null
@@ -49,7 +50,7 @@ interface HomeDao{
     @Query("SELECT * FROM home WHERE databaseId = $CURRENT_HOMEDB_ID")
     fun getHome(): LiveData<Home>
 
-
+    //TODO add a way to save and retrieve cardlist
 
 }
 

@@ -29,3 +29,5 @@ data class Home(
     @PrimaryKey(autoGenerate = false)
     var databaseId: Int = CURRENT_HOMEDB_ID
 }
+
+//TODO add cardlist
