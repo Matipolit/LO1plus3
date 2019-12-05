@@ -56,8 +56,8 @@ data class GodzinyJSON(
                 godzinyGodziny.add(godzinaGodzina)
 
             }
-            var jutroTimeArray = jutroTime.split(":")
-            var jutroObject = Jutro(jutro, jutroDataObj, jutroName,
+            val jutroTimeArray = jutroTime.split(":")
+            val jutroObject = Jutro(jutro, jutroDataObj, jutroName,
                 Date(jutroDataObj.year, jutroDataObj.month, jutroDataObj.day,
                     jutroTimeArray[1].toInt(), jutroTimeArray[0].toInt()))
             return Godziny(godzinyGodziny, jutroObject, dzwonekDelay, dzisiejszaData)
@@ -76,7 +76,7 @@ data class Tag(var tag: Char?, var start: Int, var end: Int)
 //EXTENSION FUNCTIONS
 
 fun String.format(): SpannableStringBuilder{
-    var tagi = ArrayList<Tag>()
+    val tagi = ArrayList<Tag>()
     var i = 0
     while (i < this.length - 1) {
         if (this[i] == '<') {
@@ -123,4 +123,12 @@ fun String.toDate() : Date{
     val dateStringArray = this.split(".")
     return Date(dateStringArray[2].toInt(),
         dateStringArray[1].toInt(), dateStringArray[0].toInt())
+}
+
+fun String.toCardType(): Int{
+    return STANDARD_CARD_LIST.indexOf(this)
+}
+
+fun Int.toCardName(): String{
+    return STANDARD_CARD_LIST[this]
 }

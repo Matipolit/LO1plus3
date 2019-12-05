@@ -26,7 +26,15 @@ interface MyApi{
     @POST("login")
     suspend fun userLogin(
         @Query("email")email: String,
-        @Query("haslo")password: String) : Response<AuthResponse>
+        @Query("haslo")password: String
+    ) : Response<AuthResponse>
+
+    @POST("home")
+    suspend fun home(
+        @Query("userID")userID: String,
+        @Query("json")json: String
+    ) : Response<HomeResponse>
+
 
     companion object{
         operator fun invoke(networkConnectionInterceptor: NetworkConnectionInterceptor) : MyApi{

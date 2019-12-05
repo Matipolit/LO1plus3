@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Database(
-    entities = [User::class],
-    version = 2
+    entities = [User::class, Home::class],
+    version = 3
 )
 
 abstract class LO1Database : RoomDatabase() {
@@ -43,8 +43,14 @@ interface UserDao{
 @Dao
 interface HomeDao{
 
-    @Insert
-    fun saveHome(cards: List<Pair<String, String>>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveHome(home: Home)
+
+    @Query("SELECT * FROM home WHERE databaseId = $CURRENT_HOMEDB_ID")
+    fun getHome(): LiveData<Home>
+
+
+
 }
 
 /*private lateinit var INSTANCE: UserDatabase

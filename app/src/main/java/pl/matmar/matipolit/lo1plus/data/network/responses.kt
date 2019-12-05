@@ -14,13 +14,15 @@ data class AuthResponse(
 )
 
 data class HomeResponse(
-    val correct: String?,
+    val correct: String,
+    val info: String?,
     val planLekcji: String?,
     val ostatnieOceny: String?,
     val wiadomosci: String?,
     val obiady: String?,
     val ogloszenia: String?,
     val terminySprawdzianow: String?,
-    val godziny: GodzinyJSON
+    val najblizszeDniWolne: String?,
+    val godziny: String?
 )
 
