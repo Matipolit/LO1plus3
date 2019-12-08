@@ -1,6 +1,6 @@
 package pl.matmar.matipolit.lo1plus.data.repositories
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pl.matmar.matipolit.lo1plus.data.database.Home
@@ -14,8 +14,14 @@ import pl.matmar.matipolit.lo1plus.utils.ApiException
 class HomeRepository(private val api: MyApi,
                      private val database: LO1Database
 ) : SafeApiRequest(){
+    private val home = MutableLiveData<Home>()
+
+    init {
+
+    }
+
+
     suspend fun homeResponse() : HomeResponse{
-        lateinit var homeResponse: HomeResponse
         /*withContext(Dispatchers.Main){
             try{
                 val response: ResponseBody = LoginApi.retrofitService.userLogin(email, password).await()
@@ -48,8 +54,7 @@ class HomeRepository(private val api: MyApi,
             throw ApiException("Zły email lub hasło")
         }
     }
-    }
 
-    val home : LiveData<Home> = database.homeDao.getHome()
+    //val home : LiveData<Home> = database.homeDao.getHome()
 
 }
