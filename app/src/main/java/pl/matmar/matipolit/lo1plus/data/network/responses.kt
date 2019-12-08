@@ -23,6 +23,6 @@ data class HomeResponse(
     val ogloszenia: String?,
     val terminySprawdzianow: String?,
     val najblizszeDniWolne: String?,
-    val godziny: String?
+    val godziny: GodzinyJSON?
 )
 

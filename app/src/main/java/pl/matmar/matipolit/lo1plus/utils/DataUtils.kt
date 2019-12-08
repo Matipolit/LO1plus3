@@ -5,8 +5,15 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StrikethroughSpan
 import android.util.Log
+import androidx.room.TypeConverter
 import org.json.JSONObject
+import pl.matmar.matipolit.lo1plus.R
+import pl.matmar.matipolit.lo1plus.data.database.DatabaseCard
+import pl.matmar.matipolit.lo1plus.domain.HomeCard
 import java.util.*
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.memberProperties
+
 
 data class Godzina(
     val index: Int,
@@ -73,6 +80,15 @@ data class Godziny(
 data class Tag(var tag: Char?, var start: Int, var end: Int)
 
 
+@Suppress("UNCHECKED_CAST")
+fun <R> readInstanceProperty(instance: Any, propertyName: String): R {
+    val property = instance::class.memberProperties
+        // don't cast here to <Any, R>, it would succeed silently
+        .first { it.name == propertyName } as KProperty1<Any, *>
+    // force a invalid cast exception if incorrect type here
+    return property.get(instance) as R
+}
+
 //EXTENSION FUNCTIONS
 
 fun String.format(): SpannableStringBuilder{
@@ -126,9 +142,43 @@ fun String.toDate() : Date{
 }
 
 fun String.toCardType(): Int{
-    return STANDARD_CARD_LIST.indexOf(this)
+    return DEFAULT_CARD_LIST.indexOf(this)
 }
 
 fun Int.toCardName(): String{
-    return STANDARD_CARD_LIST[this]
+    return DEFAULT_CARD_LIST[this]
 }
+
+fun String.toCardRes(): Int?{
+    when(this){
+        "planLekcji" -> return R.drawable.ic_home_plan
+        "ostatnieOceny" -> return R.drawable.ic_home_grades
+        "wiadomosci" -> return R.drawable.ic_home_messages
+        "obiady" -> return R.drawable.ic_home_lunch
+        "ogloszenia" -> return R.drawable.ic_home_announcements
+        "terminySprawdzianow" -> return R.drawable.ic_home_test
+        "godziny" -> return R.drawable.ic_home_godziny
+        else -> return null
+    }
+}
+
+fun List<HomeCard>.asDatabaseModel(): Array<DatabaseCard> {
+    return map {
+        DatabaseCard(
+            name = it.title,
+            content = it.content
+        )
+    }.toTypedArray()
+}
+object DateConverter {
+    @TypeConverter
+    fun toDate(dateLong: Long): Date {
+        return Date(dateLong)
+    }
+
+    @TypeConverter
+    fun fromDate(date: Date): Long {
+        return date.time
+    }
+}
+

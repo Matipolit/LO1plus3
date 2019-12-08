@@ -3,17 +3,24 @@ package pl.matmar.matipolit.lo1plus.data.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+
 
 @Database(
-    entities = [User::class, Home::class],
-    version = 3
-)
-
+    entities = arrayOf(User::class, DatabaseCard::class, DatabaseGodziny::class), version = 3)
+//@TypeConverters(DateConverter::class)
 abstract class LO1Database : RoomDatabase() {
+
 
     abstract val userDao : UserDao
     abstract val homeDao: HomeDao
     companion object{
+
+        var MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) { // Since we didn't alter the table, there's nothing else to do here.
+            }
+        }
         @Volatile
         private var INSTANCE : LO1Database? = null
         private val LOCK = Any()
@@ -25,7 +32,9 @@ abstract class LO1Database : RoomDatabase() {
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context.applicationContext,
                 LO1Database::class.java,
-                "user").build()
+                "user")
+                .addMigrations(MIGRATION_2_3)
+                .build()
     }
 }
 
@@ -44,13 +53,17 @@ interface UserDao{
 @Dao
 interface HomeDao{
 
+    @Query("select * from databasecard")
+    fun getCards(): LiveData<List<DatabaseCard>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveHome(home: Home)
+    fun insertCards(vararg cards: DatabaseCard)
 
-    @Query("SELECT * FROM home WHERE databaseId = $CURRENT_HOMEDB_ID")
-    fun getHome(): LiveData<Home>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upsertGodziny(godziny: DatabaseGodziny)
 
-    //TODO add a way to save and retrieve cardlist
+    @Query("SELECT * FROM databasegodziny WHERE databaseId = $CURRENT_GODZINY_ID")
+    fun getGodziny() : LiveData<DatabaseGodziny>
 
 }
 

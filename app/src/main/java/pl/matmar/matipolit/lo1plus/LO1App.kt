@@ -32,7 +32,7 @@ class LO1App : Application(), KodeinAware {
             bind() from singleton { MyApi(instance()) }
             bind() from singleton { LO1Database(instance()) }
             bind() from singleton { UserRepository(instance(), instance()) }
-            bind() from singleton { HomeRepository()}
+            bind() from singleton { HomeRepository(instance(), instance())}
 
             bind() from provider { AuthViewModelFactory(instance()) }
             bind() from provider { HomeViewModelFactory(instance()) }
