@@ -14,6 +14,7 @@ import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.AuthFragmentBinding
+import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
 import pl.matmar.matipolit.lo1plus.utils.hide
 import pl.matmar.matipolit.lo1plus.utils.show
 import pl.matmar.matipolit.lo1plus.utils.snackbar
@@ -30,6 +31,11 @@ class AuthFragment : Fragment(), KodeinAware {
         val activity = requireNotNull(this.activity){}
         ViewModelProviders.of(this, factory)
             .get(AuthViewModel::class.java)
+    }
+
+    private val sharedViewModel: SharedViewModel by lazy{
+        ViewModelProviders.of(this)
+            .get(SharedViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -57,7 +63,8 @@ class AuthFragment : Fragment(), KodeinAware {
 
         viewModel.user.observe(this, Observer {
             Timber.d("user changed")
-            it?.userID.let {
+            it?.let {
+                sharedViewModel.setUser(it)
                 navController.navigate(R.id.action_authFragment_to_homeFragment)
 
             }

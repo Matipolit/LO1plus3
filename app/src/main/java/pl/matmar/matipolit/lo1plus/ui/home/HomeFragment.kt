@@ -11,6 +11,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.databinding.HomeFragmentBinding
+import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 
@@ -24,7 +25,10 @@ class HomeFragment : Fragment(), KodeinAware {
             .get(HomeViewModel::class.java)
     }
 
-    private val authViewModel =
+    private val sharedViewModel: SharedViewModel by lazy{
+        ViewModelProviders.of(this)
+            .get(SharedViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
