@@ -57,7 +57,7 @@ class AuthFragment : Fragment(), KodeinAware {
 
         viewModel.user.observe(this, Observer {
             Timber.d("user changed")
-            it?.let {
+            it?.userID.let {
                 navController.navigate(R.id.action_authFragment_to_homeFragment)
 
             }

@@ -24,6 +24,8 @@ class HomeFragment : Fragment(), KodeinAware {
             .get(HomeViewModel::class.java)
     }
 
+    private val authViewModel =
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
