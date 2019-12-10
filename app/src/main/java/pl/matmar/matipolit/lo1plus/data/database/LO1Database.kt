@@ -33,6 +33,7 @@ abstract class LO1Database : RoomDatabase() {
             Room.databaseBuilder(context.applicationContext,
                 LO1Database::class.java,
                 "user")
+                .allowMainThreadQueries()
                 .addMigrations(MIGRATION_2_3)
                 .build()
     }

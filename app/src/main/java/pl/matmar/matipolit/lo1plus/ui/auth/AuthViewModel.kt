@@ -63,9 +63,17 @@ class AuthViewModel(mRepository: UserRepository) : ViewModel(){
         Timber.d("Login click")
         _onStartedEvent.value = true
         if (email.value.isNullOrEmpty() || password.value.isNullOrEmpty()){
-            _onFailureEvent.value = "E-mail lub hasło nie mogą być puste"
-
-            return
+            if(email.value=="test"){
+                _email.value = "test@lo1plus.pl"
+                _password.value = "Szkolny!Bot1"
+            }else{
+                _onFailureEvent.value = "E-mail lub hasło nie mogą być puste"
+                return
+            }
+        }
+        if(email.value=="test"){
+            _email.value = "test@lo1plus.pl"
+            _password.value = "Szkolny!Bot1"
         }
 
         viewModelScope.launch {

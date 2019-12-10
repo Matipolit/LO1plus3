@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import pl.matmar.matipolit.lo1plus.data.database.User
 import pl.matmar.matipolit.lo1plus.data.repositories.HomeRepository
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.DEFAULT_CARD_LIST
@@ -20,7 +21,6 @@ class HomeViewModel(mRepository : HomeRepository) : ViewModel(){
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
     init {
         Timber.d("Init")
-        refreshHome()
     }
 
     val home = repository.home
@@ -49,7 +49,7 @@ class HomeViewModel(mRepository : HomeRepository) : ViewModel(){
         _onFailureEvent.value = null
     }
 
-    fun refreshHome(){
+    fun refreshHome(user: User?){
         viewModelScope.launch {
             try {
                 repository.refreshHome(DEFAULT_CARD_LIST)

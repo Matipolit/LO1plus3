@@ -15,8 +15,15 @@ import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 
+
 class HomeFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
+
+    private val sharedViewModel: SharedViewModel by lazy{
+        ViewModelProviders.of(this)
+            .get(SharedViewModel::class.java)
+    }
+
     private val factory: HomeViewModelFactory by instance()
 
     private val viewModel: HomeViewModel by lazy {
@@ -25,10 +32,6 @@ class HomeFragment : Fragment(), KodeinAware {
             .get(HomeViewModel::class.java)
     }
 
-    private val sharedViewModel: SharedViewModel by lazy{
-        ViewModelProviders.of(this)
-            .get(SharedViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +41,10 @@ class HomeFragment : Fragment(), KodeinAware {
         val binding = HomeFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
+        val user = sharedViewModel.user
+        Timber.d(user.value?.email)
+        viewModel.refreshHome(user.value)
 
         viewModel.home.observe(this, Observer {
             Timber.d("Home changed")

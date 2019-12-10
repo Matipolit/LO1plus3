@@ -27,8 +27,9 @@ class AuthFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
     private val factory: AuthViewModelFactory by instance()
+
     private val viewModel: AuthViewModel by lazy {
-        val activity = requireNotNull(this.activity){}
+        //val activity = requireNotNull(this.activity){}
         ViewModelProviders.of(this, factory)
             .get(AuthViewModel::class.java)
     }
@@ -65,6 +66,7 @@ class AuthFragment : Fragment(), KodeinAware {
             Timber.d("user changed")
             it?.let {
                 sharedViewModel.setUser(it)
+                Timber.d(sharedViewModel.user.value?.userID)
                 navController.navigate(R.id.action_authFragment_to_homeFragment)
 
             }
