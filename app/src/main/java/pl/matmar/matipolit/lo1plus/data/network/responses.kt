@@ -1,7 +1,5 @@
 package pl.matmar.matipolit.lo1plus.data.network
 
-import pl.matmar.matipolit.lo1plus.utils.GodzinyJSON
-
 
 data class AuthResponse(
     val correct : String,
@@ -23,6 +21,6 @@ data class HomeResponse(
     val ogloszenia: String?,
     val terminySprawdzianow: String?,
     val najblizszeDniWolne: String?,
-    val godziny: GodzinyJSON?
+    val godziny: String?
 )
 

@@ -92,7 +92,6 @@ class AuthViewModel(mRepository: UserRepository) : ViewModel(){
             }catch (e: NoInternetException){
                 _onFailureEvent.value = e.message
             }
-            _onFailureEvent.value = "Błąd logowania"
         }
 
 

@@ -22,40 +22,42 @@ class HomeRepository(private val api: MyApi,
                      private val database: LO1Database
 ) : SafeApiRequest() {
 
-    suspend fun refreshHome(_cardlist: List<String>?) {
-        val user = getUser()
-        val userID = user?.userID
-        userID?.let {
-            lateinit var cardlist: List<String>
-            _cardlist?.let {
-                cardlist = _cardlist
-            } ?: run {
-                cardlist = DEFAULT_CARD_LIST
-            }
-            lateinit var homeResponse: HomeResponse
-            val gson = Gson()
+    suspend fun refreshHome(_cardlist: List<String>?, _userId: String) {
+        //val user = getUser()
+        val userID = _userId
+        lateinit var cardlist: List<String>
+        _cardlist?.let {
+            cardlist = _cardlist
+        } ?: run {
+            cardlist = DEFAULT_CARD_LIST
+        }
+        Timber.d(cardlist.toString())
+        lateinit var homeResponse: HomeResponse
+        val gson = Gson()
 
-            withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
 
-                val cardJson = gson.toJson(cardlist)
-                Timber.d("user id: " + userID)
-                homeResponse = apiRequest { api.home(userID, cardJson) }
+            val cardJson = gson.toJson(cardlist)
+            homeResponse = apiRequest { api.home(userID, cardJson) }
 
-                if (homeResponse.correct == "true") {
-                    val cards = mutableListOf<HomeCard>()
-                    for (card in cardlist) {
-                        cards.add(readInstanceProperty(homeResponse, card))
-                    }
-                    saveHome(cards)
-                } else {
-                    homeResponse.info?.let {
-                        throw ApiException(homeResponse.info!!)
-                    }
-                    throw ApiException("Błąd w żądaniu na serwer")
+            if (homeResponse.correct == "true") {
+                val cards = mutableListOf<HomeCard>()
+                for (card in cardlist) {
+                    cards.add(HomeCard(card, readInstanceProperty(homeResponse, card)))
+                    //Timber.d("readInstanceProperty" + readInstanceProperty(homeResponse, card))
                 }
-
+                saveHome(cards)
+            } else {
+                homeResponse.info?.let {
+                    throw ApiException(homeResponse.info!!)
+                }
+                throw ApiException("Błąd w żądaniu na serwer")
             }
-        } ?: kotlin.run {
+
+        }
+
+        Timber.d("finished home refresh")
+        ?: kotlin.run {
             throw ApiException("Nie znaleziono danych użytkownika")
         }
 

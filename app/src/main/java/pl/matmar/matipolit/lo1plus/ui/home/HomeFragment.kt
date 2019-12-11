@@ -44,22 +44,30 @@ class HomeFragment : Fragment(), KodeinAware {
 
         val user = sharedViewModel.user
         Timber.d(user.value?.email)
-        viewModel.refreshHome(user.value)
 
         viewModel.home.observe(this, Observer {
             Timber.d("Home changed")
+            Timber.d(it.toString())
+        })
+
+        viewModel.user.observe(this, Observer {
+            Timber.d("user changed")
+            it?.let {
+                viewModel.refreshHome(it.userID!!)
+            }
         })
 
         viewModel.onSuccessEvent.observe(this, Observer {
             it?.let{
                 binding.root.snackbar(it, showButton = false)
+                viewModel.onSuccessEventFinished()
             }
-            viewModel.onSuccessEventFinished()
         })
 
         viewModel.onStartedEvent.observe(this, Observer {
             Timber.d("onStartedEvent")
-            if(it) {
+            if(it == true) {
+                Timber.d(it.toString())
                 //context?.toast("Login started")
                 binding.root.snackbar("Odświeżam...", showButton = false)
                 viewModel.onStartedEventFinished()

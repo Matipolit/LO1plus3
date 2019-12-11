@@ -29,7 +29,7 @@ abstract class SafeApiRequest {
                 }
                 message.append("\n")
             }
-            message.append("Error code: ${response.code()}")
+            message.append("Kod erroru: ${response.code()}")
             Timber.d("Appended message")
             throw ApiException(message.toString())
         }

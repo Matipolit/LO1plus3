@@ -35,7 +35,7 @@ class LO1App : Application(), KodeinAware {
             bind() from singleton { HomeRepository(instance(), instance())}
 
             bind() from provider { AuthViewModelFactory(instance()) }
-            bind() from provider { HomeViewModelFactory(instance()) }
+            bind() from provider { HomeViewModelFactory(instance(), instance()) }
             //bind() from factory {user: User -> HomeViewModelFactory(instance(), user)}
         }
 }
