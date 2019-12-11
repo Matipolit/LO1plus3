@@ -66,11 +66,16 @@ dependencies {
     kapt "androidx.room:room-compiler:2.2.2"
 
     //Android Navigation Architecture
-    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-rc02"
-    implementation "androidx.navigation:navigation-ui-ktx:2.2.0-rc02"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-rc03"
+    implementation "androidx.navigation:navigation-ui-ktx:2.2.0-rc03"
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.3.61'
+
+    //Groupie
+    implementation "com.xwray:groupie:2.7.0"
+    implementation "com.xwray:groupie-kotlin-android-extensions:2.7.0"
+    implementation "com.xwray:groupie-databinding:2.7.0"
 }

@@ -91,7 +91,7 @@ fun <R> readInstanceProperty(instance: Any, propertyName: String): R {
 
 //EXTENSION FUNCTIONS
 
-fun String.format(): SpannableStringBuilder{
+fun String.toFormattedSpannable(): SpannableStringBuilder{
     val tagi = ArrayList<Tag>()
     var i = 0
     while (i < this.length - 1) {
