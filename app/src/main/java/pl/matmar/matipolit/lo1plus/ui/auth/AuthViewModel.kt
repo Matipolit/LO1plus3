@@ -28,7 +28,6 @@ class AuthViewModel(mRepository: UserRepository) : ViewModel(){
     val _password = MutableLiveData<String>()
     val password : LiveData<String>
         get() = _password
-
     val user = repository.user
 
     //Events
