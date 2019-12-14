@@ -8,21 +8,26 @@
         <variable
             name="card"
             type="pl.matmar.matipolit.lo1plus.domain.HomeCard" />
-        <import type="String"/>
 
     </data>
     <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mtrl_card_spacing"
+        android:layout_marginTop="@dimen/mtrl_card_spacing"
+        android:layout_marginRight="@dimen/mtrl_card_spacing"
+        tools:cardBackgroundColor="@color/colorPlanLekcji">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon_image"
-                android:layout_width="22sp"
-                android:layout_height="22sp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_margin="@dimen/activity_horizontal_margin"
+                android:tint="@color/colorDarkOnLightHigh"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/ic_home_plan" />
@@ -34,6 +39,7 @@
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 android:text="@{card.title}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorDarkOnLightHigh"
                 app:layout_constraintStart_toEndOf="@+id/icon_image"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Plan" />
@@ -43,11 +49,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="@{String.forma}"
+                android:text="@{card.content}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/colorDarkOnLightMedium"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_text"
-                tools:text="12.11.2019 - DZIŚ\n1. fizyka 2f2, sala 210\n2.<b> biologia </b>\n<i>(przeniesiona z lekcji 7, 06.06.2018)</i>" />
+                tools:text="12.11.2019 - DZIŚ\n1. fizyka 2f2, sala 210\n2. biologia \n(przeniesiona z lekcji 7, 06.06.2018)" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

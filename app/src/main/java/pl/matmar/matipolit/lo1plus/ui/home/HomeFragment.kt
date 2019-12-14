@@ -7,11 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import kotlinx.android.synthetic.main.home_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.databinding.HomeFragmentBinding
 import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
+import pl.matmar.matipolit.lo1plus.utils.Coroutines
+import pl.matmar.matipolit.lo1plus.utils.asHomeCardItem
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 
@@ -83,5 +89,29 @@ class HomeFragment : Fragment(), KodeinAware {
             }
         })
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        bindUI()
+    }
+
+    private fun bindUI() = Coroutines.main {
+        viewModel.home.observe(this, Observer {
+            it?.let {
+                initRecyclerView(it.asHomeCardItem())
+            }
+        })
+    }
+
+    private fun initRecyclerView(homeCardItems: List<HomeCardItem>) {
+        val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
+            addAll(homeCardItems)
+        }
+
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
     }
 }

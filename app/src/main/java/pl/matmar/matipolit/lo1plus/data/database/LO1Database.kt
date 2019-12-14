@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 
 @Database(
-    entities = arrayOf(User::class, DatabaseCard::class, DatabaseGodziny::class), version = 3)
+    entities = arrayOf(User::class, DatabaseCard::class, DatabaseGodziny::class), version = 3, exportSchema = false)
 //@TypeConverters(DateConverter::class)
 abstract class LO1Database : RoomDatabase() {
 

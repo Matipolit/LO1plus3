@@ -17,4 +17,11 @@
     <color name="colorRowery">#1B4993</color>
     <color name="colorDniWolne">#16b89b</color>
     <color name="colorNieobecnosci">#2B67B8</color>
+
+    <!-- TEXT -->
+    <color name="colorDarkOnLightHigh">#DE000000</color>
+    <color name="colorDarkOnLightMedium">#99000000</color>
+    <color name="colorDarkOnLightDisabled">#61000000</color>
+
+
 </resources>

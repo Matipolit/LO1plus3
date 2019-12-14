@@ -10,6 +10,7 @@ import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseCard
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
+import pl.matmar.matipolit.lo1plus.ui.home.HomeCardItem
 import java.util.*
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
@@ -170,6 +171,11 @@ fun List<HomeCard>.asDatabaseModel(): Array<DatabaseCard> {
         )
     }.toTypedArray()
 }
+
+fun List<HomeCard>.asHomeCardItem() : List<HomeCardItem> = this.map{
+    HomeCardItem(it)
+}
+
 object DateConverter {
     @TypeConverter
     fun toDate(dateLong: Long): Date {

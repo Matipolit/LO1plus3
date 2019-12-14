@@ -28,7 +28,6 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
     }
 
     val home = repository.home
-    val uer = userRepository.user
     val testString = "wiadomosci"
     private val _onStartedEvent = MutableLiveData<Boolean>()
     val onStartedEvent : LiveData<Boolean>
