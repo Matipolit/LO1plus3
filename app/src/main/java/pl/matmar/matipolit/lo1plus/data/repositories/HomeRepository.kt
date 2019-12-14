@@ -12,10 +12,7 @@ import pl.matmar.matipolit.lo1plus.data.network.HomeResponse
 import pl.matmar.matipolit.lo1plus.data.network.MyApi
 import pl.matmar.matipolit.lo1plus.data.network.SafeApiRequest
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
-import pl.matmar.matipolit.lo1plus.utils.ApiException
-import pl.matmar.matipolit.lo1plus.utils.DEFAULT_CARD_LIST
-import pl.matmar.matipolit.lo1plus.utils.asDatabaseModel
-import pl.matmar.matipolit.lo1plus.utils.readInstanceProperty
+import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
 
 class HomeRepository(private val api: MyApi,
@@ -43,8 +40,8 @@ class HomeRepository(private val api: MyApi,
             if (homeResponse.correct == "true") {
                 val cards = mutableListOf<HomeCard>()
                 for (card in cardlist) {
-                    cards.add(HomeCard(card, readInstanceProperty(homeResponse, card)))
-                    //Timber.d("readInstanceProperty" + readInstanceProperty(homeResponse, card))
+                    val content : String = readInstanceProperty(homeResponse, card)
+                    cards.add(HomeCard(card, content, card.toCardColorInt(), card.toCardIcon()))
                 }
                 saveHome(cards)
             } else {

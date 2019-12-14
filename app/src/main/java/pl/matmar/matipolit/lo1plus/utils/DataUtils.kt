@@ -150,17 +150,36 @@ fun Int.toCardName(): String{
     return DEFAULT_CARD_LIST[this]
 }
 
-fun String.toCardRes(): Int?{
-    when(this){
-        "planLekcji" -> return R.drawable.ic_home_plan
-        "ostatnieOceny" -> return R.drawable.ic_home_grades
-        "wiadomosci" -> return R.drawable.ic_home_messages
-        "obiady" -> return R.drawable.ic_home_lunch
-        "ogloszenia" -> return R.drawable.ic_home_announcements
-        "terminySprawdzianow" -> return R.drawable.ic_home_test
-        "godziny" -> return R.drawable.ic_home_godziny
-        else -> return null
+fun String.toCardIcon(): Int = when(this){
+        "planLekcji" -> R.drawable.ic_home_plan
+        "ostatnieOceny" -> R.drawable.ic_home_grades
+        "wiadomosci" -> R.drawable.ic_home_messages
+        "obiady" -> R.drawable.ic_home_lunch
+        "ogloszenia" -> R.drawable.ic_home_announcements
+        "terminySprawdzianow" -> R.drawable.ic_home_test
+        "godziny" -> R.drawable.ic_home_godziny
+        else -> R.drawable.ic_home_plan
     }
+
+
+fun String.toCardTitle(): String = when(this){
+    "planLekcji" -> "Plan lekcji"
+    "ostatnieOceny" -> "Ostatnie oceny"
+    "wiadomosci" -> "Wiadomości"
+    "obiady" -> "Obiady"
+    "ogloszenia" -> "Ogłoszenia"
+    "terminySprawdzianow" -> "Terminy sprawdzianów"
+    else -> "-"
+}
+
+fun String.toCardColorInt(): Int = when(this){
+    "planLekcji" -> R.color.colorPlanLekcji
+    "ostatnieOceny" -> R.color.colorOstatnieOceny
+    "wiadomosci" -> R.color.colorWiadomosci
+    "obiady" -> R.color.colorObiady
+    "ogloszenia" -> R.color.colorOgloszenia
+    "terminySprawdzianow" -> R.color.colorTerminySprawdzianow
+    else -> R.color.colorPlanLekcji
 }
 
 fun List<HomeCard>.asDatabaseModel(): Array<DatabaseCard> {

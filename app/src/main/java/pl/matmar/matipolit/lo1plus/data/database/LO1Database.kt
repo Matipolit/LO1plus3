@@ -54,7 +54,7 @@ interface UserDao{
 @Dao
 interface HomeDao{
 
-    @Query("select * from databasecard")
+    @Query("select * from databasecard WHERE content != 'n/a'")
     fun getCards(): LiveData<List<DatabaseCard>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

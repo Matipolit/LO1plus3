@@ -3,6 +3,9 @@ package pl.matmar.matipolit.lo1plus.data.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
+import pl.matmar.matipolit.lo1plus.utils.toCardColorInt
+import pl.matmar.matipolit.lo1plus.utils.toCardIcon
+import pl.matmar.matipolit.lo1plus.utils.toCardTitle
 import pl.matmar.matipolit.lo1plus.utils.toCardType
 
 const val CURRENT_USERDB_ID = 0
@@ -41,8 +44,10 @@ data class DatabaseCard(
 fun List<DatabaseCard>.asDomainModel(): List<HomeCard>{
     return map{
         HomeCard(
-            title = it.name,
-            content = it.content
+            title = it.name.toCardTitle(),
+            content = it.content,
+             color = it.name.toCardColorInt(),
+            icon = it.name.toCardIcon()
 
         )
     }

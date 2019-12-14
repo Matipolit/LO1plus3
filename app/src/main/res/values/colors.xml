@@ -23,5 +23,9 @@
     <color name="colorDarkOnLightMedium">#99000000</color>
     <color name="colorDarkOnLightDisabled">#61000000</color>
 
+    <color name="colorLightOnDarkHigh">#DEFFFFFF</color>
+    <color name="colorLightOnDarkMedium">#99FFFFFF</color>
+    <color name="colorLightOnDarkDisabled">#61FFFFFF</color>
+
 
 </resources>
