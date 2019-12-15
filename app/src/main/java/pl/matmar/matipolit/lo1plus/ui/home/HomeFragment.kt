@@ -63,6 +63,13 @@ class HomeFragment : Fragment(), KodeinAware {
             }
         })
 
+        viewModel.godziny.observe(this, Observer {
+            Timber.d("godziny changed")
+            it?.let {
+                Timber.d(it.godzinyObject.toString())
+            }
+        })
+
         viewModel.onSuccessEvent.observe(this, Observer {
             it?.let{
                 binding.root.snackbar(it, showButton = false)
@@ -95,6 +102,8 @@ class HomeFragment : Fragment(), KodeinAware {
         super.onActivityCreated(savedInstanceState)
         bindUI()
     }
+
+
 
     private fun bindUI() = Coroutines.main {
         viewModel.home.observe(this, Observer {

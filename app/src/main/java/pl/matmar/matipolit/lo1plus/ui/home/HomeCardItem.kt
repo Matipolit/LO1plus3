@@ -12,7 +12,6 @@ class HomeCardItem(
 
     override fun bind(viewBinding: CardLayoutBinding, position: Int) {
         viewBinding.card = homeCard
-        //TODO add color field to HomeCard
     }
 
 }

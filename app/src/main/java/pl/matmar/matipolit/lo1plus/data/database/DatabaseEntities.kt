@@ -2,14 +2,12 @@ package pl.matmar.matipolit.lo1plus.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
-import pl.matmar.matipolit.lo1plus.utils.toCardColorInt
-import pl.matmar.matipolit.lo1plus.utils.toCardIcon
-import pl.matmar.matipolit.lo1plus.utils.toCardTitle
-import pl.matmar.matipolit.lo1plus.utils.toCardType
+import pl.matmar.matipolit.lo1plus.utils.*
 
 const val CURRENT_USERDB_ID = 0
-const val CURRENT_GODZINY_ID = 0
+const val CURRENT_GODZINY_ID = 1
 
 @Entity
 data class User(
@@ -57,6 +55,7 @@ fun List<DatabaseCard>.asDomainModel(): List<HomeCard>{
 data class DatabaseGodziny(
     var godziny: String,
     var jutro: String,
+    val jutroTime: String,
     var jutroName: String,
     var jutroData: String,
     var dzwonekDelay: Int?,
@@ -66,4 +65,19 @@ data class DatabaseGodziny(
     var databaseId: Int = CURRENT_GODZINY_ID
 }
 
-//TODO add cardlist
+fun DatabaseGodziny.asGodzinyJSON(): GodzinyJSON?{
+    return(GodzinyJSON(JSONObject(godziny),jutro, jutroTime, jutroName, jutroData,
+        dzwonekDelay, data ))
+}
+
+fun JSONObject.asDatabaseGodziny() : DatabaseGodziny{
+    return DatabaseGodziny(
+        this.getString("godziny"),
+        this.optString("jutro"),
+        this.getString("jutroTime"),
+        this.getString("jutroName"),
+        this.optString("jutroData"),
+        this.optString("dzwonekDelay").toInt(),
+        this.optString("data")
+    )
+}

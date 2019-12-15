@@ -5,8 +5,8 @@ import androidx.lifecycle.Transformations
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import pl.matmar.matipolit.lo1plus.data.database.LO1Database
-import pl.matmar.matipolit.lo1plus.data.database.asDomainModel
+import org.json.JSONObject
+import pl.matmar.matipolit.lo1plus.data.database.*
 import pl.matmar.matipolit.lo1plus.data.network.HomeResponse
 import pl.matmar.matipolit.lo1plus.data.network.MyApi
 import pl.matmar.matipolit.lo1plus.data.network.SafeApiRequest
@@ -41,7 +41,12 @@ class HomeRepository(private val api: MyApi,
                     val cards = mutableListOf<HomeCard>()
                     for (card in cardlist) {
                         val content : String = readInstanceProperty(homeResponse, card)
-                        cards.add(HomeCard(card, content, card.toCardColorInt(), card.toCardIcon()))
+                        if(card!="godziny"){
+                            cards.add(HomeCard(card, content, card.toCardColorInt(), card.toCardIcon()))
+                        }else{
+                            Timber.d(content)
+                            saveGodziny(JSONObject(content).asDatabaseGodziny())
+                        }
                     }
                     saveHome(cards)
                 } else {
@@ -67,8 +72,17 @@ class HomeRepository(private val api: MyApi,
     private fun saveHome(home: List<HomeCard>) =
         database.homeDao.insertCards(*home.asDatabaseModel())
 
+    private fun saveGodziny(godziny: DatabaseGodziny) =
+        database.homeDao.upsertGodziny(godziny)
+
     val home: LiveData<List<HomeCard>> = Transformations.map(database.homeDao.getCards()) {
         it.asDomainModel()
+    }
+
+    val godziny: LiveData<GodzinyJSON> = Transformations.map(database.homeDao.getGodziny()) {
+        it?.let {
+            it.asGodzinyJSON()
+        }
     }
 
     private fun isFetchNeeded(): Boolean{

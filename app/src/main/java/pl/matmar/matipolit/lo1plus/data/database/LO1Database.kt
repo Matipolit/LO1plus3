@@ -63,7 +63,7 @@ interface HomeDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsertGodziny(godziny: DatabaseGodziny)
 
-    @Query("SELECT * FROM databasegodziny WHERE databaseId = $CURRENT_GODZINY_ID")
+    @Query("SELECT * FROM databasegodziny")
     fun getGodziny() : LiveData<DatabaseGodziny>
 
 }

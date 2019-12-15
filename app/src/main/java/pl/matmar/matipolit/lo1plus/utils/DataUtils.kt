@@ -18,9 +18,9 @@ import kotlin.reflect.full.memberProperties
 
 data class Godzina(
     val index: Int,
-    val startTime: Date,
-    val endTime: Date,
-    val name: String
+    val startTime: Date?,
+    val endTime: Date?,
+    val name: String?
 )
 
 data class Jutro(
@@ -36,12 +36,12 @@ data class GodzinyJSON(
     val jutroTime: String,
     val jutroName: String,
     val jutroData: String,
-    val dzwonekDelay: Int,
-    val data: String
+    val dzwonekDelay: Int?,
+    val data: String?
 ){
     val godzinyObject: Godziny
         get() {
-            val dzisiejszaData = data.toDate()
+            val dzisiejszaData = data?.toDate()
             val jutroDataObj = jutroData.toDate()
             val iter: Iterator<String> = godziny.keys()
             var index: Int
@@ -56,11 +56,18 @@ data class GodzinyJSON(
                 val startArray = startEnd.getString(0).split(":")
                 val endArray = startEnd.getString(1).split(":")
 
-                val godzinaGodzina = Godzina(sIndex.toInt(), Date(
-                    dzisiejszaData.year, dzisiejszaData.month,
-                    dzisiejszaData.day, startArray[0].toInt(), startArray[1].toInt()),
+                val godzinaStart = dzisiejszaData?.let {
+                    Date(
+                        dzisiejszaData.year, dzisiejszaData.month,
+                        dzisiejszaData.day, startArray[0].toInt(), startArray[1].toInt())
+                }
+
+                val godzinaEnd = dzisiejszaData?.let {
                     Date(dzisiejszaData.year, dzisiejszaData.month, dzisiejszaData.day,
-                        endArray[0].toInt(), endArray[1].toInt()), godzinaJSON.getString("name"))
+                        endArray[0].toInt(), endArray[1].toInt())
+                }
+                val godzinaGodzina = Godzina(sIndex.toInt(),godzinaStart, godzinaEnd
+                    ,godzinaJSON.getString("name"))
                 godzinyGodziny.add(godzinaGodzina)
 
             }
@@ -72,10 +79,10 @@ data class GodzinyJSON(
         }
 }
 data class Godziny(
-    var godzinyGodziny: List<Godzina>?,
+    var godzinyGodziny: List<Godzina?>?,
     var jutro: Jutro?,
     var dzwonekDelay: Int?,
-    var date: Date
+    var date: Date?
 )
 
 data class Tag(var tag: Char?, var start: Int, var end: Int)

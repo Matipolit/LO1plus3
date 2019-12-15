@@ -19,6 +19,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
     val userRepository = mUserRepository
 
     val user = userRepository.user
+    val godziny = repository.godziny
 
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
