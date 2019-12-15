@@ -3,22 +3,31 @@ package pl.matmar.matipolit.lo1plus.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import kotlinx.android.synthetic.main.activity_main.*
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.ActivityMainBinding
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    val topLevelDestinations = setOf(R.id.homeFragment,
-        R.id.gradesFragment)
+    private lateinit var navController: NavController
+    val topLevelDestinations = setOf(
+        R.id.homeFragment,
+        R.id.gradesFragment,
+        R.id.settingsFragment
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation() {
         val appBarConfiguration = getAppBarConfiguration(topLevelDestinations)
 
-        val navController = findNavController(R.id.navHost_fragment)
+        navController = findNavController(R.id.navHost_fragment)
         setSupportActionBar(binding.mainToolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -62,8 +71,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(
-            Navigation.findNavController(this, R.id.navHost_fragment),
-            getAppBarConfiguration(topLevelDestinations))
+        if(drawerLayout != null && topLevelDestinations.contains(navController.currentDestination?.id)){
+            Timber.d("Top level")
+            drawerLayout.openDrawer(GravityCompat.START)
+            return true
+        }else{
+            Timber.d("Lower level")
+            return NavigationUI.navigateUp(
+                Navigation.findNavController(this, R.id.navHost_fragment),
+                getAppBarConfiguration(topLevelDestinations))
+        }
+    }
+
+    override fun onBackPressed() {
+        if(topLevelDestinations.contains(navController.currentDestination?.id)){
+            ActivityCompat.finishAfterTransition(this)
+        }else{
+            super.onBackPressed()
+        }
     }
 }

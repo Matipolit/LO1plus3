@@ -26,4 +26,8 @@
         android:id="@+id/privacyPolicy_endpoint"
         app:action="android.intent.action.VIEW"
         app:data="@string/privacy_url"/>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="pl.matmar.matipolit.lo1plus.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

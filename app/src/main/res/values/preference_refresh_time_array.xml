@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="time_titles">
+        <item>zawsze</item>
+        <item>co 1 min</item>
+        <item>co 2 min</item>
+        <item>co 5 min</item>
+        <item>co 10 min</item>
+        <item>co 30 min</item>
+        <item>co 60 min</item>
+    </string-array>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:key="refresh_category"
+        app:title="Odświeżanie">
+        <ListPreference
+            android:key="refreshTime"
+            android:title="Odświeżaj automatycznie"
+            android:summary="Ilość czasu, po którym aplikacja będzie odświeżać się automatycznie"
+            android:entries="@array/time_titles"
+            android:entryValues="@array/time_values"/>
+
+        <SwitchPreferenceCompat
+            android:key="wifiRefresh"
+            android:title="Odświeżaj tylko przez wifi" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="frekwencja_category"
+        app:title="Frekwencja">
+
+        <SwitchPreferenceCompat
+            android:key="dontShowAttendance"
+            android:title="Nie pokazuj obecności"
+            android:summary="Pokazuje tylko wpisy inne niż obecność"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="account_category"
+        app:title="Konto">
+
+        <Preference
+            android:key="logout"
+            android:title="Wyloguj się"
+            android:summary="Wyloguj się z aplikacji LO1+"/>
+    </PreferenceCategory>
+
+
+
+</androidx.preference.PreferenceScreen>
