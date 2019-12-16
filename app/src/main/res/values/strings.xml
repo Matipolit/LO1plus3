@@ -8,4 +8,10 @@
     <string name="drawer_menu_settings_item">Ustawienia</string>
     <string name="drawer_menu_home_item">Home</string>
     <string name="drawer_menu_grades_item">Oceny</string>
+
+    <string name="godziny_after_lessons">Koniec lekcji na dzisiaj</string>
+    <string name="godziny_until_lesson_end">Do końca lekcji</string>
+    <string name="godziny_until_next_lesson">Kolejna lekcja</string>
+    <string name="godziny_before_day">Dzisiaj zaczynasz o</string>
+    <string name="godziny_until_day">Dzisiaj zaczynasz za</string>
 </resources>

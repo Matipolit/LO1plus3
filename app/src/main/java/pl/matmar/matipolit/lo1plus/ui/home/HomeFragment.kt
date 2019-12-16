@@ -17,6 +17,7 @@ import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.databinding.HomeFragmentBinding
 import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
+import pl.matmar.matipolit.lo1plus.utils.asGodzinyCardItem
 import pl.matmar.matipolit.lo1plus.utils.asHomeCardItem
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
@@ -25,7 +26,7 @@ import timber.log.Timber
 class HomeFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
 
-    private val sharedViewModel: SharedViewModel by lazy{
+    private val sharedViewModel: SharedViewModel by lazy {
         ViewModelProviders.of(this)
             .get(SharedViewModel::class.java)
     }
@@ -71,7 +72,7 @@ class HomeFragment : Fragment(), KodeinAware {
         })
 
         viewModel.onSuccessEvent.observe(this, Observer {
-            it?.let{
+            it?.let {
                 binding.root.snackbar(it, showButton = false)
                 viewModel.onSuccessEventFinished()
             }
@@ -79,7 +80,7 @@ class HomeFragment : Fragment(), KodeinAware {
 
         viewModel.onStartedEvent.observe(this, Observer {
             Timber.d("onStartedEvent")
-            if(it == true) {
+            if (it == true) {
                 Timber.d(it.toString())
                 //context?.toast("Login started")
                 binding.root.snackbar("Odświeżam...", showButton = false)
@@ -88,7 +89,7 @@ class HomeFragment : Fragment(), KodeinAware {
         })
 
         viewModel.onFailureEvent.observe(this, Observer {
-            if(it!=null) {
+            if (it != null) {
                 //context?.toast(it)
                 binding.root.snackbar(it, showButton = false)
 
@@ -104,23 +105,31 @@ class HomeFragment : Fragment(), KodeinAware {
     }
 
 
-
     private fun bindUI() = Coroutines.main {
         viewModel.home.observe(this, Observer {
             it?.let {
-                initRecyclerView(it.asHomeCardItem())
+                val homeCards = it
+                viewModel.godziny.observe(this, Observer {
+                    it?.let {
+                        initRecyclerView(homeCards.asHomeCardItem(), it.asGodzinyCardItem())
+                    }
+                })
             }
         })
     }
 
-    private fun initRecyclerView(homeCardItems: List<HomeCardItem>) {
+    private fun initRecyclerView(
+        homeCardItems: List<HomeCardItem>,
+        godzinyCardItem: GodzinyCardItem
+    ) {
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
             addAll(homeCardItems)
-        }
+            add(0, godzinyCardItem)
 
-        recycler_view.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = mAdapter
         }
-    }
+            recycler_view.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = mAdapter
+            }
+        }
 }

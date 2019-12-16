@@ -6,7 +6,7 @@ import pl.matmar.matipolit.lo1plus.databinding.CardLayoutBinding
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
 
 class HomeCardItem(
-    private val homeCard: HomeCard
+    val homeCard: HomeCard
 ) : BindableItem<CardLayoutBinding>(){
     override fun getLayout(): Int = R.layout.card_layout
 

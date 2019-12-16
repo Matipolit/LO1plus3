@@ -10,7 +10,9 @@ import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseCard
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
+import pl.matmar.matipolit.lo1plus.ui.home.GodzinyCardItem
 import pl.matmar.matipolit.lo1plus.ui.home.HomeCardItem
+import timber.log.Timber
 import java.util.*
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
@@ -59,7 +61,7 @@ data class GodzinyJSON(
                 val godzinaStart = dzisiejszaData?.let {
                     Date(
                         dzisiejszaData.year, dzisiejszaData.month,
-                        dzisiejszaData.day, startArray[0].toInt(), startArray[1].toInt())
+                        dzisiejszaData.day, startArray[0].toInt()-1, startArray[1].toInt()-1)
                 }
 
                 val godzinaEnd = dzisiejszaData?.let {
@@ -145,8 +147,11 @@ fun String.toFormattedSpannable(): SpannableStringBuilder{
 
 fun String.toDate() : Date{
     val dateStringArray = this.split(".")
-    return Date(dateStringArray[2].toInt(),
-        dateStringArray[1].toInt(), dateStringArray[0].toInt())
+    Timber.d("Date - array: " + dateStringArray.toString())
+    val date = Date(dateStringArray[2].toInt()-1900,
+        dateStringArray[1].toInt()-1, dateStringArray[0].toInt())
+    Timber.d("Date - converted: " + date)
+    return date
 }
 
 fun String.toCardType(): Int{
@@ -201,6 +206,8 @@ fun List<HomeCard>.asDatabaseModel(): Array<DatabaseCard> {
 fun List<HomeCard>.asHomeCardItem() : List<HomeCardItem> = this.map{
     HomeCardItem(it)
 }
+
+fun GodzinyJSON.asGodzinyCardItem() : GodzinyCardItem = GodzinyCardItem(this)
 
 object DateConverter {
     @TypeConverter
