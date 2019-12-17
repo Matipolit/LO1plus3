@@ -20,9 +20,9 @@ import kotlin.reflect.full.memberProperties
 
 data class Godzina(
     val index: Int,
-    val startTime: Date?,
-    val endTime: Date?,
-    val name: String?
+    val startTime: Date,
+    val endTime: Date,
+    val name: String
 )
 
 data class Jutro(
@@ -66,9 +66,9 @@ data class GodzinyJSON(
 
                 val godzinaEnd = dzisiejszaData?.let {
                     Date(dzisiejszaData.year, dzisiejszaData.month, dzisiejszaData.day,
-                        endArray[0].toInt(), endArray[1].toInt())
+                        endArray[0].toInt()-1, endArray[1].toInt()-1)
                 }
-                val godzinaGodzina = Godzina(sIndex.toInt(),godzinaStart, godzinaEnd
+                val godzinaGodzina = Godzina(sIndex.toInt(),godzinaStart!!, godzinaEnd!!
                     ,godzinaJSON.getString("name"))
                 godzinyGodziny.add(godzinaGodzina)
 
@@ -76,7 +76,7 @@ data class GodzinyJSON(
             val jutroTimeArray = jutroTime.split(":")
             val jutroObject = Jutro(jutro, jutroDataObj, jutroName,
                 Date(jutroDataObj.year, jutroDataObj.month, jutroDataObj.day,
-                    jutroTimeArray[1].toInt(), jutroTimeArray[0].toInt()))
+                    jutroTimeArray[1].toInt()-1, jutroTimeArray[0].toInt()-1))
             return Godziny(godzinyGodziny, jutroObject, dzwonekDelay, dzisiejszaData)
         }
 }
@@ -206,6 +206,8 @@ fun List<HomeCard>.asDatabaseModel(): Array<DatabaseCard> {
 fun List<HomeCard>.asHomeCardItem() : List<HomeCardItem> = this.map{
     HomeCardItem(it)
 }
+
+fun Date.toDateWithDelay(delay: Int) = Date(this.time - delay*1000)
 
 fun GodzinyJSON.asGodzinyCardItem() : GodzinyCardItem = GodzinyCardItem(this)
 

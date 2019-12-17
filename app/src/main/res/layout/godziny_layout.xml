@@ -10,6 +10,7 @@
             type="pl.matmar.matipolit.lo1plus.utils.GodzinyJSON" />
 
     </data>
+
     <com.google.android.material.card.MaterialCardView
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
@@ -18,15 +19,16 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         app:cardBackgroundColor="@color/godzinyColor">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/normal_margin">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon_image"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_margin="@dimen/activity_horizontal_margin"
                 android:src="@drawable/ic_home_godziny"
                 android:tint="@color/colorLightOnDarkHigh"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,36 +38,121 @@
                 android:id="@+id/title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="@{godziny.godzinyObject.dzwonekDelay.toString()}"
+                android:layout_marginStart="@dimen/normal_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorLightOnDarkHigh"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/icon_image"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="DzwonekDelay" />
+                tools:text="Kolejna lekcja" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/first_medium_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="@{godziny.godzinyObject.jutro.lessonName}"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorLightOnDarkMedium"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_text"
-                tools:text="data" />
+                tools:text="12:40 - 13:25" />
 
             <TextView
                 android:id="@+id/first_small_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorLightOnDarkMedium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/first_medium_text"
-                tools:text="TextView" />
+                tools:text="Matematyka" />
+
+            <TextView
+                android:id="@+id/timer_header_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorLightOnDarkMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/first_small_text"
+                tools:text="Do końca przerwy" />
+
+            <TextView
+                android:id="@+id/timer_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:countdown="@{godziny.godzinyObject}"
+                android:textColor="@color/colorLightOnDarkMedium"
+                android:textSize="@dimen/text_size_header_giant"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timer_header_text"
+                tools:text="6 min" />
+
+            <TextView
+                android:id="@+id/timer_subtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorLightOnDarkMedium"
+                android:text=""
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timer_text"
+                tools:text="Matematyka"
+                tools:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="@color/colorLightOnDarkMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:progress="25"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timer_text" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/second_medium_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorLightOnDarkMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressBar"
+                tools:text="Kolejna lekcja:"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/second_small_text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorLightOnDarkMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/second_medium_text"
+                tools:text="12:40 - 13:25"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/second_small_text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorLightOnDarkMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/second_small_text_1"
+                tools:text="Informatyka"
+                tools:visibility="gone" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

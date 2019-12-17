@@ -125,11 +125,12 @@ class HomeFragment : Fragment(), KodeinAware {
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
             addAll(homeCardItems)
             add(0, godzinyCardItem)
-
         }
             recycler_view.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = mAdapter
             }
+
         }
+
 }

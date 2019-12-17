@@ -42,6 +42,7 @@
                 android:text="@{card.title}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorLightOnDarkHigh"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/icon_image"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Plan" />

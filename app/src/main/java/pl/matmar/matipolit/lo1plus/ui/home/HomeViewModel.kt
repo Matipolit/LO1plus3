@@ -1,5 +1,6 @@
 package pl.matmar.matipolit.lo1plus.ui.home
 
+import android.os.CountDownTimer
 import android.text.format.DateUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,10 +12,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.matmar.matipolit.lo1plus.data.repositories.HomeRepository
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
-import pl.matmar.matipolit.lo1plus.utils.ApiException
-import pl.matmar.matipolit.lo1plus.utils.DEFAULT_CARD_LIST
-import pl.matmar.matipolit.lo1plus.utils.NoInternetException
+import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
+import java.util.*
 
 class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserRepository) : ViewModel(){
     val repository = mHomeRepository
@@ -26,6 +26,8 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
 
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    private lateinit var timer: CountDownTimer
 
     //for the godziny card
 
@@ -42,6 +44,10 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
     val currentTimeString = Transformations.map(currentTime) { time ->
         DateUtils.formatElapsedTime(time).split(":")[0] + " min" + DateUtils.formatElapsedTime(time).split(":")[1] + " s"
     }
+
+    private val _titleText = MutableLiveData<String>()
+    val titleText: LiveData<String>
+        get() = _titleText
 
 
     init {
@@ -86,6 +92,44 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                 _onFailureEvent.value = e.message
                 return@launch
             }
+        }
+    }
+
+    fun startTimer(godzinyJSON: GodzinyJSON){
+        var aktualnaLekcja : Godzina?= null
+        var przerwatime : Long? = null
+        var następnaLekcja : Godzina? = null
+        val godzinyObj = godzinyJSON.godzinyObject
+        val godzinyList = godzinyObj.godzinyGodziny
+        val dzwonekDelay = godzinyObj.dzwonekDelay
+        val jutro = godzinyObj.jutro
+        val date = godzinyObj.date
+        val currentDate = godzinyObj.dzwonekDelay?.let { Date().toDateWithDelay(it) }?: Date()
+        var i = 0
+        if(currentDate.time > godzinyObj.date?.time!! && currentDate.time < jutro?.date!!.time) {
+            if (godzinyList != null) {
+                for (godzina in godzinyList) {
+                    if (godzina != null) {
+                        if (godzina.startTime.before(currentDate) && godzina.endTime.after(currentDate)) {
+                            aktualnaLekcja = godzina
+                            break
+                        } else if (godzina.endTime.before(currentDate) && godzinyList.size == i){
+                            następnaLekcja = godzinyList[i+1]
+                            if (następnaLekcja != null) {
+                                przerwatime = następnaLekcja.startTime.time - godzina.endTime.time
+                                break
+                            }
+                        }
+
+                    }
+                    i++
+                }
+                if(aktualnaLekcja!=null){
+
+                }
+            }
+        }else{
+
         }
     }
 
