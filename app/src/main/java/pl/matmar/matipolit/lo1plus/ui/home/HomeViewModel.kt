@@ -1,7 +1,9 @@
 package pl.matmar.matipolit.lo1plus.ui.home
 
+import android.text.format.DateUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,15 +22,32 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
 
     val user = userRepository.user
     val godziny = repository.godziny
+    val home = repository.home
 
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-    init {
-        Timber.d("Init")
-        //refreshHome(user.value?.userID!!)
+
+    //for the godziny card
+
+    companion object {
+        // This is the number of milliseconds in a second
+        private const val ONE_SECOND = 1000L
     }
 
-    val home = repository.home
+
+    private val _currentTime = MutableLiveData<Long>()
+    val currentTime: LiveData<Long>
+        get() = _currentTime
+
+    val currentTimeString = Transformations.map(currentTime) { time ->
+        DateUtils.formatElapsedTime(time).split(":")[0] + " min" + DateUtils.formatElapsedTime(time).split(":")[1] + " s"
+    }
+
+
+    init {
+        Timber.d("Init")
+    }
+
     private val _onStartedEvent = MutableLiveData<Boolean>()
     val onStartedEvent : LiveData<Boolean>
         get() = _onStartedEvent
@@ -69,5 +88,6 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
             }
         }
     }
+
 
 }
