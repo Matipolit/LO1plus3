@@ -8,6 +8,9 @@
         <variable
             name="godziny"
             type="pl.matmar.matipolit.lo1plus.utils.GodzinyJSON" />
+        <variable
+            name="time"
+            type="String" />
 
     </data>
 
@@ -84,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:countdown="@{godziny.godzinyObject}"
+                app:text="@{time}"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:textSize="@dimen/text_size_header_giant"
                 android:textStyle="bold"

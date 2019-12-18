@@ -1,13 +1,12 @@
 package pl.matmar.matipolit.lo1plus.utils
 
-import android.os.CountDownTimer
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import timber.log.Timber
+import androidx.lifecycle.LiveData
 
 @BindingAdapter("countdown")
-fun TextView.setCountdown(godziny: Godziny) {
-    kotlin.run {
+fun TextView.setCountdown(timerData: LiveData<String>) {
+    /*kotlin.run {
         val countdownTime = (godziny.dzwonekDelay!!*1000).toLong()
         val ONE_SECOND = 1000L
         val timer: CountDownTimer
@@ -23,5 +22,6 @@ fun TextView.setCountdown(godziny: Godziny) {
             }
         }
         timer.start()
-    }
+    }*/
+    text = timerData.value
 }

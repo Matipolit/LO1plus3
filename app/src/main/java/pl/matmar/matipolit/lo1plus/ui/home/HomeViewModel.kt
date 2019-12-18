@@ -52,6 +52,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
 
     init {
         Timber.d("Init")
+        testTimer()
     }
 
     private val _onStartedEvent = MutableLiveData<Boolean>()
@@ -95,6 +96,33 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
         }
     }
 
+    private val _timerData = MutableLiveData<String>()
+    val timerData : LiveData<String>
+        get() = _timerData
+
+    fun testTimer(){
+        kotlin.run {
+            val countdownTime = (60*1000).toLong()
+            val ONE_SECOND = 1000L
+            timer = object : CountDownTimer(countdownTime, ONE_SECOND) {
+                override fun onFinish() {
+                    _timerData.value = "finish"
+                    Timber.d("finish")
+                }
+
+                override fun onTick(millisUntilFinished: Long) {
+                    _timerData.value = (millisUntilFinished/ONE_SECOND).toString()
+                    Timber.d("tick")
+                }
+            }
+            timer.start()
+        }
+    }
+
+    fun cancelTimer(){
+        timer.cancel()
+    }
+
     fun startTimer(godzinyJSON: GodzinyJSON){
         var aktualnaLekcja : Godzina?= null
         var przerwatime : Long? = null
@@ -133,5 +161,8 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
         }
     }
 
-
+    override fun onCleared() {
+        super.onCleared()
+        timer.cancel()
+    }
 }

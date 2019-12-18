@@ -209,7 +209,7 @@ fun List<HomeCard>.asHomeCardItem() : List<HomeCardItem> = this.map{
 
 fun Date.toDateWithDelay(delay: Int) = Date(this.time - delay*1000)
 
-fun GodzinyJSON.asGodzinyCardItem() : GodzinyCardItem = GodzinyCardItem(this)
+fun GodzinyJSON.asGodzinyCardItem(time : String) : GodzinyCardItem = GodzinyCardItem(this, time)
 
 object DateConverter {
     @TypeConverter

@@ -111,7 +111,7 @@ class HomeFragment : Fragment(), KodeinAware {
                 val homeCards = it
                 viewModel.godziny.observe(this, Observer {
                     it?.let {
-                        initRecyclerView(homeCards.asHomeCardItem(), it.asGodzinyCardItem())
+                        initRecyclerView(homeCards.asHomeCardItem(), it.asGodzinyCardItem(viewModel.timerData.value.toString()))
                     }
                 })
             }
@@ -130,7 +130,14 @@ class HomeFragment : Fragment(), KodeinAware {
                 layoutManager = LinearLayoutManager(context)
                 adapter = mAdapter
             }
+        viewModel.timerData.observe(this, Observer {
+            godzinyCardItem.notifyChanged(it)
+        })
 
         }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.cancelTimer()
+    }
 }
