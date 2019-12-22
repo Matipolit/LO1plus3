@@ -1,6 +1,5 @@
 package pl.matmar.matipolit.lo1plus.ui.home
 
-import android.os.CountDownTimer
 import android.text.format.DateUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,7 +26,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private lateinit var timer: CountDownTimer
+    private  var timer = Timer()
 
     //for the godziny card
 
@@ -52,7 +51,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
 
     init {
         Timber.d("Init")
-        testTimer()
+        //testTimer()
     }
 
     private val _onStartedEvent = MutableLiveData<Boolean>()
@@ -96,26 +95,54 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
         }
     }
 
-    private val _timerData = MutableLiveData<String>()
-    val timerData : LiveData<String>
+    private val _timerData = MutableLiveData<Date>()
+    val timerData : LiveData<Date>
         get() = _timerData
 
-    fun testTimer(){
+    fun testTimer(godzinyJSON: GodzinyJSON){
         kotlin.run {
-            val countdownTime = (60*1000).toLong()
-            val ONE_SECOND = 1000L
-            timer = object : CountDownTimer(countdownTime, ONE_SECOND) {
-                override fun onFinish() {
-                    _timerData.value = "finish"
-                    Timber.d("finish")
-                }
+            timer.schedule(object: TimerTask(){
+                override fun run() {
+                    _timerData.postValue(Date())
+                    Timber.d("timer tick")
+                    var aktualnaLekcja : Godzina?= null
+                    var przerwatime : Long? = null
+                    var następnaLekcja : Godzina? = null
+                    val godzinyObj = godzinyJSON.godzinyObject
+                    val godzinyList = godzinyObj.godzinyGodziny
+                    val dzwonekDelay = godzinyObj.dzwonekDelay
+                    val jutro = godzinyObj.jutro
+                    val date = godzinyObj.date
+                    val currentDate = godzinyObj.dzwonekDelay?.let { Date().toDateWithDelay(it) }?: Date()
+                    var i = 0
+                    if(currentDate.time > godzinyObj.date?.time!! && currentDate.time < jutro?.date!!.time) {
+                        if (godzinyList != null) {
+                            for (godzina in godzinyList) {
+                                if (godzina != null) {
+                                    if (godzina.startTime.before(currentDate) && godzina.endTime.after(currentDate)) {
+                                        aktualnaLekcja = godzina
+                                        break
+                                    } else if (godzina.endTime.before(currentDate) && godzinyList.size == i){
+                                        następnaLekcja = godzinyList[i+1]
+                                        if (następnaLekcja != null) {
+                                            przerwatime = następnaLekcja.startTime.time - godzina.endTime.time
+                                            break
+                                        }
+                                    }
 
-                override fun onTick(millisUntilFinished: Long) {
-                    _timerData.value = (millisUntilFinished/ONE_SECOND).toString()
-                    Timber.d("tick")
+                                }
+                                i++
+                            }
+                            if(aktualnaLekcja!=null){
+
+                            }
+                        }
+                    }else{
+
+                    }
+
                 }
-            }
-            timer.start()
+            },0, 1000)
         }
     }
 
@@ -123,43 +150,6 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
         timer.cancel()
     }
 
-    fun startTimer(godzinyJSON: GodzinyJSON){
-        var aktualnaLekcja : Godzina?= null
-        var przerwatime : Long? = null
-        var następnaLekcja : Godzina? = null
-        val godzinyObj = godzinyJSON.godzinyObject
-        val godzinyList = godzinyObj.godzinyGodziny
-        val dzwonekDelay = godzinyObj.dzwonekDelay
-        val jutro = godzinyObj.jutro
-        val date = godzinyObj.date
-        val currentDate = godzinyObj.dzwonekDelay?.let { Date().toDateWithDelay(it) }?: Date()
-        var i = 0
-        if(currentDate.time > godzinyObj.date?.time!! && currentDate.time < jutro?.date!!.time) {
-            if (godzinyList != null) {
-                for (godzina in godzinyList) {
-                    if (godzina != null) {
-                        if (godzina.startTime.before(currentDate) && godzina.endTime.after(currentDate)) {
-                            aktualnaLekcja = godzina
-                            break
-                        } else if (godzina.endTime.before(currentDate) && godzinyList.size == i){
-                            następnaLekcja = godzinyList[i+1]
-                            if (następnaLekcja != null) {
-                                przerwatime = następnaLekcja.startTime.time - godzina.endTime.time
-                                break
-                            }
-                        }
-
-                    }
-                    i++
-                }
-                if(aktualnaLekcja!=null){
-
-                }
-            }
-        }else{
-
-        }
-    }
 
     override fun onCleared() {
         super.onCleared()

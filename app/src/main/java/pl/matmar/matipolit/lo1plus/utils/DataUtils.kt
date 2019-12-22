@@ -26,10 +26,10 @@ data class Godzina(
 )
 
 data class Jutro(
-    val name: String,
-    val date: Date,
+    val name: String?,
+    val date: Date?,
     val lessonName: String?,
-    val lessonTime: Date
+    val lessonTime: Date?
 )
 
 data class GodzinyJSON(
@@ -75,12 +75,13 @@ data class GodzinyJSON(
             }
             val jutroTimeArray = jutroTime.split(":")
             val jutroObject = Jutro(jutro, jutroDataObj, jutroName,
-                Date(jutroDataObj.year, jutroDataObj.month, jutroDataObj.day,
-                    jutroTimeArray[1].toInt()-1, jutroTimeArray[0].toInt()-1))
+                jutroDataObj?.let {Date(jutroDataObj.year, jutroDataObj.month, jutroDataObj?.day,
+                    jutroTimeArray[1].toInt()-1, jutroTimeArray[0].toInt()-1)  }
+                )
             return Godziny(godzinyGodziny, jutroObject, dzwonekDelay, dzisiejszaData)
         }
 }
-data class Godziny(
+data class Godziny(1
     var godzinyGodziny: List<Godzina?>?,
     var jutro: Jutro?,
     var dzwonekDelay: Int?,
@@ -145,12 +146,15 @@ fun String.toFormattedSpannable(): SpannableStringBuilder{
     return str
 }
 
-fun String.toDate() : Date{
+fun String.toDate() : Date? {
     val dateStringArray = this.split(".")
     Timber.d("Date - array: " + dateStringArray.toString())
-    val date = Date(dateStringArray[2].toInt()-1900,
-        dateStringArray[1].toInt()-1, dateStringArray[0].toInt())
-    Timber.d("Date - converted: " + date)
+    var date: Date? = null
+    if (dateStringArray.size==3){
+        date = Date(dateStringArray[2].toInt()-1900,
+            dateStringArray[1].toInt()-1, dateStringArray[0].toInt())
+        Timber.d("Date - converted: " + date)
+    }
     return date
 }
 
@@ -191,6 +195,7 @@ fun String.toCardColorInt(): Int = when(this){
     "obiady" -> R.color.colorObiady
     "ogloszenia" -> R.color.colorOgloszenia
     "terminySprawdzianow" -> R.color.colorTerminySprawdzianow
+    "godziny" -> R.color.godzinyColor
     else -> R.color.colorPlanLekcji
 }
 
