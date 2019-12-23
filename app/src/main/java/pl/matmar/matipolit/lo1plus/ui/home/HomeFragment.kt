@@ -112,7 +112,7 @@ class HomeFragment : Fragment(), KodeinAware {
     private fun initRecyclerView(
         homeCardItems: List<HomeCardItem>
     ) {
-        lateinit var godzinyCardItem: GodzinyCardItem
+        var godzinyCardItem: GodzinyCardItem? = null
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
             for(item in homeCardItems){
                 if(item.homeCard.title == "Godziny"){
@@ -131,7 +131,11 @@ class HomeFragment : Fragment(), KodeinAware {
                 adapter = mAdapter
             }
         viewModel.timerData.observe(this, Observer {
-            godzinyCardItem.notifyChanged(it)
+            val godzinyView = it
+            godzinyCardItem?.let {
+                it.notifyChanged(godzinyView)
+            }
+
         })
 
         }

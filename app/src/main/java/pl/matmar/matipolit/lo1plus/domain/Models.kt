@@ -26,7 +26,7 @@ data class Grade(
 
 data class Subject(
     val name: String,
-    val GradeList: List<Grade>,
+    val GradeList: ArrayList<Grade>,
     val srednia: String,
     val przewidywana_śródroczna: String,
     val ocena_śródroczna: String,
