@@ -35,6 +35,12 @@ interface MyApi{
         @Query("json")json: String
     ) : Response<HomeResponse>
 
+    @POST("oceny")
+    suspend fun grades(
+        @Query("userID")userID: String,
+        @Query("semestr")semesterID: String?
+    ) : Response<GradesResponse>
+
 
     companion object{
         operator fun invoke(networkConnectionInterceptor: NetworkConnectionInterceptor) : MyApi{

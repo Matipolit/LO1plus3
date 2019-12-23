@@ -1,5 +1,7 @@
 package pl.matmar.matipolit.lo1plus.data.network
 
+import pl.matmar.matipolit.lo1plus.data.database.DatabaseGrades
+
 
 data class AuthResponse(
     val correct : String,
@@ -23,4 +25,17 @@ data class HomeResponse(
     val najblizszeDniWolne: String?,
     val godziny: String?
 )
+
+data class GradesResponse(
+    val correct: String,
+    val info: String?,
+    var oceny: String,
+    var semestr: Int,
+    var semestr1ID: Int,
+    var klasa: String,
+    var date: String
+)
+
+fun GradesResponse.asDatabaseModel() : DatabaseGrades =
+    DatabaseGrades(this.oceny, this.semestr, this.semestr1ID, this.klasa, this.date)
 

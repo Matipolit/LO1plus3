@@ -3,16 +3,12 @@ package pl.matmar.matipolit.lo1plus.ui.home
 import com.xwray.groupie.databinding.BindableItem
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.GodzinyLayoutBinding
-import pl.matmar.matipolit.lo1plus.utils.GodzinyJSON
+import pl.matmar.matipolit.lo1plus.utils.GodzinyView
 
 class GodzinyCardItem(
-    val godzinyJSON: GodzinyJSON,
-    val time : String
 ) : BindableItem<GodzinyLayoutBinding>(){
     override fun getLayout(): Int = R.layout.godziny_layout
     override fun bind(viewBinding: GodzinyLayoutBinding, position: Int) {
-        viewBinding.godziny = godzinyJSON
-        viewBinding.time = time
     }
 
     override fun bind(
@@ -22,7 +18,9 @@ class GodzinyCardItem(
     ) {
         super.bind(viewBinding, position, payloads)
         if (!payloads.isEmpty()){
-            viewBinding.time = payloads[0].toString()
+            if(payloads[0] is GodzinyView){
+                viewBinding.godzinyView = payloads[0] as GodzinyView
+            }
         }
     }
 }

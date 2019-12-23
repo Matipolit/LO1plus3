@@ -1,6 +1,7 @@
 package pl.matmar.matipolit.lo1plus.ui.home
 
 import android.text.format.DateUtils
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -20,7 +21,6 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
     val userRepository = mUserRepository
 
     val user = userRepository.user
-    val godziny = repository.godziny
     val home = repository.home
 
     private val viewModelJob = SupervisorJob()
@@ -95,15 +95,14 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
         }
     }
 
-    private val _timerData = MutableLiveData<Date>()
-    val timerData : LiveData<Date>
+    private val _timerData = MutableLiveData<GodzinyView>()
+    val timerData : LiveData<GodzinyView>
         get() = _timerData
 
-    fun testTimer(godzinyJSON: GodzinyJSON){
+    fun startGodziny(godzinyJSON: GodzinyJSON){
         kotlin.run {
             timer.schedule(object: TimerTask(){
                 override fun run() {
-                    _timerData.postValue(Date())
                     Timber.d("timer tick")
                     var aktualnaLekcja : Godzina?= null
                     var przerwatime : Long? = null
@@ -112,35 +111,75 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                     val godzinyList = godzinyObj.godzinyGodziny
                     val dzwonekDelay = godzinyObj.dzwonekDelay
                     val jutro = godzinyObj.jutro
-                    val date = godzinyObj.date
+                    var date = godzinyObj.date
                     val currentDate = godzinyObj.dzwonekDelay?.let { Date().toDateWithDelay(it) }?: Date()
+                    var jutroDate = jutro?.date
                     var i = 0
-                    if(currentDate.time > godzinyObj.date?.time!! && currentDate.time < jutro?.date!!.time) {
+
+                    var godzinyView = GodzinyView("Godziny", null, null, null, null, null, null, null, null, null)
+
+                    if(date==null){
+                        date = Date(currentDate.year, currentDate.month, currentDate.day)
+                    }
+
+                    if(jutroDate == null){
+                        jutroDate = Date(date.time + 86400000L)
+                    }
+                    if(currentDate.time >= date.time && currentDate.time < jutroDate.time){
                         if (godzinyList != null) {
-                            for (godzina in godzinyList) {
-                                if (godzina != null) {
+                            if(godzinyList.size == 0){
+                                godzinyView.TitleText = "Brak lekcji dzisiaj"
+                                godzinyView.FirstMediumText = "Kolejne lekcje - ${jutro?.lessonName} ${jutro?.name} o ${godzinyJSON.jutroTime}"
+                            }else if(godzinyList.last().endTime.before(currentDate)) {
+                                godzinyView.TitleText = "Koniec lekcji na dzisiaj"
+                                godzinyView.FirstMediumText = "Kolejne lekcje - ${jutro?.lessonName} ${jutro?.name} o ${godzinyJSON.jutroTime}"
+                            }else{
+                                for (godzina in godzinyList) {
+                                    if(godzinyList.size >= i+2){
+                                        następnaLekcja = godzinyList[i+1]
+                                    }
                                     if (godzina.startTime.before(currentDate) && godzina.endTime.after(currentDate)) {
                                         aktualnaLekcja = godzina
-                                        break
-                                    } else if (godzina.endTime.before(currentDate) && godzinyList.size == i){
-                                        następnaLekcja = godzinyList[i+1]
+                                        godzinyView.TitleText = "Do końca lekcji"
+                                        godzinyView.TimeHeaderText = (godzina.endTime.time - currentDate.time).asFormattedTime()
+                                        godzinyView.ProgressBar = ((godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS*100).toInt()
                                         if (następnaLekcja != null) {
-                                            przerwatime = następnaLekcja.startTime.time - godzina.endTime.time
-                                            break
+                                            godzinyView.SecondMediumText = "Kolejna lekcja"
+                                            godzinyView.SecondSmallText1 = następnaLekcja.asLessonTime()
+                                            godzinyView.SecondSmallText2 = następnaLekcja.name
                                         }
+                                        break
+                                    } else if (następnaLekcja != null){
+                                        przerwatime = następnaLekcja.startTime.time - godzina.endTime.time
+                                        godzinyView.TitleText = "Kolejna lekcja"
+                                        godzinyView.FirstMediumText = następnaLekcja.asLessonTime()
+                                        godzinyView.FirstSmallText = następnaLekcja.name
+                                        godzinyView.TimeHeaderText = "Do końca przerwy"
+                                        val timeLeft = następnaLekcja.startTime.time - currentDate.time
+                                        godzinyView.TimerText = timeLeft.asFormattedTime()
+                                        godzinyView.ProgressBar = (timeLeft/przerwatime*100).toInt()
+                                        break
+                                    }
+                                    i++ } } }
+                    }else{
+                        if(currentDate.after(jutroDate)){
+                            if(jutro!=null){
+                                if(jutro.lessonTime != null){
+                                    if(jutro.lessonTime.time - currentDate.time > 900000){
+                                        godzinyView.TitleText = "Dzisiaj zaczynasz o"
+                                        godzinyView.TimerText = jutro.lessonTime.asFormattedHourString()
+                                    }else if(jutro.lessonTime.time - currentDate.time > 0){
+                                        godzinyView.TitleText = "Dzisiaj zaczynasz za"
+                                        godzinyView.TimerText = (jutro.lessonTime.time - currentDate.time).asFormattedTime()
+                                    }else{
+                                        godzinyView.Visibility = View.GONE
                                     }
 
                                 }
-                                i++
-                            }
-                            if(aktualnaLekcja!=null){
-
                             }
                         }
-                    }else{
-
                     }
-
+                    _timerData.postValue(godzinyView)
                 }
             },0, 1000)
         }

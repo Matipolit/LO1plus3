@@ -6,11 +6,9 @@
     >
     <data>
         <variable
-            name="godziny"
-            type="pl.matmar.matipolit.lo1plus.utils.GodzinyJSON" />
-        <variable
-            name="time"
-            type="String" />
+            name="godzinyView"
+            type="pl.matmar.matipolit.lo1plus.utils.GodzinyView" />
+        <import type="android.view.View"/>
 
     </data>
 
@@ -21,7 +19,8 @@
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
-        app:cardBackgroundColor="@color/godzinyColor">
+        app:cardBackgroundColor="@color/godzinyColor"
+        android:visibility="@{godzinyView.visibility}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -45,6 +44,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorLightOnDarkHigh"
                 android:textStyle="bold"
+                android:text="@{godzinyView.titleText}"
                 app:layout_constraintStart_toEndOf="@+id/icon_image"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Kolejna lekcja" />
@@ -56,6 +56,7 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorLightOnDarkMedium"
+                android:text="@{godzinyView.firstMediumText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_text"
                 tools:text="12:40 - 13:25" />
@@ -67,6 +68,7 @@
                 android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
+                android:text="@{godzinyView.firstSmallText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/first_medium_text"
                 tools:text="Matematyka" />
@@ -78,6 +80,7 @@
                 android:layout_marginTop="@dimen/normal_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorLightOnDarkMedium"
+                android:text="@{godzinyView.timeHeaderText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/first_small_text"
                 tools:text="Do końca przerwy" />
@@ -90,6 +93,7 @@
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:textSize="@dimen/text_size_header_giant"
                 android:textStyle="bold"
+                android:text="@{godzinyView.timerText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timer_header_text"
                 tools:text="6 min" />
@@ -101,7 +105,7 @@
                 android:layout_marginTop="@dimen/small_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
-                android:text=""
+                android:text="@{godzinyView.timerSubText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timer_text"
                 tools:text="Matematyka"
@@ -115,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
-                android:progress="25"
+                android:progress="@{godzinyView.progressBar}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timer_text" />
@@ -127,6 +131,7 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorLightOnDarkMedium"
+                android:text="@{godzinyView.secondMediumText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/progressBar"
                 tools:text="Kolejna lekcja:"
@@ -139,6 +144,7 @@
                 android:layout_marginTop="@dimen/small_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
+                android:text="@{godzinyView.secondSmallText1}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/second_medium_text"
                 tools:text="12:40 - 13:25"
@@ -151,6 +157,7 @@
                 android:layout_marginTop="@dimen/small_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
+                android:text="@{godzinyView.secondSmallText2}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/second_small_text_1"
                 tools:text="Informatyka"

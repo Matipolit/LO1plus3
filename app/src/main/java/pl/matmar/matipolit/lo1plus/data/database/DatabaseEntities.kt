@@ -2,9 +2,14 @@ package pl.matmar.matipolit.lo1plus.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.json.JSONObject
+import pl.matmar.matipolit.lo1plus.domain.Grades
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
+import pl.matmar.matipolit.lo1plus.domain.Subject
 import pl.matmar.matipolit.lo1plus.utils.*
+import java.lang.reflect.Type
 
 const val CURRENT_USERDB_ID = 0
 const val CURRENT_GODZINY_ID = 1
@@ -30,6 +35,8 @@ data class Home(
     var databaseId: Int = CURRENT_HOMEDB_ID
 }*/
 
+//Home
+
 @Entity
 data class DatabaseCard(
     @PrimaryKey
@@ -41,14 +48,14 @@ data class DatabaseCard(
 
 fun List<DatabaseCard>.asDomainModel(): List<HomeCard>{
     return map{
-        HomeCard(
-            title = it.name.toCardTitle(),
-            content = it.content,
-             color = it.name.toCardColorInt(),
-            icon = it.name.toCardIcon()
+            HomeCard(
+                title = it.name.toCardTitle(),
+                content = it.content,
+                color = it.name.toCardColorInt(),
+                icon = it.name.toCardIcon()
 
-        )
-    }
+            )
+        }
 }
 
 @Entity
@@ -80,4 +87,21 @@ fun JSONObject.asDatabaseGodziny() : DatabaseGodziny{
         this.optString("dzwonekDelay").toInt(),
         this.optString("data")
     )
+}
+
+//Grades
+
+@Entity
+data class DatabaseGrades(
+    var oceny: String,
+    var semestr: Int,
+    var semestr1ID: Int,
+    var klasa: String,
+    var date: String
+)
+
+fun DatabaseGrades.asDomainModel() : Grades{
+    val listType: Type = object : TypeToken<List<Subject?>?>() {}.getType()
+    val subjects : List<Subject> = Gson().fromJson(this.oceny, listType)
+    return Grades(subjects, this.semestr, this.semestr1ID, this.klasa, this.date.toDate()!!)
 }

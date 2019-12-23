@@ -8,11 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.databinding.GradesFragmentBinding
 
 
 class GradesFragment : Fragment(), KodeinAware{
     override val kodein by kodein()
+
+    private val factory: GradesViewModelFactory by instance()
+
     private val viewModel: GradesViewModel by lazy {
         ViewModelProviders.of(this)
             .get(GradesViewModel::class.java)

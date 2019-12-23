@@ -17,7 +17,7 @@ import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.databinding.HomeFragmentBinding
 import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
-import pl.matmar.matipolit.lo1plus.utils.asGodzinyCardItem
+import pl.matmar.matipolit.lo1plus.utils.asGodzinyJSON
 import pl.matmar.matipolit.lo1plus.utils.asHomeCardItem
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
@@ -64,12 +64,6 @@ class HomeFragment : Fragment(), KodeinAware {
             }
         })
 
-        viewModel.godziny.observe(this, Observer {
-            Timber.d("godziny changed")
-            it?.let {
-                Timber.d(it.godzinyObject.toString())
-            }
-        })
 
         viewModel.onSuccessEvent.observe(this, Observer {
             it?.let {
@@ -109,22 +103,28 @@ class HomeFragment : Fragment(), KodeinAware {
         viewModel.home.observe(this, Observer {
             it?.let {
                 val homeCards = it
-                viewModel.godziny.observe(this, Observer {
-                    it?.let {
-                        initRecyclerView(homeCards.asHomeCardItem(), it.asGodzinyCardItem(viewModel.timerData.value.toString()))
-                    }
-                })
+                initRecyclerView(homeCards.asHomeCardItem())
+
             }
         })
     }
 
     private fun initRecyclerView(
-        homeCardItems: List<HomeCardItem>,
-        godzinyCardItem: GodzinyCardItem
+        homeCardItems: List<HomeCardItem>
     ) {
+        lateinit var godzinyCardItem: GodzinyCardItem
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
-            addAll(homeCardItems)
-            add(0, godzinyCardItem)
+            for(item in homeCardItems){
+                if(item.homeCard.title == "Godziny"){
+                    val godziny = item.homeCard.content.asGodzinyJSON()
+                    viewModel.startGodziny(godziny)
+                    godzinyCardItem = GodzinyCardItem()
+                    Timber.d("godziny card")
+                }else{
+                    add(item)
+                }
+            }
+            //add(0, godzinyCardItem)
         }
             recycler_view.apply {
                 layoutManager = LinearLayoutManager(context)

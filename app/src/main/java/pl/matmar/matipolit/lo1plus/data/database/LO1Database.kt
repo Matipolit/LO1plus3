@@ -8,13 +8,14 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 
 @Database(
-    entities = arrayOf(User::class, DatabaseCard::class, DatabaseGodziny::class), version = 3, exportSchema = false)
+    entities = arrayOf(User::class, DatabaseCard::class, DatabaseGodziny::class, DatabaseGrades::class), version = 4, exportSchema = false)
 //@TypeConverters(DateConverter::class)
 abstract class LO1Database : RoomDatabase() {
 
 
     abstract val userDao : UserDao
     abstract val homeDao: HomeDao
+    abstract val gradesDao: GradesDao
     companion object{
 
         var MIGRATION_2_3: Migration = object : Migration(2, 3) {
@@ -61,11 +62,20 @@ interface HomeDao{
     fun insertCards(vararg cards: DatabaseCard)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsertGodziny(godziny: DatabaseGodziny)
+    fun upsertGodziny(godziny: DatabaseGodziny?)
 
     @Query("SELECT * FROM databasegodziny")
-    fun getGodziny() : LiveData<DatabaseGodziny>
+    fun getGodziny() : LiveData<DatabaseGodziny?>
 
+}
+
+@Dao
+interface GradesDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upsert(grades: DatabaseGrades)
+
+    @Query("SELECT * FROM databasegrades")
+    fun getGrades() : LiveData<DatabaseGrades>
 }
 
 /*private lateinit var INSTANCE: UserDatabase

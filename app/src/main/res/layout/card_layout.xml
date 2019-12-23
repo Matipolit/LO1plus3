@@ -49,13 +49,14 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/first_medium_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 android:text="@{card.formattedContent}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/colorLightOnDarkMedium"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_text"
                 tools:text="12.11.2019 - DZIŚ\n1. fizyka 2f2, sala 210\n2. biologia \n(przeniesiona z lekcji 7, 06.06.2018)" />
