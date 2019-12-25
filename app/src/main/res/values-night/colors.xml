@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#9aa7d8</color>
+    <color name="colorPrimaryDark">#1e3e9d</color>
+    <color name="colorAccent">#f084bc</color>
     <!-- HOME CARDS -->
     <color name="colorSN">#4DAC59</color>
     <color name="colorPlanLekcji">#4E8DBD</color>
@@ -13,4 +16,10 @@
     <color name="colorRowery">#00216B</color>
     <color name="colorDniWolne">#16b89b</color>
     <color name="colorNieobecnosci">#2B67B8</color>
+
+    <!-- UI -->
+    <color name="materialBackground">#121212</color>
+    <color name="errorColor">#CF6679</color>
+
+
 </resources>

@@ -104,7 +104,6 @@ data class DatabaseGrades(
     var databaseId: Int = CURRENT_GRADES_ID
 }
 fun DatabaseGrades.asDomainModel() : Grades{
-    //TODO: fix json to object conversion
     Timber.d(this.oceny)
     val array = JSONArray(this.oceny)
     var i =0

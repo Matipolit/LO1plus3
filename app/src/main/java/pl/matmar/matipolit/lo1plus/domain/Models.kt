@@ -67,4 +67,6 @@ data class Grades(
     val semestr1ID: Int,
     val klasa: String?,
     val date: Date?
-)
+){
+    val average = oceny.map { it->it.sredniaFloat }.average()
+}

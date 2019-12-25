@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#2f50b3</color>
+    <color name="colorPrimaryDark">#1e3e9d</color>
+    <color name="colorAccent">#eb0071</color>
 
     <!-- HOME CARDS -->
     <color name="colorSN">#4DAC59</color>
@@ -26,6 +26,18 @@
     <color name="colorLightOnDarkHigh">#DEFFFFFF</color>
     <color name="colorLightOnDarkMedium">#99FFFFFF</color>
     <color name="colorLightOnDarkDisabled">#61FFFFFF</color>
+
+    <!-- GRADES -->
+    <color name="color6">#93b446</color>
+    <color name="color5">#37bd94</color>
+    <color name="color4">#51a8de</color>
+    <color name="color3">#d7b03a</color>
+    <color name="color2">#9174b2</color>
+    <color name="color1">#d5595b</color>
+
+    <!-- UI -->
+    <color name="materialBackground">#FFFFFF</color>
+    <color name="errorColor">#B00020</color>
 
 
 </resources>

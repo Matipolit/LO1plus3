@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.databinding.GradesFragmentBinding
+import pl.matmar.matipolit.lo1plus.domain.Grades
+import pl.matmar.matipolit.lo1plus.utils.Coroutines
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 
@@ -67,5 +71,20 @@ class GradesFragment : Fragment(), KodeinAware{
         })
 
         return binding.root
+    }
+
+    private fun bindUI() = Coroutines.main {
+        viewModel.grades.observe(this, Observer {
+            it?.let {
+                initRecyclerView(it)
+            }
+        })
+    }
+
+    private fun initRecyclerView(grades: Grades){
+        val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
+            //TODO create layout for headers
+            //TODO create logic for initializing recyclerview
+        }
     }
 }
