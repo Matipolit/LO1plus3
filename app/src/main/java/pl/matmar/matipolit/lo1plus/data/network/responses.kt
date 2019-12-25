@@ -1,6 +1,8 @@
 package pl.matmar.matipolit.lo1plus.data.network
 
+import com.google.gson.Gson
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseGrades
+import pl.matmar.matipolit.lo1plus.domain.Subject
 
 
 data class AuthResponse(
@@ -29,13 +31,13 @@ data class HomeResponse(
 data class GradesResponse(
     val correct: String,
     val info: String?,
-    var oceny: String,
+    var oceny: Array<Subject>,
     var semestr: Int,
     var semestr1ID: Int,
-    var klasa: String,
-    var date: String
+    var klasa: String?,
+    var date: String?
 )
 
 fun GradesResponse.asDatabaseModel() : DatabaseGrades =
-    DatabaseGrades(this.oceny, this.semestr, this.semestr1ID, this.klasa, this.date)
+    DatabaseGrades(Gson().toJson(this.oceny), this.semestr, this.semestr1ID, this.klasa, this.date)
 

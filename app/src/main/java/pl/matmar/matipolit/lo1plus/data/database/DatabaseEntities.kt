@@ -3,14 +3,13 @@ package pl.matmar.matipolit.lo1plus.data.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import org.json.JSONArray
 import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.domain.Grades
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
 import pl.matmar.matipolit.lo1plus.domain.Subject
 import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
-import java.lang.reflect.Type
 
 const val CURRENT_USERDB_ID = 0
 const val CURRENT_GODZINY_ID = 0
@@ -98,8 +97,8 @@ data class DatabaseGrades(
     var oceny: String,
     var semestr: Int,
     var semestr1ID: Int,
-    var klasa: String,
-    var date: String
+    var klasa: String?,
+    var date: String?
 ){
     @PrimaryKey(autoGenerate = false)
     var databaseId: Int = CURRENT_GRADES_ID
@@ -107,7 +106,15 @@ data class DatabaseGrades(
 fun DatabaseGrades.asDomainModel() : Grades{
     //TODO: fix json to object conversion
     Timber.d(this.oceny)
-    val listType: Type = object : TypeToken<List<Subject>>(){}.type
-    val subjects : List<Subject> = Gson().fromJson(this.oceny, listType)
-    return Grades(subjects, this.semestr, this.semestr1ID, this.klasa, this.date.toDate()!!)
+    val array = JSONArray(this.oceny)
+    var i =0
+    val subjects = mutableListOf<Subject>()
+    val gson = Gson()
+    while(i<array.length()){
+        subjects.add(gson.fromJson(array.getString(i), Subject :: class.java))
+        i++
+    }
+    //val listType: Type =  object : TypeToken<List<Subject>>(){}.type
+    //val subjects : List<Subject> = Gson().fromJson(this.oceny, listType)
+    return Grades(subjects, this.semestr, this.semestr1ID, this.klasa, this.date?.toDate())
 }

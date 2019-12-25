@@ -17,27 +17,54 @@ data class HomeCard(
 data class Grade(
     val kod: String,
     val opis: String,
-    val waga: Int,
+    val waga: String,
     val data: String,
     val nauczyciel: String,
-    val ocena: Int,
+    val ocena: String,
     val komentarz: String?
-)
+){
+    val wagaInt = Character.getNumericValue(waga[0])
+    var dodatek: Float = 0f
+    var ocenaFloat = 0f
+    var liczysie = false
+    init {
+        if (ocena.length == 2) {
+            if (ocena[1].toString() == "+") {
+                dodatek = 0.5f
+            } else if (ocena[1].toString() == "-") {
+                dodatek = -0.25f
+            }
+        }
+        if (ocena != "+" && ocena != "-") {
+            if (ocena.isNotEmpty()) {
+                if (ocena[0].toString().matches("\\d+(?:\\.\\d+)?".toRegex())) {
+                    ocenaFloat = Integer.valueOf(ocena[0].toString()) + dodatek
+                    liczysie = true
+                }
+            } else {
+                ocenaFloat = 0f
+                liczysie = false
+            }
+        }
+    }
+}
 
 data class Subject(
     val name: String,
-    val GradeList: ArrayList<Grade>,
+    val oceny: ArrayList<Grade>,
     val srednia: String,
     val przewidywana_śródroczna: String,
     val ocena_śródroczna: String,
     val przewidywana_roczna: String,
     val ocena_roczna: String
-)
+){
+    val sredniaFloat = srednia.toFloat()
+}
 
 data class Grades(
     val oceny: List<Subject>,
     val semestr: Int,
     val semestr1ID: Int,
-    val klasa: String,
-    val date: Date
+    val klasa: String?,
+    val date: Date?
 )

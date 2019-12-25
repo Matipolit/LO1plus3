@@ -244,6 +244,7 @@ fun Godzina.asLessonTime() : String = "${this.startTime.hours}:${this.startTime.
 fun Date.asFormattedHourString() : String = "${this.hours}:${this.minutes}"
 
 fun Int.asSemesterID() : String = "${11381+Date().year+this}"
+
 object DateConverter {
     @TypeConverter
     fun toDate(dateLong: Long): Date {
