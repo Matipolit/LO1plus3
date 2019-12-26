@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ELEVATION -->
+    <dimen name="elevation_card_normal">0dp</dimen>
+
+</resources>

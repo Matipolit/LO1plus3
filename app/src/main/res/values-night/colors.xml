@@ -20,6 +20,12 @@
     <!-- UI -->
     <color name="materialBackground">#121212</color>
     <color name="errorColor">#CF6679</color>
+    <color name="NormalElevation">#17FFFFFF</color>
+
+    <!-- TEXT -->
+    <color name="colorAdaptableHigh">#DEFFFFFF</color>
+    <color name="colorAdaptableMedium">#99FFFFFF</color>
+    <color name="colorAdaptableDisabled">#61FFFFFF</color>
 
 
 </resources>

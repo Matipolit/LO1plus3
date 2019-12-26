@@ -27,6 +27,10 @@
     <color name="colorLightOnDarkMedium">#99FFFFFF</color>
     <color name="colorLightOnDarkDisabled">#61FFFFFF</color>
 
+    <color name="colorAdaptableHigh">#DE000000</color>
+    <color name="colorAdaptableMedium">#99000000</color>
+    <color name="colorAdaptableDisabled">#61000000</color>
+
     <!-- GRADES -->
     <color name="color6">#93b446</color>
     <color name="color5">#37bd94</color>
@@ -38,6 +42,8 @@
     <!-- UI -->
     <color name="materialBackground">#FFFFFF</color>
     <color name="errorColor">#B00020</color>
+    <color name="NormalElevation">#00FFFFFF</color>
+
 
 
 </resources>

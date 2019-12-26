@@ -83,7 +83,7 @@ class GradesFragment : Fragment(), KodeinAware{
 
     private fun initRecyclerView(grades: Grades){
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
-            //TODO create layout for headers
+            
             //TODO create logic for initializing recyclerview
         }
     }
