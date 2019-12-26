@@ -12,9 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:cardBackgroundColor="@color/color6"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin">
+        app:cardCornerRadius="6dp"
+        app:gradeColor="@{grade}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

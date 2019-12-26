@@ -7,10 +7,14 @@ import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.xwray.groupie.Section
 import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseCard
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
+import pl.matmar.matipolit.lo1plus.domain.Subject
+import pl.matmar.matipolit.lo1plus.ui.grades.GradeHeaderItem
+import pl.matmar.matipolit.lo1plus.ui.grades.GradeItem
 import pl.matmar.matipolit.lo1plus.ui.home.GodzinyCardItem
 import pl.matmar.matipolit.lo1plus.ui.home.HomeCardItem
 import timber.log.Timber
@@ -244,6 +248,13 @@ fun Godzina.asLessonTime() : String = "${this.startTime.hours}:${this.startTime.
 fun Date.asFormattedHourString() : String = "${this.hours}:${this.minutes}"
 
 fun Int.asSemesterID() : String = "${11381+Date().year+this}"
+
+fun List<Subject>.asSections() : List<Section> = this.map {
+    Section().apply {
+        setHeader(GradeHeaderItem(it))
+        addAll(it.oceny.map { GradeItem(it) })
+    }
+}
 
 object DateConverter {
     @TypeConverter

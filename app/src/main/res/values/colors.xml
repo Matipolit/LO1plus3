@@ -38,6 +38,7 @@
     <color name="color3">#d7b03a</color>
     <color name="color2">#9174b2</color>
     <color name="color1">#d5595b</color>
+    <color name="colorDefaultGrade">#40619b</color>
 
     <!-- UI -->
     <color name="materialBackground">#FFFFFF</color>

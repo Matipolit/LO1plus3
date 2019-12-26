@@ -2,6 +2,8 @@ package pl.matmar.matipolit.lo1plus.utils
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.google.android.material.card.MaterialCardView
+import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.domain.Grade
 
 @BindingAdapter("godziny")
@@ -42,5 +44,22 @@ fun TextView.setGradeName(grade: Grade?) {
         }else{
             text = "${grade.opis.substring(0, 8)}..."
         }
+    }
+}
+
+@BindingAdapter("gradeColor")
+fun MaterialCardView.setCardColor(grade: Grade?) {
+    grade?.let {
+        var bgColor: Int
+        when(it.ocena){
+            "1", "1+" -> bgColor = resources.getColor(R.color.color1)
+            "2", "2-", "2+" -> bgColor = resources.getColor(R.color.color2)
+            "3", "3-", "3+" -> bgColor = resources.getColor(R.color.color3)
+            "4", "4-", "4+" -> bgColor = resources.getColor(R.color.color4)
+            "5", "5-", "5+" -> bgColor = resources.getColor(R.color.color5)
+            "6", "6-" -> bgColor = resources.getColor(R.color.color6)
+            else -> bgColor = resources.getColor(R.color.colorDefaultGrade)
+        }
+        setBackgroundColor(bgColor)
     }
 }

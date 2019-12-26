@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import kotlinx.android.synthetic.main.home_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.databinding.GradesFragmentBinding
-import pl.matmar.matipolit.lo1plus.domain.Grades
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
+import pl.matmar.matipolit.lo1plus.utils.asSections
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 
@@ -73,18 +76,40 @@ class GradesFragment : Fragment(), KodeinAware{
         return binding.root
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        bindUI()
+    }
+
     private fun bindUI() = Coroutines.main {
         viewModel.grades.observe(this, Observer {
             it?.let {
-                initRecyclerView(it)
+                var averageHeaderItem : GradesAverageHeaderItem? = null
+                if(it.averageVal != null && it.averageText != null){
+                    averageHeaderItem = GradesAverageHeaderItem(it)
+                }
+                initRecyclerView(averageHeaderItem, it.oceny.asSections())
             }
         })
     }
 
-    private fun initRecyclerView(grades: Grades){
+    private fun initRecyclerView(averageHeaderItem: GradesAverageHeaderItem?, sections: List<Section>){
+        //TODO add decoration
+        Timber.d("Init recyclerView")
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
-            
-            //TODO create logic for initializing recyclerview
+            averageHeaderItem?.let {
+                add(it)
+            }
+            addAll(sections)
+            spanCount = 4
+        }
+
+        recycler_view.apply {
+            layoutManager = GridLayoutManager(context, mAdapter.spanCount).apply {
+                spanSizeLookup = mAdapter.spanSizeLookup
+            }
+            adapter = mAdapter
+
         }
     }
 }

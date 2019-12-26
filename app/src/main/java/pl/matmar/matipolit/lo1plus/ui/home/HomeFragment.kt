@@ -120,6 +120,7 @@ class HomeFragment : Fragment(), KodeinAware {
                     viewModel.startGodziny(godziny)
                     godzinyCardItem = GodzinyCardItem()
                     Timber.d("godziny card")
+                    add(godzinyCardItem!!)
                 }else{
                     add(item)
                 }
