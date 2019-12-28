@@ -45,6 +45,9 @@
     <color name="errorColor">#B00020</color>
     <color name="NormalElevation">#00FFFFFF</color>
 
+    <!-- OTHER -->
+    <color name="colorTransparent">#00000000</color>
+
 
 
 </resources>

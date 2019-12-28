@@ -1,13 +1,22 @@
 package pl.matmar.matipolit.lo1plus.utils
 
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.card.MaterialCardView
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.domain.Grade
+import pl.matmar.matipolit.lo1plus.domain.Grades
 
 @BindingAdapter("godziny")
 fun TextView.setCountdown(godziny: Godziny) {
+}
+
+@BindingAdapter("godzinyVisibility")
+fun View.setGodzinyVisibility(any: Any?) {
+    any?.let {
+        visibility = View.VISIBLE
+    } ?: run {visibility = View.GONE}
 }
 
 @BindingAdapter("gradeDate")
@@ -39,10 +48,10 @@ fun TextView.setGradeValue(grade: Grade?) {
 @BindingAdapter("gradeName")
 fun TextView.setGradeName(grade: Grade?) {
     grade?.let {
-        if(grade.opis.length <=9 ){
+        if(grade.opis.length <=11 ){
             text = grade.opis
         }else{
-            text = "${grade.opis.substring(0, 8)}..."
+            text = "${grade.opis.substring(0, 10)}..."
         }
     }
 }
@@ -60,6 +69,13 @@ fun MaterialCardView.setCardColor(grade: Grade?) {
             "6", "6-" -> bgColor = resources.getColor(R.color.color6)
             else -> bgColor = resources.getColor(R.color.colorDefaultGrade)
         }
-        setBackgroundColor(bgColor)
+        setCardBackgroundColor(bgColor)
+    }
+}
+
+@BindingAdapter("roundedGradesAvarage")
+fun TextView.setRoundedGradesAverage(grades: Grades?) {
+    grades?.let {
+        text = "%.2f".format(grades.averageVal)
     }
 }

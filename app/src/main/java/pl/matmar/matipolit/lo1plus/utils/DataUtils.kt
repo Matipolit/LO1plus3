@@ -6,7 +6,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.room.TypeConverter
-import com.google.gson.Gson
 import com.xwray.groupie.Section
 import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.R
@@ -17,12 +16,14 @@ import pl.matmar.matipolit.lo1plus.ui.grades.GradeHeaderItem
 import pl.matmar.matipolit.lo1plus.ui.grades.GradeItem
 import pl.matmar.matipolit.lo1plus.ui.home.GodzinyCardItem
 import pl.matmar.matipolit.lo1plus.ui.home.HomeCardItem
-import timber.log.Timber
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
-const val LESSON_TIME_MILIS = 2700000
+
+const val LESSON_TIME_MILIS = 2700000F
 
 data class Godzina(
     val index: Int,
@@ -49,8 +50,8 @@ data class GodzinyJSON(
 ){
     val godzinyObject: Godziny
         get() {
-            val dzisiejszaData = data?.toDate()
-            val jutroDataObj = jutroData?.toDate()
+            val dzisiejszaData = data?.toDate()?: TodayDateAtMidnight()
+            val jutroDataObj = jutroData?.toDate()?:dzisiejszaData.tommorow()
             val iter: Iterator<String> = godziny.keys()
             var index: Int
             val godzinyGodziny = mutableListOf<Godzina>()
@@ -64,16 +65,9 @@ data class GodzinyJSON(
                 val startArray = startEnd.getString(0).split(":")
                 val endArray = startEnd.getString(1).split(":")
 
-                val godzinaStart = dzisiejszaData?.let {
-                    Date(
-                        dzisiejszaData.year, dzisiejszaData.month,
-                        dzisiejszaData.day, startArray[0].toInt()-1, startArray[1].toInt()-1)
-                }
+                val godzinaStart = dzisiejszaData.addTime(hours = startArray[0].toInt(), minutes = startArray[1].toInt())
+                val godzinaEnd = dzisiejszaData.addTime(hours = endArray[0].toInt(), minutes = endArray[1].toInt())
 
-                val godzinaEnd = dzisiejszaData?.let {
-                    Date(dzisiejszaData.year, dzisiejszaData.month, dzisiejszaData.day,
-                        endArray[0].toInt()-1, endArray[1].toInt()-1)
-                }
                 val godzinaGodzina = Godzina(sIndex.toInt(),godzinaStart!!, godzinaEnd!!
                     ,godzinaJSON.getString("name"))
                 godzinyGodziny.add(godzinaGodzina)
@@ -167,8 +161,14 @@ fun String.toFormattedSpannable(): SpannableStringBuilder{
     return str
 }
 
-fun String.toDate() : Date? {
-    val dateStringArray = this.split(".")
+fun String.toDate(time: String? = null) : Date? = when(this.length) {
+    8 -> time?.let {
+        SimpleDateFormat("dd/MM/yyyy/HH:mm", Locale.US).parse("$this/$time")
+    }?:SimpleDateFormat("dd/MM/yyyy", Locale.US).parse(this)
+    else -> null
+
+}
+    /*val dateStringArray = this.split(".")
     Timber.d("Date - array: " + dateStringArray.toString())
     var date: Date? = null
     if (dateStringArray.size==3){
@@ -176,10 +176,15 @@ fun String.toDate() : Date? {
             dateStringArray[1].toInt()-1, dateStringArray[0].toInt())
         Timber.d("Date - converted: " + date)
     }
-    return date
+    return date*/
+
+
+fun String.asGodzinyJSON() : GodzinyJSON{
+    val jsonObject = JSONObject(this)
+    return GodzinyJSON(jsonObject.getJSONObject("godziny"), jsonObject.optString("jutro"), jsonObject.optString("jutroTime"), jsonObject.optString("jutroTime"), jsonObject.optString("jutroData"),
+        jsonObject.optInt("dzwonekDelay"), jsonObject.optString("data"))
 }
 
-fun String.asGodzinyJSON() : GodzinyJSON = Gson().fromJson(this, GodzinyJSON::class.java)
 
 fun String.toCardType(): Int{
     return DEFAULT_CARD_LIST.indexOf(this)
@@ -236,7 +241,7 @@ fun List<HomeCard>.asHomeCardItem() : List<HomeCardItem> = this.map{
     HomeCardItem(it)
 }
 
-fun Date.toDateWithDelay(delay: Int) = Date(this.time - delay*1000)
+fun Long.toDateWithDelay(delay: Int) = Date(this - delay*1000)
 
 fun GodzinyJSON.asGodzinyCardItem(time : String) : GodzinyCardItem = GodzinyCardItem()
 
@@ -247,12 +252,31 @@ fun Godzina.asLessonTime() : String = "${this.startTime.hours}:${this.startTime.
 
 fun Date.asFormattedHourString() : String = "${this.hours}:${this.minutes}"
 
+fun Date.tommorow(): Date = Date(this.time + 86400000L)
+
 fun Int.asSemesterID() : String = "${11381+Date().year+this}"
 
-fun List<Subject>.asSections() : List<Section> = this.map {
-    Section().apply {
-        setHeader(GradeHeaderItem(it))
-        addAll(it.oceny.map { GradeItem(it) })
+fun TodayDateAtMidnight(): Date{
+    val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val today = Date()
+    return formatter.parse(formatter.format(today))
+}
+
+fun Date.addTime(hours: Int? = null, minutes: Int? = null): Date? {
+    val calendar = Calendar.getInstance()
+    calendar.time = this
+    hours?.let {
+        calendar.add(Calendar.HOUR_OF_DAY, it)
+    }
+    minutes?.let {
+        calendar.add(Calendar.MINUTE, minutes)
+    }
+    return calendar.time
+}
+
+fun List<Subject>.asSections() : List<Section> = this.map {subject ->
+    Section(GradeHeaderItem(subject)).apply {
+        addAll(subject.oceny.map { GradeItem(it) })
     }
 }
 
@@ -266,5 +290,9 @@ object DateConverter {
     fun fromDate(date: Date): Long {
         return date.time
     }
+}
+
+fun getOrNull(jsonObj: JSONObject, key: String?): Any? {
+    return jsonObj.optString(key, null)
 }
 

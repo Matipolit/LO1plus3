@@ -54,7 +54,6 @@ class HomeFragment : Fragment(), KodeinAware {
 
         viewModel.home.observe(this, Observer {
             Timber.d("Home changed")
-            Timber.d(it.toString())
         })
 
         viewModel.user.observe(this, Observer {
@@ -75,7 +74,6 @@ class HomeFragment : Fragment(), KodeinAware {
         viewModel.onStartedEvent.observe(this, Observer {
             Timber.d("onStartedEvent")
             if (it == true) {
-                Timber.d(it.toString())
                 //context?.toast("Login started")
                 binding.root.snackbar("Odświeżam...", showButton = false)
                 viewModel.onStartedEventFinished()
@@ -86,7 +84,6 @@ class HomeFragment : Fragment(), KodeinAware {
             if (it != null) {
                 //context?.toast(it)
                 binding.root.snackbar(it, showButton = false)
-
                 viewModel.onFailureEventFinished()
             }
         })
@@ -116,10 +113,13 @@ class HomeFragment : Fragment(), KodeinAware {
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
             for(item in homeCardItems){
                 if(item.homeCard.title == "Godziny"){
+                    Timber.d("Godziny card in initRecyclerView: ${item.homeCard.content}")
                     val godziny = item.homeCard.content.asGodzinyJSON()
+                    if(viewModel.timerStarted){
+                        viewModel.cancelTimer()
+                    }
                     viewModel.startGodziny(godziny)
                     godzinyCardItem = GodzinyCardItem()
-                    Timber.d("godziny card")
                     add(godzinyCardItem!!)
                 }else{
                     add(item)

@@ -16,7 +16,9 @@
     <dimen name="text_size_header_giant">30sp</dimen>
 
     <!-- ELEVATION -->
+    <dimen name="elevation_card_big">8dp</dimen>
     <dimen name="elevation_card_normal">4dp</dimen>
+    <dimen name="elevation_card_small">2dp</dimen>
 
 
 </resources>

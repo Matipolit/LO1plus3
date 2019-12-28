@@ -74,6 +74,7 @@ data class DatabaseGodziny(
 }
 
 fun DatabaseGodziny.asGodzinyJSON(): GodzinyJSON?{
+    Timber.d("Godziny list from DatabaseGodziny: $godziny")
     return(GodzinyJSON(JSONObject(godziny),jutro, jutroTime, jutroName, jutroData,
         dzwonekDelay, data ))
 }
@@ -104,7 +105,6 @@ data class DatabaseGrades(
     var databaseId: Int = CURRENT_GRADES_ID
 }
 fun DatabaseGrades.asDomainModel() : Grades{
-    Timber.d(this.oceny)
     val array = JSONArray(this.oceny)
     var i =0
     val subjects = mutableListOf<Subject>()

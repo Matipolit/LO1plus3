@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/materialBackground"
         app:cardForegroundColor="@color/NormalElevation"
-        android:elevation="@dimen/elevation_card_normal">
+        android:clipToPadding="false"
+        app:cardElevation="@dimen/elevation_card_big">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

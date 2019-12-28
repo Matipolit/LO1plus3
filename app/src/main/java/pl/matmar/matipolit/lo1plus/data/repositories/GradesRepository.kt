@@ -42,7 +42,7 @@ class GradesRepository(private val api: MyApi,
         database.gradesDao.upsert(gradesResponse.asDatabaseModel())
 
     val grades: LiveData<Grades> = Transformations.map(database.gradesDao.getGrades()){
-        it.asDomainModel()
+        it?.asDomainModel()
     }
 
     private fun isFetchNeeded(): Boolean{

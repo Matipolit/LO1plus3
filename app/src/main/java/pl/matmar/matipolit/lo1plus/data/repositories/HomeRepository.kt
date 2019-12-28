@@ -30,7 +30,6 @@ class HomeRepository(private val api: MyApi,
             } ?: run {
                 cardlist = DEFAULT_CARD_LIST
             }
-            Timber.d(cardlist.toString())
             lateinit var homeResponse: HomeResponse
             val gson = Gson()
 

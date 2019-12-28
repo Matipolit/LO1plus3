@@ -15,8 +15,10 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.GradesFragmentBinding
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
+import pl.matmar.matipolit.lo1plus.utils.GRADES_SPAN
 import pl.matmar.matipolit.lo1plus.utils.asSections
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
@@ -31,6 +33,8 @@ class GradesFragment : Fragment(), KodeinAware{
         ViewModelProviders.of(this, factory)
             .get(GradesViewModel::class.java)
     }
+
+    private var decorationsAdded: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,19 +98,28 @@ class GradesFragment : Fragment(), KodeinAware{
     }
 
     private fun initRecyclerView(averageHeaderItem: GradesAverageHeaderItem?, sections: List<Section>){
-        //TODO add decoration
+        //TODO dynamically estimate span count according to screen size
         Timber.d("Init recyclerView")
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
+            spanCount = GRADES_SPAN
             averageHeaderItem?.let {
                 add(it)
             }
             addAll(sections)
-            spanCount = 4
         }
+
+        val bgColor = resources.getColor(R.color.colorTransparent)
+        val padding = resources.getDimensionPixelSize(R.dimen.small_margin)
 
         recycler_view.apply {
             layoutManager = GridLayoutManager(context, mAdapter.spanCount).apply {
                 spanSizeLookup = mAdapter.spanSizeLookup
+                if(!decorationsAdded){
+                    addItemDecoration(GradesAverageHeaderItemDecoration(bgColor, padding))
+                    addItemDecoration(GradeHeaderItemDecoration(bgColor, padding))
+                    addItemDecoration(GradeInsetItemDecoration(bgColor, padding))
+                    decorationsAdded = true
+                }
             }
             adapter = mAdapter
 

@@ -59,22 +59,19 @@ data class Subject(
     val ocena_roczna: String
 ){
     val sredniaFloat = srednia.toFloat()
-    var sredniaText : String? = null
-    var sredniaVal : String? = null
-    init {
-        if(ocena_roczna != "-"){
-            sredniaText = "Ocena roczna"
-            sredniaVal = ocena_roczna
-        }else if(przewidywana_roczna != "-"){
-            sredniaText = "Przewidywana ocena roczna"
-            sredniaVal = przewidywana_roczna
-        }else if(ocena_śródroczna != "-"){
-            sredniaText = "Ocena śródroczna"
-            sredniaVal = ocena_śródroczna
-        }else if(przewidywana_śródroczna != "-"){
-            sredniaText = "Przewidywana ocena śródroczna"
-            sredniaVal = przewidywana_śródroczna
-        }
+    val sredniaText : String? = when {
+        !ocena_roczna.equals("-") -> "Ocena roczna"
+        !przewidywana_roczna.equals("-") -> "Ocena przewidywana roczna"
+        !ocena_śródroczna.equals("-") -> "Ocena śródroczna"
+        !przewidywana_śródroczna.equals("-") -> "Ocena przewidywana śródroczna"
+        else -> null
+    }
+    val sredniaVal : String? = when {
+        !ocena_roczna.equals("-") -> ocena_roczna
+        !przewidywana_roczna.equals("-") -> przewidywana_roczna
+        !ocena_śródroczna.equals("-") -> ocena_śródroczna
+        !przewidywana_śródroczna.equals("-") -> przewidywana_śródroczna
+        else -> null
     }
 }
 
@@ -100,24 +97,27 @@ data class Grades(
 
         for(subject in oceny){
             if(subject.ocena_roczna != "-" || subject.przewidywana_roczna != "-"){
-                sumaRocznych += subject.sredniaVal?.toFloat() ?: 0F
                 iloscRocznych += 1
                 if(subject.ocena_roczna != "-"){
                     areRoczne = true
+                    sumaRocznych += subject.ocena_roczna.toFloat()
                 }else{
                     arePrzewidywaneRoczne = true
+                    sumaRocznych += subject.przewidywana_roczna.toFloat()
                 }
             }
             if(subject.ocena_śródroczna != "-" || subject.przewidywana_śródroczna != "-"){
-                sumaSrodrocznych += subject.sredniaVal?.toFloat() ?: 0F
                 iloscSrodrocznych += 1
                 if(subject.ocena_śródroczna != "-"){
                     areSrodroczne = true
+                    sumaSrodrocznych += subject.ocena_śródroczna.toFloat()
                 }else{
                     arePrzewidywaneRoczne = true
+                    sumaSrodrocznych += subject.przewidywana_roczna.toFloat()
                 }
             }
         }
+        //Timber.d("Suma rocznych: ${sumaRocznych}\nIlość rocznych: $iloscRocznych\nSuma śródrocznych: $sumaSrodrocznych\nIlość śródrocznych: $iloscSrodrocznych")
         val sredniaRocznych = sumaRocznych / iloscRocznych
         val sredniaSrodrocznych = sumaSrodrocznych / iloscSrodrocznych
 

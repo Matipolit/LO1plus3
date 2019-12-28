@@ -57,6 +57,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:text="@{godzinyView.firstMediumText}"
+                app:godzinyVisibility="@{godzinyView.firstMediumText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_text"
                 tools:text="12:40 - 13:25" />
@@ -69,6 +70,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:text="@{godzinyView.firstSmallText}"
+                app:godzinyVisibility="@{godzinyView.firstSmallText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/first_medium_text"
                 tools:text="Matematyka" />
@@ -81,6 +83,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:text="@{godzinyView.timeHeaderText}"
+                app:godzinyVisibility="@{godzinyView.timeHeaderText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/first_small_text"
                 tools:text="Do końca przerwy" />
@@ -94,6 +97,7 @@
                 android:textSize="@dimen/text_size_header_giant"
                 android:textStyle="bold"
                 android:text="@{godzinyView.timerText}"
+                app:godzinyVisibility="@{godzinyView.timerText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timer_header_text"
                 tools:text="6 min" />
@@ -106,6 +110,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:text="@{godzinyView.timerSubText}"
+                app:godzinyVisibility="@{godzinyView.timerSubText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timer_text"
                 tools:text="Matematyka"
@@ -120,6 +125,7 @@
                 android:layout_marginTop="@dimen/small_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:progress="@{godzinyView.progressBar}"
+                app:godzinyVisibility="@{godzinyView.progressBar}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timer_text" />
@@ -132,6 +138,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:text="@{godzinyView.secondMediumText}"
+                app:godzinyVisibility="@{godzinyView.secondMediumText}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/progressBar"
                 tools:text="Kolejna lekcja:"
@@ -145,6 +152,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:text="@{godzinyView.secondSmallText1}"
+                app:godzinyVisibility="@{godzinyView.secondSmallText1}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/second_medium_text"
                 tools:text="12:40 - 13:25"
@@ -158,6 +166,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorLightOnDarkMedium"
                 android:text="@{godzinyView.secondSmallText2}"
+                app:godzinyVisibility="@{godzinyView.secondSmallText2}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/second_small_text_1"
                 tools:text="Informatyka"
