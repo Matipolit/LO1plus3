@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.HomeFragmentBinding
 import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
@@ -39,6 +41,7 @@ class HomeFragment : Fragment(), KodeinAware {
             .get(HomeViewModel::class.java)
     }
 
+    private var decorationsAdded: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,10 +130,20 @@ class HomeFragment : Fragment(), KodeinAware {
             }
             //add(0, godzinyCardItem)
         }
-            recycler_view.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = mAdapter
+        val bgColor = resources.getColor(R.color.colorTransparent)
+        val padding = resources.getDimensionPixelSize(R.dimen.small_margin)
+        val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        decoration.setDrawable(resources.getDrawable(R.drawable.divider))
+
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(context).apply {
+                if(!decorationsAdded){
+                    addItemDecoration(decoration)
+                    decorationsAdded = true
+                }
             }
+            adapter = mAdapter
+        }
         viewModel.timerData.observe(this, Observer {
             val godzinyView = it
             godzinyCardItem?.let {
@@ -143,6 +156,9 @@ class HomeFragment : Fragment(), KodeinAware {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.cancelTimer()
+        if(viewModel.timerStarted){
+            viewModel.cancelTimer()
+            viewModel.timerStarted = false
+        }
     }
 }

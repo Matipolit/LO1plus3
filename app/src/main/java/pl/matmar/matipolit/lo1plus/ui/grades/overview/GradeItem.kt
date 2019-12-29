@@ -1,4 +1,4 @@
-package pl.matmar.matipolit.lo1plus.ui.grades
+package pl.matmar.matipolit.lo1plus.ui.grades.overview
 
 import com.xwray.groupie.databinding.BindableItem
 import pl.matmar.matipolit.lo1plus.R

@@ -1,4 +1,4 @@
-package pl.matmar.matipolit.lo1plus.ui.grades
+package pl.matmar.matipolit.lo1plus.ui.grades.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +17,9 @@ import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.GradesFragmentBinding
+import pl.matmar.matipolit.lo1plus.ui.grades.GradeHeaderItemDecoration
+import pl.matmar.matipolit.lo1plus.ui.grades.GradeInsetItemDecoration
+import pl.matmar.matipolit.lo1plus.ui.grades.GradesAverageHeaderItemDecoration
 import pl.matmar.matipolit.lo1plus.utils.Coroutines
 import pl.matmar.matipolit.lo1plus.utils.GRADES_SPAN
 import pl.matmar.matipolit.lo1plus.utils.asSections
@@ -90,7 +93,10 @@ class GradesFragment : Fragment(), KodeinAware{
             it?.let {
                 var averageHeaderItem : GradesAverageHeaderItem? = null
                 if(it.averageVal != null && it.averageText != null){
-                    averageHeaderItem = GradesAverageHeaderItem(it)
+                    averageHeaderItem =
+                        GradesAverageHeaderItem(
+                            it
+                        )
                 }
                 initRecyclerView(averageHeaderItem, it.oceny.asSections())
             }
@@ -115,9 +121,24 @@ class GradesFragment : Fragment(), KodeinAware{
             layoutManager = GridLayoutManager(context, mAdapter.spanCount).apply {
                 spanSizeLookup = mAdapter.spanSizeLookup
                 if(!decorationsAdded){
-                    addItemDecoration(GradesAverageHeaderItemDecoration(bgColor, padding))
-                    addItemDecoration(GradeHeaderItemDecoration(bgColor, padding))
-                    addItemDecoration(GradeInsetItemDecoration(bgColor, padding))
+                    addItemDecoration(
+                        GradesAverageHeaderItemDecoration(
+                            bgColor,
+                            padding
+                        )
+                    )
+                    addItemDecoration(
+                        GradeHeaderItemDecoration(
+                            bgColor,
+                            padding
+                        )
+                    )
+                    addItemDecoration(
+                        GradeInsetItemDecoration(
+                            bgColor,
+                            padding
+                        )
+                    )
                     decorationsAdded = true
                 }
             }

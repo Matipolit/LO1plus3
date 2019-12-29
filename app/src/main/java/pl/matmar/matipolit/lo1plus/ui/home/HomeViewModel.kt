@@ -28,7 +28,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private  var timer = Timer()
+    lateinit  var timer : Timer
     //TODO add a way to cancel and start timer
 
     //for the godziny card
@@ -104,12 +104,13 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
 
     fun startGodziny(godzinyJSON: GodzinyJSON){
         timerStarted = true
+        timer = Timer()
         kotlin.run {
             timer.schedule(object: TimerTask(){
                 override fun run() {
                     Timber.d("timer tick")
                     var aktualnaLekcja : Godzina?= null
-                    var przerwatime : Long? = null
+                    var przerwatime : Float? = null
                     var następnaLekcja : Godzina? = null
                     val godzinyObj = godzinyJSON.godzinyObject
                     Timber.d("$godzinyJSON")
@@ -148,7 +149,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                                         aktualnaLekcja = godzina
                                         godzinyView.TitleText = "Do końca lekcji"
                                         godzinyView.TimerText = (godzina.endTime.time - currentDate.time).asFormattedTime()
-                                        godzinyView.ProgressBar = ((godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS*100L).toInt()
+                                        godzinyView.ProgressBar = (100-(godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS*100L).toInt()
                                         Timber.d("Miliseconds left: ${(godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS}")
                                         if (następnaLekcja != null) {
                                             godzinyView.SecondMediumText = "Kolejna lekcja"
@@ -158,14 +159,14 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                                         break
                                     } else if (następnaLekcja != null){
                                         if(godzina.endTime.before(currentDate) && następnaLekcja.startTime.after(currentDate)){
-                                            przerwatime = następnaLekcja.startTime.time - godzina.endTime.time
+                                            przerwatime = (następnaLekcja.startTime.time - godzina.endTime.time).toFloat()
                                             godzinyView.TitleText = "Kolejna lekcja"
                                             godzinyView.FirstMediumText = następnaLekcja.asLessonTime()
                                             godzinyView.FirstSmallText = następnaLekcja.name
                                             godzinyView.TimeHeaderText = "Do końca przerwy"
                                             val timeLeft = następnaLekcja.startTime.time - currentDate.time
                                             godzinyView.TimerText = timeLeft.asFormattedTime()
-                                            godzinyView.ProgressBar = (timeLeft/przerwatime*100).toInt()
+                                            godzinyView.ProgressBar = (100-(timeLeft/przerwatime*100F)).toInt()
                                             break
                                         }
                                     }
@@ -202,6 +203,9 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
 
     override fun onCleared() {
         super.onCleared()
-        timer.cancel()
+        if(timerStarted){
+            timer.cancel()
+            timerStarted = false
+        }
     }
 }

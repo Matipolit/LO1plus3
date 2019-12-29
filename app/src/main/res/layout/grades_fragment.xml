@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="pl.matmar.matipolit.lo1plus.ui.grades.GradesViewModel" />
+            type="pl.matmar.matipolit.lo1plus.ui.grades.overview.GradesViewModel" />
     </data>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

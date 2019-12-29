@@ -12,8 +12,8 @@ import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseCard
 import pl.matmar.matipolit.lo1plus.domain.HomeCard
 import pl.matmar.matipolit.lo1plus.domain.Subject
-import pl.matmar.matipolit.lo1plus.ui.grades.GradeHeaderItem
-import pl.matmar.matipolit.lo1plus.ui.grades.GradeItem
+import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradeHeaderItem
+import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradeItem
 import pl.matmar.matipolit.lo1plus.ui.home.GodzinyCardItem
 import pl.matmar.matipolit.lo1plus.ui.home.HomeCardItem
 import java.text.DateFormat
@@ -181,7 +181,7 @@ fun String.toDate(time: String? = null) : Date? = when(this.length) {
 
 fun String.asGodzinyJSON() : GodzinyJSON{
     val jsonObject = JSONObject(this)
-    return GodzinyJSON(jsonObject.getJSONObject("godziny"), jsonObject.optString("jutro"), jsonObject.optString("jutroTime"), jsonObject.optString("jutroTime"), jsonObject.optString("jutroData"),
+    return GodzinyJSON(jsonObject.getJSONObject("godziny"), jsonObject.optString("jutro"), jsonObject.optString("jutroTime"), jsonObject.optString("jutroName"), jsonObject.optString("jutroData"),
         jsonObject.optInt("dzwonekDelay"), jsonObject.optString("data"))
 }
 
@@ -275,8 +275,16 @@ fun Date.addTime(hours: Int? = null, minutes: Int? = null): Date? {
 }
 
 fun List<Subject>.asSections() : List<Section> = this.map {subject ->
-    Section(GradeHeaderItem(subject)).apply {
-        addAll(subject.oceny.map { GradeItem(it) })
+    Section(
+        GradeHeaderItem(
+            subject
+        )
+    ).apply {
+        addAll(subject.oceny.map {
+            GradeItem(
+                it
+            )
+        })
     }
 }
 

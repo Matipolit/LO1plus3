@@ -19,8 +19,16 @@
         android:label="@string/drawer_menu_home_item" />
     <fragment
         android:id="@+id/gradesFragment"
-        android:name="pl.matmar.matipolit.lo1plus.ui.grades.GradesFragment"
-        android:label="@string/drawer_menu_grades_item" />
+        android:name="pl.matmar.matipolit.lo1plus.ui.grades.overview.GradesFragment"
+        android:label="@string/drawer_menu_grades_item" >
+        <action
+            android:id="@+id/action_gradesFragment_to_gradeDetailFragment"
+            app:destination="@id/gradeDetailFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
 
     <activity
         android:id="@+id/privacyPolicy_endpoint"
@@ -30,4 +38,13 @@
         android:id="@+id/settingsFragment"
         android:name="pl.matmar.matipolit.lo1plus.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/gradeDetailFragment"
+        android:name="pl.matmar.matipolit.lo1plus.ui.grades.detail.GradeDetailFragment"
+        android:label="GradeDetailFragment">
+        <argument
+            android:name="grade"
+            app:argType="pl.matmar.matipolit.lo1plus.domain.Grade"/>
+
+    </fragment>
 </navigation>

@@ -19,6 +19,7 @@ fun View.setGodzinyVisibility(any: Any?) {
     } ?: run {visibility = View.GONE}
 }
 
+
 @BindingAdapter("gradeDate")
 fun TextView.setGradeDate(grade: Grade?) {
     grade?.let {

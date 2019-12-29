@@ -14,9 +14,9 @@
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
+        app:cardElevation="@dimen/elevation_card_normal"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:layout_marginStart="@dimen/small_margin"
         app:cardBackgroundColor="@{context.getColor(card.color)}"
         tools:cardBackgroundColor="@color/colorPlanLekcji">
         <androidx.constraintlayout.widget.ConstraintLayout

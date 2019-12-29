@@ -14,7 +14,7 @@
         app:cardBackgroundColor="@color/materialBackground"
         app:cardForegroundColor="@color/NormalElevation"
         android:clipToPadding="false"
-        app:cardElevation="@dimen/elevation_card_big">
+        app:cardElevation="@dimen/elevation_card_normal">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -23,7 +23,8 @@
                 android:id="@+id/name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/small_margin"
                 android:textSize="@dimen/text_size_normal"
                 android:textColor="@color/colorAdaptableHigh"
                 android:text="@{subject.name}"
@@ -37,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginTop="@dimen/small_margin"
-                android:layout_marginBottom="@dimen/normal_margin"
+                android:layout_marginBottom="@dimen/small_margin"
                 android:textColor="@color/colorAdaptableMedium"
                 android:textSize="@dimen/text_size_small"
                 android:text="@{subject.srednia}"
