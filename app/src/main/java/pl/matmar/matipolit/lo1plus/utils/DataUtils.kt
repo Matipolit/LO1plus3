@@ -274,7 +274,7 @@ fun Date.addTime(hours: Int? = null, minutes: Int? = null): Date? {
     return calendar.time
 }
 
-fun List<Subject>.asSections() : List<Section> = this.map {subject ->
+fun List<Subject>.asSections(onClickListener: GradeItem.OnClickListener) : List<Section> = this.map {subject ->
     Section(
         GradeHeaderItem(
             subject
@@ -282,7 +282,8 @@ fun List<Subject>.asSections() : List<Section> = this.map {subject ->
     ).apply {
         addAll(subject.oceny.map {
             GradeItem(
-                it
+                it,
+                onClickListener
             )
         })
     }

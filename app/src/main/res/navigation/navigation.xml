@@ -43,7 +43,7 @@
         android:name="pl.matmar.matipolit.lo1plus.ui.grades.detail.GradeDetailFragment"
         android:label="GradeDetailFragment">
         <argument
-            android:name="grade"
+            android:name="selectedGrade"
             app:argType="pl.matmar.matipolit.lo1plus.domain.Grade"/>
 
     </fragment>

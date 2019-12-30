@@ -1,5 +1,7 @@
 package pl.matmar.matipolit.lo1plus.domain
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import pl.matmar.matipolit.lo1plus.utils.toCardType
 import pl.matmar.matipolit.lo1plus.utils.toFormattedSpannable
 import java.util.*
@@ -14,6 +16,7 @@ data class HomeCard(
     val id = title.toCardType()
 }
 
+@Parcelize
 data class Grade(
     val kod: String,
     val opis: String,
@@ -22,7 +25,7 @@ data class Grade(
     val nauczyciel: String,
     val ocena: String,
     val komentarz: String?
-){
+) : Parcelable {
     val wagaInt = Character.getNumericValue(waga[0])
     var dodatek: Float = 0f
     var ocenaFloat = 0f
