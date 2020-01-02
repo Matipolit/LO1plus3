@@ -18,8 +18,8 @@ import java.util.*
 
 
 class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserRepository) : ViewModel(){
-    val repository = mHomeRepository
-    val userRepository = mUserRepository
+    private val repository = mHomeRepository
+    private val userRepository = mUserRepository
 
     val user = userRepository.user
     val home = repository.home
@@ -111,7 +111,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                     Timber.d("timer tick")
                     var aktualnaLekcja : Godzina?= null
                     var przerwatime : Float? = null
-                    var następnaLekcja : Godzina? = null
+                    var nastepnaLekcja : Godzina? = null
                     val godzinyObj = godzinyJSON.godzinyObject
                     Timber.d("$godzinyJSON")
                     val godzinyList = godzinyObj.godzinyGodziny
@@ -122,7 +122,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                     var jutroDate = jutro?.date
                     var i = 0
 
-                    var godzinyView = GodzinyView("Godziny", null, null, null, null, null, null, null, null, null)
+                    val godzinyView = GodzinyView("Godziny", null, null, null, null, null, null, null, null, null)
 
                     date = TodayDateAtMidnight()
 
@@ -143,7 +143,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                             }else{
                                 for (godzina in godzinyList) {
                                     if(godzinyList.size >= i+2){
-                                        następnaLekcja = godzinyList[i+1]
+                                        nastepnaLekcja = godzinyList[i+1]
                                     }
                                     if (godzina.startTime.before(currentDate) && godzina.endTime.after(currentDate)) {
                                         aktualnaLekcja = godzina
@@ -151,20 +151,20 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                                         godzinyView.TimerText = (godzina.endTime.time - currentDate.time).asFormattedTime()
                                         godzinyView.ProgressBar = (100-(godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS*100L).toInt()
                                         Timber.d("Miliseconds left: ${(godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS}")
-                                        if (następnaLekcja != null) {
+                                        if (nastepnaLekcja != null) {
                                             godzinyView.SecondMediumText = "Kolejna lekcja"
-                                            godzinyView.SecondSmallText1 = następnaLekcja.asLessonTime()
-                                            godzinyView.SecondSmallText2 = następnaLekcja.name
+                                            godzinyView.SecondSmallText1 = nastepnaLekcja.asLessonTime()
+                                            godzinyView.SecondSmallText2 = nastepnaLekcja.name
                                         }
                                         break
-                                    } else if (następnaLekcja != null){
-                                        if(godzina.endTime.before(currentDate) && następnaLekcja.startTime.after(currentDate)){
-                                            przerwatime = (następnaLekcja.startTime.time - godzina.endTime.time).toFloat()
+                                    } else if (nastepnaLekcja != null){
+                                        if(godzina.endTime.before(currentDate) && nastepnaLekcja.startTime.after(currentDate)){
+                                            przerwatime = (nastepnaLekcja.startTime.time - godzina.endTime.time).toFloat()
                                             godzinyView.TitleText = "Kolejna lekcja"
-                                            godzinyView.FirstMediumText = następnaLekcja.asLessonTime()
-                                            godzinyView.FirstSmallText = następnaLekcja.name
+                                            godzinyView.FirstMediumText = nastepnaLekcja.asLessonTime()
+                                            godzinyView.FirstSmallText = nastepnaLekcja.name
                                             godzinyView.TimeHeaderText = "Do końca przerwy"
-                                            val timeLeft = następnaLekcja.startTime.time - currentDate.time
+                                            val timeLeft = nastepnaLekcja.startTime.time - currentDate.time
                                             godzinyView.TimerText = timeLeft.asFormattedTime()
                                             godzinyView.ProgressBar = (100-(timeLeft/przerwatime*100F)).toInt()
                                             break

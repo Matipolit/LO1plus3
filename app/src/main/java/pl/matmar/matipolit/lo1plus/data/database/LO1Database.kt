@@ -50,6 +50,10 @@ interface UserDao{
 
     @Query("SELECT * FROM user WHERE databaseId = $CURRENT_USERDB_ID")
     fun getUser() : LiveData<User>
+
+    @Query("DELETE FROM user WHERE databaseId = $CURRENT_USERDB_ID")
+    fun deleteUser()
+
 }
 
 @Dao

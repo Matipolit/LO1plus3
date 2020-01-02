@@ -45,6 +45,10 @@ class UserRepository(private val api: MyApi,
         }
     }
 
+    suspend fun deleteUser(){
+        database.userDao.deleteUser()
+    }
+
     val user: LiveData<User> = database.userDao.getUser()
 
     private suspend fun saveUser(user: User) = database.userDao.upsert(user)

@@ -12,8 +12,12 @@ class GradeDetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val binding = GradeDetailFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
+
         val grade = GradeDetailFragmentArgs.fromBundle(arguments!!).selectedGrade
+        val subjectName = GradeDetailFragmentArgs.fromBundle(arguments!!).selectedSubject
+
         binding.grade = grade
+        binding.subjectName = subjectName
         return binding.root
     }
 }

@@ -24,11 +24,13 @@ fun ProgressBar.hide(){
 }
 
 fun View.snackbar(message: String, showButton:Boolean = true, buttonPrompt:String = "OK"){
-    Snackbar.make(this, message, Snackbar.LENGTH_LONG).also { snackbar ->
-        if(showButton){
-            snackbar.setAction(buttonPrompt){
-                snackbar.dismiss()
-        }
-        }
-    }.show()
+    if(this.isAttachedToWindow){
+        Snackbar.make(this, message, Snackbar.LENGTH_LONG).also { snackbar ->
+            if(showButton){
+                snackbar.setAction(buttonPrompt){
+                    snackbar.dismiss()
+                }
+            }
+        }.show()
+    }
 }

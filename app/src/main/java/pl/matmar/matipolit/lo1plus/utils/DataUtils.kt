@@ -283,6 +283,7 @@ fun List<Subject>.asSections(onClickListener: GradeItem.OnClickListener) : List<
         addAll(subject.oceny.map {
             GradeItem(
                 it,
+                subject.name,
                 onClickListener
             )
         })

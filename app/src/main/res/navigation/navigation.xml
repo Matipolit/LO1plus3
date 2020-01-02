@@ -37,14 +37,27 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="pl.matmar.matipolit.lo1plus.ui.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="Ustawienia" >
+        <action
+            android:id="@+id/action_settingsFragment_to_authFragment"
+            app:destination="@id/authFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/settingsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/gradeDetailFragment"
         android:name="pl.matmar.matipolit.lo1plus.ui.grades.detail.GradeDetailFragment"
-        android:label="GradeDetailFragment">
+        android:label="Szczegóły oceny">
         <argument
             android:name="selectedGrade"
             app:argType="pl.matmar.matipolit.lo1plus.domain.Grade"/>
+        <argument
+            android:name="selectedSubject"
+            app:argType="java.lang.String"/>
 
     </fragment>
 </navigation>

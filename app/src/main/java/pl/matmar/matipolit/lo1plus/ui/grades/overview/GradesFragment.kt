@@ -1,6 +1,8 @@
 package pl.matmar.matipolit.lo1plus.ui.grades.overview
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,25 +42,27 @@ class GradesFragment : Fragment(), KodeinAware{
     }
 
     private var decorationsAdded: Boolean = false
+    private var scroll: Parcelable? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Timber.d("OnCreate")
         val binding = GradesFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        viewModel.user.observe(this, Observer {
-            it.userID?.let {
+        viewModel.user.observe(this, Observer { user ->
+            user.userID?.let {
                 viewModel.refreshGrades(it, 1)
             }
         })
 
         viewModel.onSuccessEvent.observe(this, Observer {
             it?.let {
-                //binding.root.snackbar(it, showButton = false)
+                binding.root.snackbar(it, showButton = false)
                 viewModel.onSuccessEventFinished()
             }
         })
@@ -68,7 +72,7 @@ class GradesFragment : Fragment(), KodeinAware{
             if (it == true) {
                 Timber.d(it.toString())
                 //context?.toast("Login started")
-                //binding.root.snackbar("Odświeżam...", showButton = false)
+                binding.root.snackbar("Odświeżam...", showButton = false)
                 viewModel.onStartedEventFinished()
             }
         })
@@ -76,7 +80,7 @@ class GradesFragment : Fragment(), KodeinAware{
         viewModel.onFailureEvent.observe(this, Observer {
             if (it != null) {
                 //context?.toast(it)
-                binding.root.snackbar(it, showButton = false)
+                binding.recyclerView.snackbar(it, showButton = false)
 
                 viewModel.onFailureEventFinished()
             }
@@ -88,6 +92,7 @@ class GradesFragment : Fragment(), KodeinAware{
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         bindUI()
+        Timber.d("OnActivityCreated")
     }
 
     private fun bindUI() = Coroutines.main {
@@ -100,16 +105,18 @@ class GradesFragment : Fragment(), KodeinAware{
                             it
                         )
                 }
-                initRecyclerView(averageHeaderItem, it.oceny.asSections(GradeItem.OnClickListener { grade ->
-                    navigateToDetail(grade)
+                initRecyclerView(averageHeaderItem, it.oceny.asSections(GradeItem.OnClickListener { grade, subjectName ->
+                    navigateToDetail(grade, subjectName)
                     decorationsAdded = false
+                    scroll = recycler_view.layoutManager?.onSaveInstanceState()
+                    Timber.d("Scroll: $scroll")
                 }))
             }
         })
     }
 
-    private fun navigateToDetail(grade: Grade){
-        this.findNavController().navigate(GradesFragmentDirections.actionGradesFragmentToGradeDetailFragment(grade))
+    private fun navigateToDetail(grade: Grade, subjectName: String){
+        this.findNavController().navigate(GradesFragmentDirections.actionGradesFragmentToGradeDetailFragment(grade, subjectName))
     }
 
     private fun initRecyclerView(averageHeaderItem: GradesAverageHeaderItem?, sections: List<Section>){
@@ -154,5 +161,20 @@ class GradesFragment : Fragment(), KodeinAware{
             adapter = mAdapter
 
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Timber.d("OnAttach")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Timber.d("OnDetach")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.d("OnDestroy")
     }
 }

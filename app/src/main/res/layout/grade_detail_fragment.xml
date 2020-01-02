@@ -6,211 +6,229 @@
         <variable
             name="grade"
             type="pl.matmar.matipolit.lo1plus.domain.Grade" />
+        <variable
+            name="subjectName"
+            type="java.lang.String" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/ocena_card"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_margin="@dimen/normal_margin"
-            tools:cardBackgroundColor="@color/color5"
-            app:cardElevation="@dimen/elevation_card_small"
-            app:cardCornerRadius="6dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ocena_card"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_margin="@dimen/normal_margin"
+                tools:cardBackgroundColor="@color/color5"
+                app:gradeColor="@{grade}"
+                app:cardElevation="@dimen/elevation_card_small"
+                app:cardCornerRadius="6dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/grade_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/ultra_small_margin"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorLightOnDarkHigh"
-                    android:textSize="@dimen/text_size_header_giant"
-                    app:gradeVal="@{grade}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="5" />
+                    <TextView
+                        android:id="@+id/grade_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/ultra_small_margin"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorLightOnDarkHigh"
+                        android:textSize="@dimen/text_size_header_giant"
+                        app:gradeVal="@{grade}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="5" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/date_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/giant_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:textColor="@color/colorAdaptableMedium"
-            android:textSize="@dimen/text_size_normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ocena_card"
-            app:layout_constraintTop_toTopOf="@+id/ocena_card"
-            tools:text="18.10.2019" />
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/giant_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:textColor="@color/colorAdaptableMedium"
+                android:textSize="@dimen/text_size_normal"
+                android:text="@{grade.data}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ocena_card"
+                app:layout_constraintTop_toTopOf="@+id/ocena_card"
+                tools:text="18.10.2019" />
 
-        <TextView
-            android:id="@+id/subject_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/giant_margin"
-            android:layout_marginTop="@dimen/ultra_small_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:textColor="@color/colorAdaptableHigh"
-            android:textSize="@dimen/text_size_header_small"
+            <TextView
+                android:id="@+id/subject_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/giant_margin"
+                android:layout_marginTop="@dimen/ultra_small_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:textColor="@color/colorAdaptableHigh"
+                android:textSize="@dimen/text_size_header_small"
+                android:text="@{subjectName}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ocena_card"
+                app:layout_constraintTop_toBottomOf="@+id/date_text"
+                tools:text="Matematyka" />
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ocena_card"
-            app:layout_constraintTop_toBottomOf="@+id/date_text"
-            tools:text="Matematyka" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/teacher_title_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/giant_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:text="Nauczyciel:"
+                android:textColor="@color/colorAdaptableHigh"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ocena_card" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/teacher_title_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/giant_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:text="Nauczyciel:"
-            android:textColor="@color/colorAdaptableHigh"
-            android:textSize="@dimen/text_size_normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ocena_card" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/teacher_content_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/ultra_small_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:textColor="@color/colorAdaptableMedium"
+                android:textSize="@dimen/text_size_smaller"
+                android:text="@{grade.nauczyciel}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teacher_title_text"
+                tools:text="Nisiewicz Małgorzata" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/teacher_content_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/ultra_small_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:textColor="@color/colorAdaptableMedium"
-            android:textSize="@dimen/text_size_smaller"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/teacher_title_text"
-            tools:text="Nisiewicz Małgorzata" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/desc_title_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:text="Opis:"
+                android:textColor="@color/colorAdaptableHigh"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teacher_content_text" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/desc_title_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:text="Opis:"
-            android:textColor="@color/colorAdaptableHigh"
-            android:textSize="@dimen/text_size_normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/teacher_content_text" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/desc_content_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/ultra_small_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:textColor="@color/colorAdaptableMedium"
+                android:textSize="@dimen/text_size_smaller"
+                android:text="@{grade.opis}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/desc_title_text"
+                tools:text="Domowe;trygonometria(13.09.2019)" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/desc_content_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/ultra_small_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:textColor="@color/colorAdaptableMedium"
-            android:textSize="@dimen/text_size_smaller"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/desc_title_text"
-            tools:text="Domowe;trygonometria(13.09.2019)" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/weight_title_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:text="Waga oceny:"
+                android:textColor="@color/colorAdaptableHigh"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/desc_content_text" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/weight_title_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:text="Waga oceny:"
-            android:textColor="@color/colorAdaptableHigh"
-            android:textSize="@dimen/text_size_normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/desc_content_text" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/weight_content_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/ultra_small_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:textColor="@color/colorAdaptableMedium"
+                android:textSize="@dimen/text_size_smaller"
+                app:gradeWeight="@{grade}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weight_title_text"
+                tools:text="1,00" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/weight_content_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/ultra_small_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:textColor="@color/colorAdaptableMedium"
-            android:textSize="@dimen/text_size_smaller"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weight_title_text"
-            tools:text="1,00" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/code_title_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:text="Kod:"
+                android:textColor="@color/colorAdaptableHigh"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weight_content_text" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/code_title_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:text="Kod:"
-            android:textColor="@color/colorAdaptableHigh"
-            android:textSize="@dimen/text_size_normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weight_content_text" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/code_content_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/ultra_small_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:textColor="@color/colorAdaptableMedium"
+                android:textSize="@dimen/text_size_smaller"
+                android:text="@{grade.kod}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/code_title_text"
+                tools:text="D1" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/code_content_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/ultra_small_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:textColor="@color/colorAdaptableMedium"
-            android:textSize="@dimen/text_size_smaller"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/code_title_text"
-            tools:text="D1" />
+            <com.google.android.material.textview.MaterialTextView
+                app:viewVisibilityFrom="@{grade.komentarz}"
+                android:id="@+id/comment_title_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:text="Komentarz:"
+                android:textColor="@color/colorAdaptableHigh"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/code_content_text" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/comment_title_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:text="Komentarz:"
-            android:textColor="@color/colorAdaptableHigh"
-            android:textSize="@dimen/text_size_normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/code_content_text" />
+            <com.google.android.material.textview.MaterialTextView
+                app:viewVisibilityFrom="@{grade.komentarz}"
+                android:id="@+id/comment_content_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/ultra_small_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:layout_marginBottom="@dimen/normal_margin"
+                android:textColor="@color/colorAdaptableMedium"
+                android:textSize="@dimen/text_size_smaller"
+                android:text="@{grade.komentarz}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comment_title_text"
+                tools:text="poprawa" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/comment_content_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/ultra_small_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:textColor="@color/colorAdaptableMedium"
-            android:textSize="@dimen/text_size_smaller"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comment_title_text"
-            tools:text="poprawa" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

@@ -10,6 +10,7 @@ import pl.matmar.matipolit.lo1plus.utils.INSET_TYPE_KEY
 
 class GradeItem (
     val grade: Grade,
+    val subjectName: String,
     val onClickListener: OnClickListener
 ) : BindableItem<GradeLayoutBinding>(){
     override fun getLayout(): Int  = R.layout.grade_layout
@@ -17,7 +18,7 @@ class GradeItem (
     override fun bind(viewBinding: GradeLayoutBinding, position: Int) {
         viewBinding.grade = grade
         viewBinding.root.setOnClickListener {
-            onClickListener.onClick(grade)
+            onClickListener.onClick(grade, subjectName)
         }
     }
 
@@ -29,8 +30,8 @@ class GradeItem (
         extras.put(INSET_TYPE_KEY, INSET)
     }
 
-    class OnClickListener(val clickListener: (grade: Grade) -> Unit) {
-        fun onClick(grade: Grade) = clickListener(grade)
+    class OnClickListener(val clickListener: (grade: Grade, subjectName: String) -> Unit) {
+        fun onClick(grade: Grade, subjectName: String) = clickListener(grade, subjectName)
     }
 }
 

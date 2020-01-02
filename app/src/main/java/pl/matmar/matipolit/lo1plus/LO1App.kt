@@ -17,6 +17,7 @@ import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.ui.auth.AuthViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradesViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.home.HomeViewModelFactory
+import pl.matmar.matipolit.lo1plus.ui.settings.SettingsViewModelFactory
 import timber.log.Timber
 
 class LO1App : Application(), KodeinAware {
@@ -39,12 +40,9 @@ class LO1App : Application(), KodeinAware {
 
             bind() from provider { AuthViewModelFactory(instance()) }
             bind() from provider { HomeViewModelFactory(instance(), instance()) }
-            bind() from provider {
-                GradesViewModelFactory(
-                    instance(),
-                    instance()
-                )
-            }
+            bind() from provider { GradesViewModelFactory(instance(), instance()) }
+            bind() from provider { SettingsViewModelFactory(instance())}
+
             //bind() from factory {user: User -> HomeViewModelFactory(instance(), user)}
         }
 }

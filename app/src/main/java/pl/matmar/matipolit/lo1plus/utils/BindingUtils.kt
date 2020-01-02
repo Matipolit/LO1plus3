@@ -12,8 +12,8 @@ import pl.matmar.matipolit.lo1plus.domain.Grades
 fun TextView.setCountdown(godziny: Godziny) {
 }
 
-@BindingAdapter("godzinyVisibility")
-fun View.setGodzinyVisibility(any: Any?) {
+@BindingAdapter("viewVisibilityFrom")
+fun View.setVisibilityFrom(any: Any?) {
     any?.let {
         visibility = View.VISIBLE
     } ?: run {visibility = View.GONE}
@@ -49,10 +49,10 @@ fun TextView.setGradeValue(grade: Grade?) {
 @BindingAdapter("gradeName")
 fun TextView.setGradeName(grade: Grade?) {
     grade?.let {
-        if(grade.opis.length <=11 ){
+        if(grade.opis.length <=9 ){
             text = grade.opis
         }else{
-            text = "${grade.opis.substring(0, 10)}..."
+            text = "${grade.opis.substring(0, 8)}..."
         }
     }
 }

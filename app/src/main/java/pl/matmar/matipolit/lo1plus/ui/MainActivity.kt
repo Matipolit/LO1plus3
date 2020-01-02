@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    val topLevelDestinations = setOf(
+    private val topLevelDestinations = setOf(
+        R.id.authFragment,
         R.id.homeFragment,
         R.id.gradesFragment,
         R.id.settingsFragment
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.mainToolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        navController.addOnDestinationChangedListener{controller, destination, arguments ->
+        navController.addOnDestinationChangedListener{ _, destination, _ ->
             when(destination.id){
                 R.id.authFragment -> {
                     binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -64,20 +65,20 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setupWithNavController(navController)
     }
 
-    fun getAppBarConfiguration(topLevelDestinations : Set<Int>) : AppBarConfiguration{
+    private fun getAppBarConfiguration(topLevelDestinations : Set<Int>) : AppBarConfiguration{
         return AppBarConfiguration.Builder(topLevelDestinations)
             .setDrawerLayout(binding.drawerLayout)
             .build()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if(drawerLayout != null && topLevelDestinations.contains(navController.currentDestination?.id)){
+        return if(drawerLayout != null && topLevelDestinations.contains(navController.currentDestination?.id)){
             Timber.d("Top level")
             drawerLayout.openDrawer(GravityCompat.START)
-            return true
+            true
         }else{
             Timber.d("Lower level")
-            return NavigationUI.navigateUp(
+            NavigationUI.navigateUp(
                 Navigation.findNavController(this, R.id.navHost_fragment),
                 getAppBarConfiguration(topLevelDestinations))
         }
