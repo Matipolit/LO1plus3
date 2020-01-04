@@ -1,5 +1,7 @@
 package pl.matmar.matipolit.lo1plus.ui.settings
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.R
+
 
 class SettingsFragment : PreferenceFragmentCompat(), KodeinAware {
 
@@ -53,7 +56,22 @@ class SettingsFragment : PreferenceFragmentCompat(), KodeinAware {
         val logoutPreference: Preference? = findPreference("logout")
         logoutPreference?.setOnPreferenceClickListener {
             kotlin.run {
-                viewModel.removeUser()
+                val dialogClickListener =
+                    DialogInterface.OnClickListener { dialog, which ->
+                        when (which) {
+                            DialogInterface.BUTTON_POSITIVE -> {
+                                viewModel.removeUser()
+                            }
+                            DialogInterface.BUTTON_NEGATIVE -> {
+                            }
+                        }
+                    }
+
+                val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                builder.setMessage("Czy na pewno chcesz się wylogować?")
+                    .setPositiveButton("Tak", dialogClickListener)
+                    .setNegativeButton("Nie", dialogClickListener)
+                    .show()
             }
             true
         }

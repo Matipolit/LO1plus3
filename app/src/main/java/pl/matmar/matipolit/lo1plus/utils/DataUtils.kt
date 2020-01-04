@@ -1,10 +1,12 @@
 package pl.matmar.matipolit.lo1plus.utils
 
+import android.content.Context
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StrikethroughSpan
 import android.view.View
+import androidx.preference.PreferenceManager
 import androidx.room.TypeConverter
 import com.xwray.groupie.Section
 import org.json.JSONObject
@@ -16,6 +18,7 @@ import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradeHeaderItem
 import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradeItem
 import pl.matmar.matipolit.lo1plus.ui.home.GodzinyCardItem
 import pl.matmar.matipolit.lo1plus.ui.home.HomeCardItem
+import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -115,6 +118,18 @@ fun <R> readInstanceProperty(instance: Any, propertyName: String): R {
         .first { it.name == propertyName } as KProperty1<Any, *>
     // force a invalid cast exception if incorrect type here
     return property.get(instance) as R
+}
+
+fun isRefreshNeeded(context: Context?, lastRefresh: Long?): Boolean{
+    return if(context != null && lastRefresh != null) {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val refreshDelay = (sharedPref.getString("refreshTime", "") ?: "0").toInt()
+        Timber.d("lastRefresh: $lastRefresh")
+        Timber.d("RefreshDelay: $refreshDelay")
+        (Date().time >= lastRefresh + refreshDelay * 60000L)
+    }else{
+        false
+    }
 }
 
 //EXTENSION FUNCTIONS

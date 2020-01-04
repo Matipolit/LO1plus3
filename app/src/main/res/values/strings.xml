@@ -14,4 +14,9 @@
     <string name="godziny_until_next_lesson">Kolejna lekcja</string>
     <string name="godziny_before_day">Dzisiaj zaczynasz o</string>
     <string name="godziny_until_day">Dzisiaj zaczynasz za</string>
+
+    <string name="const_pref_key">lo1plus_pref</string>
+    <string name="const_pref_home_lastrefresh">pref_home_lastrefresh</string>
+    <string name="const_pref_grades_lastrefresh">pref_grades_lastrefresh</string>
+
 </resources>

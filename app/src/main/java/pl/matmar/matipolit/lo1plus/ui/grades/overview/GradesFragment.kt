@@ -24,11 +24,9 @@ import pl.matmar.matipolit.lo1plus.domain.Grade
 import pl.matmar.matipolit.lo1plus.ui.grades.GradeHeaderItemDecoration
 import pl.matmar.matipolit.lo1plus.ui.grades.GradeInsetItemDecoration
 import pl.matmar.matipolit.lo1plus.ui.grades.GradesAverageHeaderItemDecoration
-import pl.matmar.matipolit.lo1plus.utils.Coroutines
-import pl.matmar.matipolit.lo1plus.utils.GRADES_SPAN
-import pl.matmar.matipolit.lo1plus.utils.asSections
-import pl.matmar.matipolit.lo1plus.utils.snackbar
+import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
+import java.util.*
 
 
 class GradesFragment : Fragment(), KodeinAware{
@@ -54,15 +52,32 @@ class GradesFragment : Fragment(), KodeinAware{
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        val sharedPref = activity?.getSharedPreferences(
+            getString(R.string.const_pref_key), Context.MODE_PRIVATE)
+
+        var lastRefresh : Long? = null
+
         viewModel.user.observe(this, Observer { user ->
             user.userID?.let {
-                viewModel.refreshGrades(it, 1)
+                sharedPref?.let {
+                    lastRefresh = sharedPref.getLong(getString(R.string.const_pref_grades_lastrefresh), 0L)
+                }
+                if(isRefreshNeeded(context, lastRefresh)){
+                    viewModel.refreshGrades(it, 1)
+                }
             }
         })
 
         viewModel.onSuccessEvent.observe(this, Observer {
             it?.let {
                 binding.root.snackbar(it, showButton = false)
+                sharedPref?.let {
+                    with (it.edit()) {
+                        putLong(getString(R.string.const_pref_grades_lastrefresh), Date().time)
+                        commit()
+                    }
+
+                }
                 viewModel.onSuccessEventFinished()
             }
         })

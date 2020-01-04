@@ -1,5 +1,6 @@
 package pl.matmar.matipolit.lo1plus.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +19,9 @@ import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.HomeFragmentBinding
 import pl.matmar.matipolit.lo1plus.ui.SharedViewModel
-import pl.matmar.matipolit.lo1plus.utils.Coroutines
-import pl.matmar.matipolit.lo1plus.utils.asGodzinyJSON
-import pl.matmar.matipolit.lo1plus.utils.asHomeCardItem
-import pl.matmar.matipolit.lo1plus.utils.snackbar
+import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
+import java.util.*
 
 
 class HomeFragment : Fragment(), KodeinAware {
@@ -55,21 +54,41 @@ class HomeFragment : Fragment(), KodeinAware {
         val user = sharedViewModel.user
         Timber.d(user.value?.email)
 
+        val sharedPref = activity?.getSharedPreferences(
+            getString(R.string.const_pref_key), Context.MODE_PRIVATE)
+
+        var lastRefresh : Long? = null
+
+
         viewModel.home.observe(this, Observer {
             Timber.d("Home changed")
         })
 
-        viewModel.user.observe(this, Observer {
+        viewModel.user.observe(this, Observer { user1 ->
             Timber.d("user changed")
-            it?.let {
-                viewModel.refreshHome(it.userID!!)
+            user1?.let { nonNullUser ->
+                sharedPref?.let {
+                    lastRefresh = sharedPref.getLong(getString(R.string.const_pref_home_lastrefresh), 0L)
+
+                }
+                if(isRefreshNeeded(context, lastRefresh)){
+                    viewModel.refreshHome(nonNullUser.userID!!)
+                }
             }
         })
 
 
-        viewModel.onSuccessEvent.observe(this, Observer {
-            it?.let {
-                binding.root.snackbar(it, showButton = false)
+        viewModel.onSuccessEvent.observe(this, Observer { succesEventString ->
+            succesEventString?.let { successEventString ->
+                binding.root.snackbar(successEventString, showButton = false)
+                sharedPref?.let {
+                    with (it.edit()) {
+                        putLong(getString(R.string.const_pref_home_lastrefresh), Date().time)
+                        commit()
+                    }
+
+                }
+
                 viewModel.onSuccessEventFinished()
             }
         })

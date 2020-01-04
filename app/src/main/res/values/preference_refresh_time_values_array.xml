@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="time_values">
+    <string-array name="time_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -8,5 +8,5 @@
         <item>10</item>
         <item>30</item>
         <item>60</item>
-    </integer-array>
+    </string-array>
 </resources>

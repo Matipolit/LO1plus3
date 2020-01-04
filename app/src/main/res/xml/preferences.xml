@@ -10,7 +10,8 @@
             android:title="Odświeżaj automatycznie"
             android:summary="Ilość czasu, po którym aplikacja będzie odświeżać się automatycznie"
             android:entries="@array/time_titles"
-            android:entryValues="@array/time_values"/>
+            android:entryValues="@array/time_values"
+            android:defaultValue="10"/>
 
         <SwitchPreferenceCompat
             android:key="wifiRefresh"
