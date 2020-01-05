@@ -5,15 +5,14 @@ import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
-import pl.matmar.matipolit.lo1plus.domain.Grades
-import pl.matmar.matipolit.lo1plus.domain.HomeCard
-import pl.matmar.matipolit.lo1plus.domain.Subject
+import pl.matmar.matipolit.lo1plus.domain.*
 import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
 
 const val CURRENT_USERDB_ID = 0
 const val CURRENT_GODZINY_ID = 0
 const val CURRENT_GRADES_ID = 0
+const val CURRENT_PLAN_ID = 0
 
 @Entity
 data class User(
@@ -117,3 +116,14 @@ fun DatabaseGrades.asDomainModel() : Grades{
     //val subjects : List<Subject> = Gson().fromJson(this.oceny, listType)
     return Grades(subjects, this.semestr, this.semestr1ID, this.klasa, this.date?.toDate())
 }
+
+@Entity
+data class DatabasePlan(
+    val plan: PlanLekcji,
+    val klasa: String?
+){
+    @PrimaryKey(autoGenerate = false)
+    var databaseId: Int = CURRENT_PLAN_ID
+}
+
+fun DatabasePlan.asDomainModel() = Plan(plan, klasa)

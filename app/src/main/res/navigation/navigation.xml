@@ -60,4 +60,8 @@
             app:argType="java.lang.String"/>
 
     </fragment>
+    <fragment
+        android:id="@+id/planFragment"
+        android:name="pl.matmar.matipolit.lo1plus.ui.plan.PlanFragment"
+        android:label="Plan lekcji" />
 </navigation>

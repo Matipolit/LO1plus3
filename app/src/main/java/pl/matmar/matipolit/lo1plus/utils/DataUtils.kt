@@ -7,7 +7,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.preference.PreferenceManager
-import androidx.room.TypeConverter
 import com.xwray.groupie.Section
 import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.R
@@ -123,7 +122,10 @@ fun <R> readInstanceProperty(instance: Any, propertyName: String): R {
 fun isRefreshNeeded(context: Context?, lastRefresh: Long?): Boolean{
     return if(context != null && lastRefresh != null) {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val refreshDelay = (sharedPref.getString("refreshTime", "") ?: "0").toInt()
+        var refreshDelay = 10
+        if(sharedPref.contains("refreshTime")){
+            refreshDelay = (sharedPref.getString("refreshTime", "") ?: "0").toInt()
+        }
         Timber.d("lastRefresh: $lastRefresh")
         Timber.d("RefreshDelay: $refreshDelay")
         (Date().time >= lastRefresh + refreshDelay * 60000L)
@@ -267,6 +269,8 @@ fun Godzina.asLessonTime() : String = "${this.startTime.hours}:${this.startTime.
 
 fun Date.asFormattedHourString() : String = "${this.hours}:${this.minutes}"
 
+fun Date.asString(): String = "${this.day+1}.${this.month+1}.${this.year}"
+
 fun Date.tommorow(): Date = Date(this.time + 86400000L)
 
 fun Int.asSemesterID() : String = "${11381+Date().year+this}"
@@ -302,18 +306,6 @@ fun List<Subject>.asSections(onClickListener: GradeItem.OnClickListener) : List<
                 onClickListener
             )
         })
-    }
-}
-
-object DateConverter {
-    @TypeConverter
-    fun toDate(dateLong: Long): Date {
-        return Date(dateLong)
-    }
-
-    @TypeConverter
-    fun fromDate(date: Date): Long {
-        return date.time
     }
 }
 

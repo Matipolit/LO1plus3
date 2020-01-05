@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         R.id.authFragment,
         R.id.homeFragment,
         R.id.gradesFragment,
+        R.id.planFragment,
         R.id.settingsFragment
     )
 
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.navHost_fragment)
         setSupportActionBar(binding.mainToolbar)
+        binding.mainToolbar.elevation
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener{ _, destination, _ ->

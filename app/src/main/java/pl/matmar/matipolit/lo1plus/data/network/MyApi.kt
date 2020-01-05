@@ -41,6 +41,12 @@ interface MyApi{
         @Query("semestr")semesterID: String?
     ) : Response<GradesResponse>
 
+    @POST("plan")
+    suspend fun plan(
+        @Query("userID")userID: String,
+        @Query("date")date: String?
+    ) : Response<PlanResponse>
+
 
     companion object{
         operator fun invoke(networkConnectionInterceptor: NetworkConnectionInterceptor) : MyApi{

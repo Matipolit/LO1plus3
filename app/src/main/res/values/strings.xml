@@ -18,5 +18,7 @@
     <string name="const_pref_key">lo1plus_pref</string>
     <string name="const_pref_home_lastrefresh">pref_home_lastrefresh</string>
     <string name="const_pref_grades_lastrefresh">pref_grades_lastrefresh</string>
+    <string name="const_pref_plan_lastrefresh">pref_plan_lastrefresh</string>
+
 
 </resources>

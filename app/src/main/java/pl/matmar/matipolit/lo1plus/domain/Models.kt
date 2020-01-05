@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import pl.matmar.matipolit.lo1plus.utils.toCardType
 import pl.matmar.matipolit.lo1plus.utils.toFormattedSpannable
+import java.text.SimpleDateFormat
 import java.util.*
 
 data class HomeCard(
@@ -148,3 +149,37 @@ data class Grades(
 
     }
 }
+
+data class Plan(
+    val planLekcji: PlanLekcji,
+    val klasa: String?
+)
+
+data class PlanLekcji(
+    val godziny: List<String>,
+    val tydzien: List<WeekDay>
+){
+    val godzinySplit = godziny.map {
+        it.split(" ")
+    }
+    var begDate: Date? = null
+    var endDate: Date? = null
+    init {
+        if(godziny.size >= 2){
+            begDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.first().date)
+            endDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.last().date)
+        }
+    }
+
+}
+
+data class WeekDay(
+    val name: String,
+    val date: String,
+    val lekcje: List<Lekcja>
+)
+
+data class Lekcja(
+    val index: Int,
+    val data: String
+)

@@ -5,5 +5,7 @@
     <dimen name="elevation_card_big">0dp</dimen>
     <dimen name="elevation_card_normal">0dp</dimen>
     <dimen name="elevation_card_small">0dp</dimen>
+    <dimen name="elevation_toolbar">0dp</dimen>
+
 
 </resources>

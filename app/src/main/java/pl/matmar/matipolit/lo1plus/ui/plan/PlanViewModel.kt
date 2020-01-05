@@ -1,4 +1,4 @@
-package pl.matmar.matipolit.lo1plus.ui.grades.overview
+package pl.matmar.matipolit.lo1plus.ui.plan
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,18 +7,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import pl.matmar.matipolit.lo1plus.data.repositories.GradesRepository
+import pl.matmar.matipolit.lo1plus.data.repositories.PlanRepository
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.NoInternetException
 
-class GradesViewModel(mRepository: GradesRepository, mUserRepository: UserRepository) : ViewModel(){
+class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository): ViewModel(){
 
     private val repository = mRepository
     private val userRepository = mUserRepository
 
     val user = userRepository.user
-    val grades = repository.grades
+    val plan = repository.plan
 
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -47,12 +47,13 @@ class GradesViewModel(mRepository: GradesRepository, mUserRepository: UserReposi
         _onFailureEvent.value = null
     }
 
-    fun refreshGrades(userId: String, semesterID: Int){
+    fun refreshPlan(userId: String, date: String? = null){
         _onStartedEvent.value = true
         viewModelScope.launch {
             try {
-                repository.refreshGrades(userId, semesterID)
-                _onSuccessEvent.value = "Pomyślnie odświeżono oceny"
+                repository.refreshPlan(userId, date)
+                //TODO error 404 for every refresh
+                _onSuccessEvent.value = "Pomyślnie odświeżono plan"
                 return@launch
             }catch (e: ApiException){
                 _onFailureEvent.value = e.message
@@ -62,6 +63,5 @@ class GradesViewModel(mRepository: GradesRepository, mUserRepository: UserReposi
                 return@launch
             }
         }
-
     }
 }

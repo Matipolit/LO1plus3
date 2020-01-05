@@ -2,6 +2,9 @@ package pl.matmar.matipolit.lo1plus.data.network
 
 import com.google.gson.Gson
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseGrades
+import pl.matmar.matipolit.lo1plus.data.database.DatabasePlan
+import pl.matmar.matipolit.lo1plus.domain.Plan
+import pl.matmar.matipolit.lo1plus.domain.PlanLekcji
 import pl.matmar.matipolit.lo1plus.domain.Subject
 
 
@@ -37,6 +40,18 @@ data class GradesResponse(
     var klasa: String?,
     var date: String?
 )
+
+data class PlanResponse(
+    val correct: String,
+    val info: String?,
+    val planLekcji: PlanLekcji,
+    val klasa: String?
+
+)
+
+fun PlanResponse.asDomainModel():Plan = Plan(this.planLekcji, this.klasa)
+
+fun PlanResponse.asDatabaseModel(): DatabasePlan = DatabasePlan(this.planLekcji, this.klasa)
 
 fun GradesResponse.asDatabaseModel() : DatabaseGrades =
     DatabaseGrades(Gson().toJson(this.oceny), this.semestr, this.semestr1ID, this.klasa, this.date)

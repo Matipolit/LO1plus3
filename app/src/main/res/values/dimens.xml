@@ -22,6 +22,7 @@
     <dimen name="elevation_card_big">8dp</dimen>
     <dimen name="elevation_card_normal">4dp</dimen>
     <dimen name="elevation_card_small">2dp</dimen>
+    <dimen name="elevation_toolbar">4dp</dimen>
 
 
 </resources>

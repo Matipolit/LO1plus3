@@ -19,11 +19,9 @@ class GradesRepository(private val api: MyApi,
 ) : SafeApiRequest(){
     suspend fun refreshGrades(_userID : String, semesterID: Int? = null){
 
-        val userID = _userID
-
         if(isFetchNeeded()){
             withContext(Dispatchers.IO){
-                val response = apiRequest { api.grades(userID, semesterID?.asSemesterID()) }
+                val response = apiRequest { api.grades(_userID, semesterID?.asSemesterID()) }
 
                 if(response.correct == "true"){
                     saveGrades(response)
