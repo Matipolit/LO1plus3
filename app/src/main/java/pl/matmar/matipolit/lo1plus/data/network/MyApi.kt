@@ -41,7 +41,7 @@ interface MyApi{
         @Query("semestr")semesterID: String?
     ) : Response<GradesResponse>
 
-    @POST("plan")
+    @POST("planLekcji")
     suspend fun plan(
         @Query("userID")userID: String,
         @Query("date")date: String?

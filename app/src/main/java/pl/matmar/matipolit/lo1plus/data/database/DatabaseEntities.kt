@@ -8,6 +8,7 @@ import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.domain.*
 import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
+import java.util.*
 
 const val CURRENT_USERDB_ID = 0
 const val CURRENT_GODZINY_ID = 0
@@ -120,10 +121,11 @@ fun DatabaseGrades.asDomainModel() : Grades{
 @Entity
 data class DatabasePlan(
     val plan: PlanLekcji,
-    val klasa: String?
+    val klasa: String?,
+    val cal: Calendar
 ){
     @PrimaryKey(autoGenerate = false)
-    var databaseId: Int = CURRENT_PLAN_ID
+    var timeInMilis: Long = cal.timeInMillis
 }
 
 fun DatabasePlan.asDomainModel() = Plan(plan, klasa)

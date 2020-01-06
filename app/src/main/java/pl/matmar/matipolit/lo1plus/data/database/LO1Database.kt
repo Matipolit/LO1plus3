@@ -88,8 +88,11 @@ interface PlanDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(plan: DatabasePlan)
 
-    @Query("SELECT * FROM databaseplan")
-    fun getPlan() : LiveData<DatabasePlan>
+    @Query("SELECT * FROM databaseplan WHERE timeInMilis = :timeMillis")
+    fun getPlan(timeMillis: Long) : DatabasePlan?
+
+    @Query("DELETE FROM databaseplan WHERE timeInMilis < :timeMin AND timeInMilis > :timeMax")
+    fun clearPlans(timeMin: Long, timeMax: Long)
 
 }
 /*private lateinit var INSTANCE: UserDatabase

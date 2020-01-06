@@ -54,20 +54,20 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
 
     //New Material Design
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
 
     //Kodein Dependency Injection
     implementation "org.kodein.di:kodein-di-generic-jvm:6.2.1"
     implementation "org.kodein.di:kodein-di-framework-android-x:6.2.1"
 
     //Android Room
-    implementation "androidx.room:room-runtime:2.2.2"
-    implementation "androidx.room:room-ktx:2.2.2"
-    kapt "androidx.room:room-compiler:2.2.2"
+    implementation "androidx.room:room-runtime:2.2.3"
+    implementation "androidx.room:room-ktx:2.2.3"
+    kapt "androidx.room:room-compiler:2.2.3"
 
     //Android Navigation Architecture
-    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-rc03"
-    implementation "androidx.navigation:navigation-ui-ktx:2.2.0-rc03"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-rc04"
+    implementation "androidx.navigation:navigation-ui-ktx:2.2.0-rc04"
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -81,4 +81,10 @@ dependencies {
 
     //AndroidX preferences
     implementation "androidx.preference:preference:1.1.0"
+
+    //Sticky layoutmanager
+    implementation 'com.github.qiujayen:sticky-layoutmanager:1.0.1'
+
+    //Database debug
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }

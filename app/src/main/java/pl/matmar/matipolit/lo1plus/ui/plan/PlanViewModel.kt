@@ -9,8 +9,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.matmar.matipolit.lo1plus.data.repositories.PlanRepository
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
+import pl.matmar.matipolit.lo1plus.domain.Plan
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.NoInternetException
+import java.util.*
+
 
 class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository): ViewModel(){
 
@@ -18,10 +21,26 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
     private val userRepository = mUserRepository
 
     val user = userRepository.user
-    val plan = repository.plan
 
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    private val cal = Calendar.getInstance()
+        .apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            clear(Calendar.MINUTE)
+            clear(Calendar.SECOND)
+            clear(Calendar.MILLISECOND)
+            set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
+        }
+
+    private val _calendar = MutableLiveData<Calendar>()
+    val calendar : LiveData<Calendar>
+        get() = _calendar
+
+    private val _plan = MutableLiveData<Plan>()
+    val plan : LiveData<Plan>
+        get() = _plan
 
     private val _onStartedEvent = MutableLiveData<Boolean>()
     val onStartedEvent : LiveData<Boolean>
@@ -47,13 +66,14 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
         _onFailureEvent.value = null
     }
 
-    fun refreshPlan(userId: String, date: String? = null){
+    fun refreshPlan(userId: String){
         _onStartedEvent.value = true
         viewModelScope.launch {
             try {
-                repository.refreshPlan(userId, date)
+                repository.refreshPlan(userId, cal)
                 //TODO error 404 for every refresh
                 _onSuccessEvent.value = "Pomyślnie odświeżono plan"
+                getPlan()
                 return@launch
             }catch (e: ApiException){
                 _onFailureEvent.value = e.message
@@ -63,5 +83,24 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
                 return@launch
             }
         }
+    }
+
+    fun getPlan(){
+        _plan.value = repository.getPlan(cal)
+    }
+
+    fun nextWeek(){
+        cal.add(Calendar.WEEK_OF_YEAR, 1)
+        _calendar.value = cal
+    }
+
+    fun prevWeek(){
+        cal.add(Calendar.WEEK_OF_YEAR, -1)
+        _calendar.value = cal
+    }
+
+    init {
+        _calendar.value = cal
+        getPlan()
     }
 }

@@ -28,4 +28,16 @@ class Converters {
         return date?.time
     }
 
+    @TypeConverter
+    fun calFromTimestamp(value: Long): Calendar{
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = value
+        return cal
+    }
+
+    @TypeConverter
+    fun calToTimestamp(cal: Calendar): Long{
+        return cal.timeInMillis
+    }
+
 }

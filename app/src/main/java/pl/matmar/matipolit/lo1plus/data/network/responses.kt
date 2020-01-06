@@ -6,6 +6,7 @@ import pl.matmar.matipolit.lo1plus.data.database.DatabasePlan
 import pl.matmar.matipolit.lo1plus.domain.Plan
 import pl.matmar.matipolit.lo1plus.domain.PlanLekcji
 import pl.matmar.matipolit.lo1plus.domain.Subject
+import java.util.*
 
 
 data class AuthResponse(
@@ -51,7 +52,7 @@ data class PlanResponse(
 
 fun PlanResponse.asDomainModel():Plan = Plan(this.planLekcji, this.klasa)
 
-fun PlanResponse.asDatabaseModel(): DatabasePlan = DatabasePlan(this.planLekcji, this.klasa)
+fun PlanResponse.asDatabaseModel(cal: Calendar): DatabasePlan = DatabasePlan(this.planLekcji, this.klasa, cal)
 
 fun GradesResponse.asDatabaseModel() : DatabaseGrades =
     DatabaseGrades(Gson().toJson(this.oceny), this.semestr, this.semestr1ID, this.klasa, this.date)

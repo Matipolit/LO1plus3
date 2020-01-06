@@ -15,6 +15,10 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -41,6 +45,9 @@ class GradesFragment : Fragment(), KodeinAware{
 
     private var decorationsAdded: Boolean = false
     private var scroll: Parcelable? = null
+
+    private val fragmentJob = SupervisorJob()
+    private val fragmentScope = CoroutineScope(fragmentJob + Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,27 +113,32 @@ class GradesFragment : Fragment(), KodeinAware{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindUI()
+        fragmentScope.launch {
+            bindUI()
+        }
         Timber.d("OnActivityCreated")
     }
 
-    private fun bindUI() = Coroutines.main {
+    private suspend fun bindUI() = Coroutines.main {
         viewModel.grades.observe(this, Observer {
             it?.let {
-                var averageHeaderItem : GradesAverageHeaderItem? = null
-                if(it.averageVal != null && it.averageText != null){
-                    averageHeaderItem =
-                        GradesAverageHeaderItem(
-                            it
-                        )
+                    var averageHeaderItem: GradesAverageHeaderItem? = null
+                    if (it.averageVal != null && it.averageText != null) {
+                        averageHeaderItem =
+                            GradesAverageHeaderItem(
+                                it
+                            )
+                    }
+                    initRecyclerView(
+                        averageHeaderItem,
+                        it.oceny.asSections(GradeItem.OnClickListener { grade, subjectName ->
+                            navigateToDetail(grade, subjectName)
+                            decorationsAdded = false
+                            scroll = recycler_view.layoutManager?.onSaveInstanceState()
+                            Timber.d("Scroll: $scroll")
+                        })
+                    )
                 }
-                initRecyclerView(averageHeaderItem, it.oceny.asSections(GradeItem.OnClickListener { grade, subjectName ->
-                    navigateToDetail(grade, subjectName)
-                    decorationsAdded = false
-                    scroll = recycler_view.layoutManager?.onSaveInstanceState()
-                    Timber.d("Scroll: $scroll")
-                }))
-            }
         })
     }
 

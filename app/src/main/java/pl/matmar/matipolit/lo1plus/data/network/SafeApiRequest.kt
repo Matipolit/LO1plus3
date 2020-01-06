@@ -24,7 +24,7 @@ abstract class SafeApiRequest {
                 try{
                     message.append(JSONObject(it).getString("info"))
                 }catch (e: JSONException){
-                    Timber.d("JSONException")
+                    Timber.d("No info field")
                     e.printStackTrace()
                 }
                 message.append("\n")
