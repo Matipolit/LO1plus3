@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -37,6 +38,8 @@ class PlanFragment : Fragment(), KodeinAware{
 
     private val fragmentJob = SupervisorJob()
     private val fragmentScope = CoroutineScope(fragmentJob + Dispatchers.Main)
+    private var userID: String? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +53,8 @@ class PlanFragment : Fragment(), KodeinAware{
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        val swipeContainer = binding.swipeContainer
+
         val sharedPref = activity?.getSharedPreferences(
             getString(R.string.const_pref_key), Context.MODE_PRIVATE)
 
@@ -57,6 +62,7 @@ class PlanFragment : Fragment(), KodeinAware{
 
         viewModel.user.observe(this, Observer { user ->
             user.userID?.let {
+                userID = it
                 sharedPref?.let {
                     lastRefresh = sharedPref.getLong(getString(R.string.const_pref_plan_lastrefresh), 0L)
                 }
@@ -67,6 +73,7 @@ class PlanFragment : Fragment(), KodeinAware{
         })
 
         viewModel.onSuccessEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = false
             it?.let {
                 binding.root.snackbar(it, showButton = false)
                 sharedPref?.let {
@@ -81,6 +88,7 @@ class PlanFragment : Fragment(), KodeinAware{
         })
 
         viewModel.onStartedEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = true
             Timber.d("onStartedEvent")
             if (it == true) {
                 Timber.d(it.toString())
@@ -91,11 +99,18 @@ class PlanFragment : Fragment(), KodeinAware{
         })
 
         viewModel.onFailureEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = false
             if (it != null) {
                 //context?.toast(it)
                 binding.recyclerView.snackbar(it, showButton = false)
 
                 viewModel.onFailureEventFinished()
+            }
+        })
+
+        swipeContainer.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener() {
+            userID?.let {
+                viewModel.refreshPlan(it)
             }
         })
 

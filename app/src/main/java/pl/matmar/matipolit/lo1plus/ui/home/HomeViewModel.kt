@@ -108,12 +108,12 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
         kotlin.run {
             timer.schedule(object: TimerTask(){
                 override fun run() {
-                    Timber.d("timer tick")
+                    Timber.v("timer tick")
                     var aktualnaLekcja : Godzina?= null
                     var przerwatime : Float? = null
                     var nastepnaLekcja : Godzina? = null
                     val godzinyObj = godzinyJSON.godzinyObject
-                    Timber.d("$godzinyJSON")
+                    Timber.v("$godzinyJSON")
                     val godzinyList = godzinyObj.godzinyGodziny
                     val dzwonekDelay = godzinyObj.dzwonekDelay
                     val jutro = godzinyObj.jutro
@@ -169,7 +169,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                                         godzinyView.TitleText = "Do końca lekcji"
                                         godzinyView.TimerText = (godzina.endTime.time - currentDate.time).asFormattedTime()
                                         godzinyView.ProgressBar = (100-(godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS*100L).toInt()
-                                        Timber.d("Miliseconds left: ${(godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS}")
+                                        Timber.v("Miliseconds left: ${(godzina.endTime.time - currentDate.time)/ LESSON_TIME_MILIS}")
                                         if (nastepnaLekcja != null) {
                                             godzinyView.SecondMediumText = "Kolejna lekcja"
                                             godzinyView.SecondSmallText1 = nastepnaLekcja.asLessonTime()
@@ -209,7 +209,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                         }
                     }
                     _timerData.postValue(godzinyView)
-                    Timber.d(godzinyView.toString())
+                    Timber.v(godzinyView.toString())
                 }
             },0, 200)
         }

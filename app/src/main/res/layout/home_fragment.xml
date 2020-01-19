@@ -6,10 +6,17 @@
             name="viewModel"
             type="pl.matmar.matipolit.lo1plus.ui.home.HomeViewModel" />
     </data>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        tools:listitem="@layout/card_layout"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            tools:listitem="@layout/card_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

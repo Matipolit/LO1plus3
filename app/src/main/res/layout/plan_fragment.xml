@@ -7,57 +7,63 @@
             name="viewModel"
             type="pl.matmar.matipolit.lo1plus.ui.plan.PlanViewModel" />
     </data>
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:clipChildren="false"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
-
-            <ImageView
-                android:id="@+id/arrow_right_icon"
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:clipChildren="false"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tint="@color/colorAdaptableMedium"
-                android:layout_marginLeft="@dimen/normal_margin"
-                android:onClick="@{() -> viewModel.nextWeek()}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/date_text"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_right" />
+                android:layout_gravity="bottom">
 
-            <ImageView
-                android:id="@+id/arrow_left_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:tint="@color/colorAdaptableMedium"
-                android:layout_marginRight="@dimen/normal_margin"
-                android:onClick="@{() -> viewModel.prevWeek()}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/date_text"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_left" />
+                <ImageView
+                    android:id="@+id/arrow_right_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="@color/colorAdaptableMedium"
+                    android:layout_marginLeft="@dimen/normal_margin"
+                    android:onClick="@{() -> viewModel.nextWeek()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/date_text"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_arrow_right" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_margin"
-                android:layout_marginBottom="@dimen/small_margin"
-                android:textColor="@color/colorAdaptableMedium"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="06.01 - 12.01" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+                <ImageView
+                    android:id="@+id/arrow_left_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="@color/colorAdaptableMedium"
+                    android:layout_marginRight="@dimen/normal_margin"
+                    android:onClick="@{() -> viewModel.prevWeek()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/date_text"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_arrow_left" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:textColor="@color/colorAdaptableMedium"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="06.01 - 12.01" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </layout>

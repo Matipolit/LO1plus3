@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -49,6 +50,8 @@ class GradesFragment : Fragment(), KodeinAware{
     private val fragmentJob = SupervisorJob()
     private val fragmentScope = CoroutineScope(fragmentJob + Dispatchers.Main)
 
+    private var userID: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +62,8 @@ class GradesFragment : Fragment(), KodeinAware{
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        val swipeContainer = binding.swipeContainer
+
         val sharedPref = activity?.getSharedPreferences(
             getString(R.string.const_pref_key), Context.MODE_PRIVATE)
 
@@ -66,16 +71,18 @@ class GradesFragment : Fragment(), KodeinAware{
 
         viewModel.user.observe(this, Observer { user ->
             user.userID?.let {
+                userID = it
                 sharedPref?.let {
                     lastRefresh = sharedPref.getLong(getString(R.string.const_pref_grades_lastrefresh), 0L)
                 }
                 if(isRefreshNeeded(context, lastRefresh)){
-                    viewModel.refreshGrades(it, 1)
+                    viewModel.refreshGrades(userID!!, 1)
                 }
             }
         })
 
         viewModel.onSuccessEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = false
             it?.let {
                 binding.root.snackbar(it, showButton = false)
                 sharedPref?.let {
@@ -90,6 +97,7 @@ class GradesFragment : Fragment(), KodeinAware{
         })
 
         viewModel.onStartedEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = true
             Timber.d("onStartedEvent")
             if (it == true) {
                 Timber.d(it.toString())
@@ -100,11 +108,18 @@ class GradesFragment : Fragment(), KodeinAware{
         })
 
         viewModel.onFailureEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = false
             if (it != null) {
                 //context?.toast(it)
                 binding.recyclerView.snackbar(it, showButton = false)
 
                 viewModel.onFailureEventFinished()
+            }
+        })
+
+        swipeContainer.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener(){
+            userID?.let {
+                viewModel.refreshGrades(it, 1)
             }
         })
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -43,6 +44,7 @@ class HomeFragment : Fragment(), KodeinAware {
 
     private var decorationsAdded: Boolean = false
     private var godzinyRemoved: Boolean = false
+    private var userID: String? = null
 
 
     override fun onCreateView(
@@ -53,6 +55,8 @@ class HomeFragment : Fragment(), KodeinAware {
         val binding = HomeFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
+        val swipeContainer = binding.swipeContainer
 
         val user = sharedViewModel.user
         Timber.d(user.value?.email)
@@ -70,18 +74,20 @@ class HomeFragment : Fragment(), KodeinAware {
         viewModel.user.observe(this, Observer { user1 ->
             Timber.d("user changed")
             user1?.let { nonNullUser ->
+                userID = nonNullUser.userID
                 sharedPref?.let {
                     lastRefresh = sharedPref.getLong(getString(R.string.const_pref_home_lastrefresh), 0L)
 
                 }
                 if(isRefreshNeeded(context, lastRefresh)){
-                    viewModel.refreshHome(nonNullUser.userID!!)
+                    viewModel.refreshHome(userID!!)
                 }
             }
         })
 
 
         viewModel.onSuccessEvent.observe(this, Observer { succesEventString ->
+            swipeContainer.isRefreshing = false
             succesEventString?.let { successEventString ->
                 binding.root.snackbar(successEventString, showButton = false)
                 sharedPref?.let {
@@ -97,6 +103,7 @@ class HomeFragment : Fragment(), KodeinAware {
         })
 
         viewModel.onStartedEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = true
             Timber.d("onStartedEvent")
             if (it == true) {
                 //context?.toast("Login started")
@@ -106,10 +113,17 @@ class HomeFragment : Fragment(), KodeinAware {
         })
 
         viewModel.onFailureEvent.observe(this, Observer {
+            swipeContainer.isRefreshing = false
             if (it != null) {
                 //context?.toast(it)
                 binding.root.snackbar(it, showButton = false)
                 viewModel.onFailureEventFinished()
+            }
+        })
+
+        swipeContainer.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener() {
+            userID?.let {
+                viewModel.refreshHome(it)
             }
         })
         return binding.root
