@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="lesson"
+            type="pl.matmar.matipolit.lo1plus.domain.Lekcja" />
+        <variable
+            name="hours"
+            type="java.lang.String" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/index_text"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/oval"
+            android:textColor="@color/colorAdaptableInvertedHigh"
+            android:layout_margin="@dimen/small_margin"
+            android:textSize="@dimen/text_size_smaller"
+            android:text="@{`` + lesson.index}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/hours_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAdaptableMedium"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:textSize="@dimen/text_size_smaller"
+            android:text="@{hours}"
+            app:layout_constraintStart_toEndOf="@+id/index_text"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="8:00 8:45" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/content_first_line_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAdaptableHigh"
+            android:textSize="@dimen/text_size_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/index_text"
+            app:splitLekcjaDataFirst="@{lesson}"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginTop="@dimen/ultra_small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+            tools:text="Fizyka [2f2]" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/content_secont_line_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAdaptableMedium"
+            android:textSize="@dimen/text_size_smaller"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content_first_line_text"
+            app:splitLekcjaDataSecond="@{lesson}"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+            tools:text="sala: 210" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

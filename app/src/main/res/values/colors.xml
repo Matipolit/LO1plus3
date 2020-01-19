@@ -31,6 +31,10 @@
     <color name="colorAdaptableMedium">#99000000</color>
     <color name="colorAdaptableDisabled">#61000000</color>
 
+    <color name="colorAdaptableInvertedHigh">#DEFFFFFF</color>
+    <color name="colorAdaptableInvertedMedium">#99FFFFFF</color>
+    <color name="colorAdaptableInvertedDisabled">#61FFFFFF</color>
+
     <!-- GRADES -->
     <color name="color6">#93b446</color>
     <color name="color5">#37bd94</color>

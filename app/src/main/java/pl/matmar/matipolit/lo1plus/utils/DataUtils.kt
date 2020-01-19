@@ -15,7 +15,6 @@ import pl.matmar.matipolit.lo1plus.domain.HomeCard
 import pl.matmar.matipolit.lo1plus.domain.Subject
 import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradeHeaderItem
 import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradeItem
-import pl.matmar.matipolit.lo1plus.ui.home.GodzinyCardItem
 import pl.matmar.matipolit.lo1plus.ui.home.HomeCardItem
 import timber.log.Timber
 import java.text.DateFormat
@@ -198,8 +197,17 @@ fun String.toDate(time: String? = null) : Date? = when(this.length) {
 
 fun String.asGodzinyJSON() : GodzinyJSON{
     val jsonObject = JSONObject(this)
-    return GodzinyJSON(jsonObject.getJSONObject("godziny"), jsonObject.optString("jutro"), jsonObject.optString("jutroTime"), jsonObject.optString("jutroName"), jsonObject.optString("jutroData"),
-        jsonObject.optInt("dzwonekDelay"), jsonObject.optString("data"))
+    return GodzinyJSON(jsonObject.getJSONObject("godziny"), jsonObject.optString("jutro").checkAvailability(), jsonObject.optString("jutroTime").checkAvailability(), jsonObject.optString("jutroName").checkAvailability(), jsonObject.optString("jutroData").checkAvailability(),
+        jsonObject.optInt("dzwonekDelay"), jsonObject.optString("data").checkAvailability())
+}
+
+fun String?.checkAvailability(): String?{
+    return if(this == "n/a"){
+        null
+    }else{
+        this
+    }
+
 }
 
 
@@ -260,20 +268,26 @@ fun List<HomeCard>.asHomeCardItem() : List<HomeCardItem> = this.map{
 
 fun Long.toDateWithDelay(delay: Int) = Date(this - delay*1000)
 
-fun GodzinyJSON.asGodzinyCardItem(time : String) : GodzinyCardItem = GodzinyCardItem()
+//fun GodzinyJSON.asGodzinyCardItem(time : String) : GodzinyCardItem = GodzinyCardItem()
 
 
 fun Long.asFormattedTime() : String = "${this / 1000 / 60}min ${this / 1000 % 60}s"
 
 fun Godzina.asLessonTime() : String = "${this.startTime.hours}:${this.startTime.minutes} - ${this.endTime.hours}:${this.endTime.minutes}"
 
-fun Date.asFormattedHourString() : String = "${this.hours}:${this.minutes}"
+fun Date.asFormattedHourString() : String {
+    return if(this.minutes == 0){
+        "${this.hours}:${this.minutes}0"
+    }else{
+        "${this.hours}:${this.minutes}"
+    }
+}
 
 fun Date.asString(): String = "${this.day+1}.${this.month+1}.${this.year}"
 
 fun Date.tommorow(): Date = Date(this.time + 86400000L)
 
-fun Int.asSemesterID() : String = "${11381+Date().year+this}"
+fun Int.asSemesterID() : String = "${13400+this}"
 
 fun TodayDateAtMidnight(): Date{
     val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")

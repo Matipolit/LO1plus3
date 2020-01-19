@@ -117,7 +117,7 @@ data class Grades(
                     sumaSrodrocznych += subject.ocena_śródroczna.toFloat()
                 }else{
                     arePrzewidywaneRoczne = true
-                    sumaSrodrocznych += subject.przewidywana_roczna.toFloat()
+                    sumaSrodrocznych += subject.przewidywana_śródroczna.toFloat()
                 }
             }
         }

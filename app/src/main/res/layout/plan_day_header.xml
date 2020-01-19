@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="weekDay"
+            type="pl.matmar.matipolit.lo1plus.domain.WeekDay" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/NormalElevation">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/day_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:textColor="@color/colorAdaptableHigh"
+            android:textSize="@dimen/text_size_normal"
+            android:text="@{weekDay.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Wtorek" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAdaptableMedium"
+            android:textSize="@dimen/text_size_normal"
+            app:noYearWeekDayDate="@{weekDay}"
+            app:layout_constraintStart_toEndOf="@+id/day_text"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            tools:text="07.01" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

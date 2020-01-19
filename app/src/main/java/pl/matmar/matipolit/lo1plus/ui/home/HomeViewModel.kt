@@ -138,9 +138,28 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                                 godzinyView.TitleText = "Brak lekcji dzisiaj"
                                 godzinyView.FirstMediumText = "Kolejne lekcje - ${jutro?.lessonName} ${jutro?.name?:"jutro"} o ${godzinyJSON.jutroTime}"
                             }else if(godzinyList.last().endTime.before(currentDate)) {
-                                godzinyView.TitleText = "Koniec lekcji na dzisiaj"
-                                godzinyView.FirstMediumText = "Kolejne lekcje - ${jutro?.lessonName} ${jutro?.name} o ${godzinyJSON.jutroTime}"
-                            }else{
+                                if(jutro?.lessonName!= null && jutro.name != null){
+                                    godzinyView.TitleText = "Koniec lekcji na dzisiaj"
+                                    godzinyView.FirstMediumText = "Kolejne lekcje - ${jutro.lessonName} ${jutro.name} o ${godzinyJSON.jutroTime}"
+                                }else{
+                                    godzinyView.Visibility = View.GONE
+                                }
+                            }
+                            else if(godzinyList.first().startTime.after(currentDate)){
+
+                                val firstLekcjaStart = godzinyList.first().startTime.time
+
+                                if(firstLekcjaStart - currentDate.time > 900000){
+                                    godzinyView.TitleText = "Dzisiaj zaczynasz o"
+                                    godzinyView.TimerText = godzinyList.first().startTime.asFormattedHourString()
+                                    godzinyView.TimerSubText = godzinyList.first().name
+                                }else if(firstLekcjaStart- currentDate.time > 0){
+                                    godzinyView.TitleText = "Dzisiaj zaczynasz za"
+                                    godzinyView.TimerText = (firstLekcjaStart - currentDate.time).asFormattedTime()
+                                    godzinyView.TimerSubText = godzinyList.first().name
+                                }
+                            }
+                            else{
                                 for (godzina in godzinyList) {
                                     if(godzinyList.size >= i+2){
                                         nastepnaLekcja = godzinyList[i+1]
@@ -192,7 +211,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
                     _timerData.postValue(godzinyView)
                     Timber.d(godzinyView.toString())
                 }
-            },0, 1000)
+            },0, 200)
         }
     }
 

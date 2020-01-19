@@ -1,21 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/materialBackground</item>
-        
+
         <item name="android:statusBarColor">@color/materialBackground</item>
         <item name="android:windowLightStatusBar">@bool/isLightMode</item>
+        <item name="android:windowLightNavigationBar">@bool/isLightMode</item>
+        <item name="android:navigationBarColor">@color/materialBackground</item>
 
-        <item name="android:buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="android:buttonBarButtonStyle">
+            @style/Widget.MaterialComponents.Button.TextButton
+        </item>
     </style>
-
-    <style name="dialogAlertTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
-        <item name="android:buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
-    </style>
-
 </resources>

@@ -27,5 +27,9 @@
     <color name="colorAdaptableMedium">#99FFFFFF</color>
     <color name="colorAdaptableDisabled">#61FFFFFF</color>
 
+    <color name="colorAdaptableInvertedHigh">#DE000000</color>
+    <color name="colorAdaptableInvertedMedium">#99000000</color>
+    <color name="colorAdaptableInvertedDisabled">#61000000</color>
+
 
 </resources>

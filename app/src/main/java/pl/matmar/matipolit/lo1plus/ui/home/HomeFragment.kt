@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Section
 import kotlinx.android.synthetic.main.home_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -41,6 +42,8 @@ class HomeFragment : Fragment(), KodeinAware {
     }
 
     private var decorationsAdded: Boolean = false
+    private var godzinyRemoved: Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -132,21 +135,25 @@ class HomeFragment : Fragment(), KodeinAware {
         homeCardItems: List<HomeCardItem>
     ) {
         var godzinyCardItem: GodzinyCardItem? = null
-        val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
-            for(item in homeCardItems){
-                if(item.homeCard.title == "Godziny"){
-                    Timber.d("Godziny card in initRecyclerView: ${item.homeCard.content}")
-                    val godziny = item.homeCard.content.asGodzinyJSON()
-                    if(viewModel.timerStarted){
-                        viewModel.cancelTimer()
-                    }
-                    viewModel.startGodziny(godziny)
-                    godzinyCardItem = GodzinyCardItem()
-                    add(godzinyCardItem!!)
-                }else{
-                    add(item)
+        var homeSection = Section()
+
+        for(item in homeCardItems){
+            if(item.homeCard.title == "Godziny"){
+                val godziny = item.homeCard.content.asGodzinyJSON()
+                if(viewModel.timerStarted){
+                    viewModel.cancelTimer()
                 }
+                viewModel.startGodziny(godziny)
+                godzinyCardItem = GodzinyCardItem(viewModel.timerData.value)
+                homeSection?.add(godzinyCardItem)
+                godzinyRemoved = false
+            }else{
+                homeSection?.add(item)
             }
+        }
+
+        val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
+            add(homeSection)
             //add(0, godzinyCardItem)
         }
         val bgColor = resources.getColor(R.color.colorTransparent)
@@ -163,10 +170,20 @@ class HomeFragment : Fragment(), KodeinAware {
             }
             adapter = mAdapter
         }
-        viewModel.timerData.observe(this, Observer {
-            val godzinyView = it
+        viewModel.timerData.observe(this, Observer {godzinyView ->
             godzinyCardItem?.let {
-                it.notifyChanged(godzinyView)
+                if(godzinyView.Visibility == View.VISIBLE){
+                    if(godzinyRemoved){
+                        homeSection.add(0, godzinyCardItem)
+                        godzinyRemoved = false
+                    }
+                    it.notifyChanged(godzinyView)
+                }else{
+                    if(!godzinyRemoved){
+                        homeSection.remove(godzinyCardItem)
+                        godzinyRemoved = true
+                    }
+                }
             }
 
         })

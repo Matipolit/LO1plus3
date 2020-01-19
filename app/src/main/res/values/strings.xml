@@ -20,5 +20,7 @@
     <string name="const_pref_grades_lastrefresh">pref_grades_lastrefresh</string>
     <string name="const_pref_plan_lastrefresh">pref_plan_lastrefresh</string>
 
+    <string name="normal_format">%s</string>
+
 
 </resources>

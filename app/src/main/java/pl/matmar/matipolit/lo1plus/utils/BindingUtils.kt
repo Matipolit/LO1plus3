@@ -7,6 +7,10 @@ import com.google.android.material.card.MaterialCardView
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.domain.Grade
 import pl.matmar.matipolit.lo1plus.domain.Grades
+import pl.matmar.matipolit.lo1plus.domain.Lekcja
+import pl.matmar.matipolit.lo1plus.domain.WeekDay
+import java.text.SimpleDateFormat
+import java.util.*
 
 @BindingAdapter("godziny")
 fun TextView.setCountdown(godziny: Godziny) {
@@ -78,5 +82,43 @@ fun MaterialCardView.setCardColor(grade: Grade?) {
 fun TextView.setRoundedGradesAverage(grades: Grades?) {
     grades?.let {
         text = "%.2f".format(grades.averageVal)
+    }
+}
+
+
+@BindingAdapter("noYearWeekDayDate")
+fun TextView.setNoYearWeekDayDate(weekDay: WeekDay?) {
+    weekDay?.let {
+        val splitted = it.date.split(".")
+        text = "${splitted[0]}.${splitted[1]}"
+    }
+}
+
+@BindingAdapter("splitLekcjaDataFirst")
+fun TextView.setSplitLekcjaDataFirst(lekcja: Lekcja?) {
+    lekcja?.let {
+        val splitted = it.data.split("\n")
+        text = splitted[0]
+    }
+}
+
+@BindingAdapter("splitLekcjaDataSecond")
+fun TextView.setSplitLekcjaDataSecond(lekcja: Lekcja?) {
+    lekcja?.let {
+        val splitted = it.data.split("\n")
+        if(splitted.size > 1){
+            text = splitted[1]
+        }
+    }
+}
+
+@BindingAdapter("firstLastDaysOfWeek")
+fun TextView.setFirstLastDaysOfWeek(cal: Calendar?) {
+    cal?.let {
+        val first = cal
+        cal.add(Calendar.DAY_OF_WEEK, 7)
+        val last = cal
+        val format = SimpleDateFormat("dd.MM", Locale.US)
+        text = "${format.format(first)} - ${format.format(last)}"
     }
 }
