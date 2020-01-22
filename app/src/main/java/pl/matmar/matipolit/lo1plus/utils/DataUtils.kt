@@ -184,6 +184,8 @@ fun String.toDate(time: String? = null) : Date? = when(this.length) {
     else -> null
 
 }
+
+fun String.isNumeric():Boolean = this.matches("-?\\d+(\\.\\d+)?".toRegex())
     /*val dateStringArray = this.split(".")
     Timber.d("Date - array: " + dateStringArray.toString())
     var date: Date? = null

@@ -2,6 +2,7 @@ package pl.matmar.matipolit.lo1plus.domain
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import pl.matmar.matipolit.lo1plus.utils.isNumeric
 import pl.matmar.matipolit.lo1plus.utils.toCardType
 import pl.matmar.matipolit.lo1plus.utils.toFormattedSpannable
 import java.text.SimpleDateFormat
@@ -102,22 +103,22 @@ data class Grades(
         for(subject in oceny){
             if(subject.ocena_roczna != "-" || subject.przewidywana_roczna != "-"){
                 iloscRocznych += 1
-                if(subject.ocena_roczna != "-"){
+                if(subject.ocena_roczna != "-" && subject.ocena_roczna.isNumeric()){
                     areRoczne = true
                     sumaRocznych += subject.ocena_roczna.toFloat()
-                }else{
+                }else if(subject.przewidywana_roczna.isNumeric()){
                     arePrzewidywaneRoczne = true
                     sumaRocznych += subject.przewidywana_roczna.toFloat()
                 }
             }
             if(subject.ocena_śródroczna != "-" || subject.przewidywana_śródroczna != "-"){
                 iloscSrodrocznych += 1
-                if(subject.ocena_śródroczna != "-"){
+                if(subject.ocena_śródroczna != "-" && subject.ocena_śródroczna.isNumeric()){
                     areSrodroczne = true
                     sumaSrodrocznych += subject.ocena_śródroczna.toFloat()
-                }else{
-                    arePrzewidywaneRoczne = true
-                    sumaSrodrocznych += subject.przewidywana_śródroczna.toFloat()
+                }else if(subject.przewidywana_śródroczna.isNumeric()){
+                        arePrzewidywaneRoczne = true
+                        sumaSrodrocznych += subject.przewidywana_śródroczna.toFloat()
                 }
             }
         }
