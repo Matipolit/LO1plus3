@@ -18,8 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/small_margin"
         android:layout_marginStart="@dimen/small_margin"
-        app:cardBackgroundColor="@color/godzinyColor"
-        android:visibility="@{godzinyView.visibility}">
+        app:cardBackgroundColor="@color/godzinyColor">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

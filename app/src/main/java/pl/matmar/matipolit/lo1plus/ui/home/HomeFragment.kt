@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -121,11 +120,11 @@ class HomeFragment : Fragment(), KodeinAware {
             }
         })
 
-        swipeContainer.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener() {
+        swipeContainer.setOnRefreshListener {
             userID?.let {
                 viewModel.refreshHome(it)
             }
-        })
+        }
         return binding.root
     }
 
@@ -138,6 +137,7 @@ class HomeFragment : Fragment(), KodeinAware {
     private fun bindUI() = Coroutines.main {
         viewModel.home.observe(this, Observer {
             it?.let {
+                Timber.d("initializing recyclerview")
                 val homeCards = it
                 initRecyclerView(homeCards.asHomeCardItem())
 
@@ -158,11 +158,10 @@ class HomeFragment : Fragment(), KodeinAware {
                     viewModel.cancelTimer()
                 }
                 viewModel.startGodziny(godziny)
-                godzinyCardItem = GodzinyCardItem(viewModel.timerData.value)
-                homeSection?.add(godzinyCardItem)
-                godzinyRemoved = false
+                godzinyCardItem = GodzinyCardItem()
+                homeSection.add(godzinyCardItem)
             }else{
-                homeSection?.add(item)
+                homeSection.add(item)
             }
         }
 
@@ -186,18 +185,18 @@ class HomeFragment : Fragment(), KodeinAware {
         }
         viewModel.timerData.observe(this, Observer {godzinyView ->
             godzinyCardItem?.let {
-                if(godzinyView.Visibility == View.VISIBLE){
+                /*if(godzinyView.Visibility == View.VISIBLE){
                     if(godzinyRemoved){
                         homeSection.add(0, godzinyCardItem)
                         godzinyRemoved = false
-                    }
+                    }*/
                     it.notifyChanged(godzinyView)
-                }else{
+                /*}else{
                     if(!godzinyRemoved){
                         homeSection.remove(godzinyCardItem)
                         godzinyRemoved = true
                     }
-                }
+                }*/
             }
 
         })
