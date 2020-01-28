@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -29,7 +28,10 @@ import pl.matmar.matipolit.lo1plus.domain.Grade
 import pl.matmar.matipolit.lo1plus.ui.grades.GradeHeaderItemDecoration
 import pl.matmar.matipolit.lo1plus.ui.grades.GradeInsetItemDecoration
 import pl.matmar.matipolit.lo1plus.ui.grades.GradesAverageHeaderItemDecoration
-import pl.matmar.matipolit.lo1plus.utils.*
+import pl.matmar.matipolit.lo1plus.utils.GRADES_SPAN
+import pl.matmar.matipolit.lo1plus.utils.asSections
+import pl.matmar.matipolit.lo1plus.utils.isRefreshNeeded
+import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 import java.util.*
 
@@ -77,6 +79,8 @@ class GradesFragment : Fragment(), KodeinAware{
                 }
                 if(isRefreshNeeded(context, lastRefresh)){
                     viewModel.refreshGrades(userID!!, 1)
+                }else{
+                    bindUI()
                 }
             }
         })
@@ -92,6 +96,7 @@ class GradesFragment : Fragment(), KodeinAware{
                     }
 
                 }
+                bindUI()
                 viewModel.onSuccessEventFinished()
             }
         })
@@ -112,7 +117,7 @@ class GradesFragment : Fragment(), KodeinAware{
             if (it != null) {
                 //context?.toast(it)
                 binding.recyclerView.snackbar(it, showButton = false)
-
+                bindUI()
                 viewModel.onFailureEventFinished()
             }
         })
@@ -128,13 +133,13 @@ class GradesFragment : Fragment(), KodeinAware{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fragmentScope.launch {
+        /*fragmentScope.launch {
             bindUI()
-        }
+        }*/
         Timber.d("OnActivityCreated")
     }
 
-    private suspend fun bindUI() = Coroutines.main {
+    private fun bindUI(){
         viewModel.grades.observe(this, Observer {
             it?.let {
                     var averageHeaderItem: GradesAverageHeaderItem? = null
@@ -154,6 +159,7 @@ class GradesFragment : Fragment(), KodeinAware{
                         })
                     )
                 }
+            viewModel.grades.removeObservers(this)
         })
     }
 

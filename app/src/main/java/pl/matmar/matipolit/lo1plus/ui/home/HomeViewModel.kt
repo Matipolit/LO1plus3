@@ -44,7 +44,7 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
         get() = _currentTime
 
     val currentTimeString = Transformations.map(currentTime) { time ->
-        DateUtils.formatElapsedTime(time).split(":")[0] + " min" + DateUtils.formatElapsedTime(time).split(":")[1] + " s"
+        DateUtils.formatElapsedTime(time).split(":")[0] + " m" + DateUtils.formatElapsedTime(time).split(":")[1] + " s"
     }
 
     private val _titleText = MutableLiveData<String>()

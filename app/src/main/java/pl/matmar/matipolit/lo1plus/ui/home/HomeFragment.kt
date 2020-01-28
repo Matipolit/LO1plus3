@@ -45,12 +45,12 @@ class HomeFragment : Fragment(), KodeinAware {
     private var godzinyRemoved: Boolean = false
     private var userID: String? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Timber.d("OnCreateView")
         val binding = HomeFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -58,7 +58,6 @@ class HomeFragment : Fragment(), KodeinAware {
         val swipeContainer = binding.swipeContainer
 
         val user = sharedViewModel.user
-        Timber.d(user.value?.email)
 
         val sharedPref = activity?.getSharedPreferences(
             getString(R.string.const_pref_key), Context.MODE_PRIVATE)
@@ -80,6 +79,9 @@ class HomeFragment : Fragment(), KodeinAware {
                 }
                 if(isRefreshNeeded(context, lastRefresh)){
                     viewModel.refreshHome(userID!!)
+                }else{
+                    bindUI()
+                    Timber.d("set bind to true")
                 }
             }
         })
@@ -96,7 +98,7 @@ class HomeFragment : Fragment(), KodeinAware {
                     }
 
                 }
-
+                bindUI()
                 viewModel.onSuccessEventFinished()
             }
         })
@@ -116,6 +118,7 @@ class HomeFragment : Fragment(), KodeinAware {
             if (it != null) {
                 //context?.toast(it)
                 binding.root.snackbar(it, showButton = false)
+                bindUI()
                 viewModel.onFailureEventFinished()
             }
         })
@@ -130,17 +133,23 @@ class HomeFragment : Fragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindUI()
+        Timber.d("OnActivityCreated")
+        /*if(bind){
+            Timber.d("Bind!")
+            bindUI()
+        }*/
     }
 
 
     private fun bindUI() = Coroutines.main {
         viewModel.home.observe(this, Observer {
             it?.let {
-                Timber.d("initializing recyclerview")
-                val homeCards = it
-                initRecyclerView(homeCards.asHomeCardItem())
-
+                if(it.isNotEmpty()){
+                    Timber.d("initializing recyclerview")
+                    val homeCards = it
+                    initRecyclerView(homeCards.asHomeCardItem())
+                    viewModel.home.removeObservers(this)
+                }
             }
         })
     }
@@ -185,18 +194,18 @@ class HomeFragment : Fragment(), KodeinAware {
         }
         viewModel.timerData.observe(this, Observer {godzinyView ->
             godzinyCardItem?.let {
-                /*if(godzinyView.Visibility == View.VISIBLE){
+                if(godzinyView.Visibility == View.VISIBLE){
                     if(godzinyRemoved){
                         homeSection.add(0, godzinyCardItem)
                         godzinyRemoved = false
-                    }*/
+                    }
                     it.notifyChanged(godzinyView)
-                /*}else{
+                }else{
                     if(!godzinyRemoved){
                         homeSection.remove(godzinyCardItem)
                         godzinyRemoved = true
                     }
-                }*/
+                }
             }
 
         })

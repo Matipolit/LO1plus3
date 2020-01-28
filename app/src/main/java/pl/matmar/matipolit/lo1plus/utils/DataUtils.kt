@@ -273,7 +273,7 @@ fun Long.toDateWithDelay(delay: Int) = Date(this - delay*1000)
 //fun GodzinyJSON.asGodzinyCardItem(time : String) : GodzinyCardItem = GodzinyCardItem()
 
 
-fun Long.asFormattedTime() : String = "${this / 1000 / 60}min ${this / 1000 % 60}s"
+fun Long.asFormattedTime() : String = "${this / 1000 / 60} m ${this / 1000 % 60} s"
 
 fun Godzina.asLessonTime() : String = "${this.startTime.hours}:${this.startTime.minutes} - ${this.endTime.hours}:${this.endTime.minutes}"
 
