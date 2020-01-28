@@ -8,16 +8,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Section
+import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.PlanFragmentBinding
+import pl.matmar.matipolit.lo1plus.domain.asSections
 import pl.matmar.matipolit.lo1plus.utils.isRefreshNeeded
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
@@ -68,6 +73,8 @@ class PlanFragment : Fragment(), KodeinAware{
                 }
                 if(isRefreshNeeded(context, lastRefresh)){
                     viewModel.refreshPlan(it)
+                }else{
+                    bindUI()
                 }
             }
         })
@@ -83,6 +90,7 @@ class PlanFragment : Fragment(), KodeinAware{
                     }
 
                 }
+                bindUI()
                 viewModel.onSuccessEventFinished()
             }
         })
@@ -103,7 +111,7 @@ class PlanFragment : Fragment(), KodeinAware{
             if (it != null) {
                 //context?.toast(it)
                 binding.recyclerView.snackbar(it, showButton = false)
-
+                bindUI()
                 viewModel.onFailureEventFinished()
             }
         })
@@ -120,18 +128,33 @@ class PlanFragment : Fragment(), KodeinAware{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fragmentScope.launch {
-            bindUI()
-        }
         Timber.d("OnActivityCreated")
     }
 
     private fun bindUI() {
         viewModel.plan.observe(this, Observer {
             it?.let {
-
+                initRecyclerView(it.planLekcji.asSections())
             }
+            viewModel.plan.removeObservers(this)
         })
+    }
+
+    private fun initRecyclerView(
+        sections: List<Section>
+    ){
+        Timber.d("Init recyclerView")
+
+        val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
+            for(section in sections){
+                add(section)
+            }
+        }
+
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
     }
 
 

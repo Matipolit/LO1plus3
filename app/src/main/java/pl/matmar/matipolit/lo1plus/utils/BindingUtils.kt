@@ -98,16 +98,30 @@ fun TextView.setNoYearWeekDayDate(weekDay: WeekDay?) {
 fun TextView.setSplitLekcjaDataFirst(lekcja: Lekcja?) {
     lekcja?.let {
         val splitted = it.data.split("\n")
-        text = splitted[0]
+        text = splitted[0].asFormattedSpannable()
     }
 }
 
 @BindingAdapter("splitLekcjaDataSecond")
 fun TextView.setSplitLekcjaDataSecond(lekcja: Lekcja?) {
     lekcja?.let {
+        val data = it.data
+        val splitted = data.split("\n")
+        if(splitted.size > 1){
+            text = data.substring(data.indexOf("\n")+1).asFormattedSpannable()
+        }
+
+    }
+}
+
+@BindingAdapter("lekcjaSecondVisibility")
+fun View.setLekcjaSecondVisibility(lekcja: Lekcja?) {
+    lekcja?.let {
         val splitted = it.data.split("\n")
         if(splitted.size > 1){
-            text = splitted[1]
+            visibility = View.VISIBLE
+        }else{
+            visibility = View.GONE
         }
     }
 }
@@ -115,10 +129,11 @@ fun TextView.setSplitLekcjaDataSecond(lekcja: Lekcja?) {
 @BindingAdapter("firstLastDaysOfWeek")
 fun TextView.setFirstLastDaysOfWeek(cal: Calendar?) {
     cal?.let {
-        val first = cal
-        cal.add(Calendar.DAY_OF_WEEK, 7)
-        val last = cal
         val format = SimpleDateFormat("dd.MM", Locale.US)
-        text = "${format.format(first)} - ${format.format(last)}"
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        val first = format.format(cal.time)
+        cal.add(Calendar.DAY_OF_WEEK, 6)
+        val last = format.format(cal.time)
+        text = "$first - $last"
     }
 }

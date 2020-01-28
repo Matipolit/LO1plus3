@@ -1,10 +1,13 @@
 package pl.matmar.matipolit.lo1plus.domain
 
 import android.os.Parcelable
+import com.xwray.groupie.Section
 import kotlinx.android.parcel.Parcelize
+import pl.matmar.matipolit.lo1plus.ui.plan.PlanDayHeaderItem
+import pl.matmar.matipolit.lo1plus.ui.plan.PlanLessonItem
+import pl.matmar.matipolit.lo1plus.utils.asFormattedSpannable
 import pl.matmar.matipolit.lo1plus.utils.isNumeric
 import pl.matmar.matipolit.lo1plus.utils.toCardType
-import pl.matmar.matipolit.lo1plus.utils.toFormattedSpannable
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,7 +17,7 @@ data class HomeCard(
     val color: Int,
     val icon: Int
 ){
-    val formattedContent = content.toFormattedSpannable()
+    val formattedContent = content.asFormattedSpannable()
     val id = title.toCardType()
 }
 
@@ -184,3 +187,20 @@ data class Lekcja(
     val index: Int,
     val data: String
 )
+
+fun PlanLekcji.asSections() : List<Section>{
+    return this.tydzien.map {
+        Section(
+            PlanDayHeaderItem(
+                it
+            )
+        ).apply {
+            addAll(it.lekcje.map {
+                PlanLessonItem(
+                        it,
+                        godziny[it.index-1]
+                    )
+            })
+        }
+    }
+}

@@ -12,6 +12,7 @@ import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.domain.Plan
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.NoInternetException
+import timber.log.Timber
 import java.util.*
 
 
@@ -71,7 +72,6 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
         viewModelScope.launch {
             try {
                 repository.refreshPlan(userId, cal)
-                //TODO error 404 for every refresh
                 _onSuccessEvent.value = "Pomyślnie odświeżono plan"
                 getPlan()
                 return@launch
@@ -92,11 +92,13 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
     fun nextWeek(){
         cal.add(Calendar.WEEK_OF_YEAR, 1)
         _calendar.value = cal
+        Timber.d("Added one week: $cal")
     }
 
     fun prevWeek(){
         cal.add(Calendar.WEEK_OF_YEAR, -1)
         _calendar.value = cal
+        Timber.d("Substracted one week: $cal")
     }
 
     init {

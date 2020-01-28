@@ -64,13 +64,7 @@ class HomeFragment : Fragment(), KodeinAware {
 
         var lastRefresh : Long? = null
 
-
-        viewModel.home.observe(this, Observer {
-            Timber.d("Home changed")
-        })
-
         viewModel.user.observe(this, Observer { user1 ->
-            Timber.d("user changed")
             user1?.let { nonNullUser ->
                 userID = nonNullUser.userID
                 sharedPref?.let {
@@ -81,7 +75,6 @@ class HomeFragment : Fragment(), KodeinAware {
                     viewModel.refreshHome(userID!!)
                 }else{
                     bindUI()
-                    Timber.d("set bind to true")
                 }
             }
         })

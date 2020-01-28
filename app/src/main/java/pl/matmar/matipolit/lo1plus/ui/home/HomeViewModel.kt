@@ -29,9 +29,6 @@ class HomeViewModel(mHomeRepository: HomeRepository, mUserRepository: UserReposi
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     lateinit  var timer : Timer
-    //TODO add a way to cancel and start timer
-
-    //for the godziny card
 
     companion object {
         // This is the number of milliseconds in a second

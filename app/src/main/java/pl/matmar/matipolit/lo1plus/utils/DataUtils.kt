@@ -135,7 +135,7 @@ fun isRefreshNeeded(context: Context?, lastRefresh: Long?): Boolean{
 
 //EXTENSION FUNCTIONS
 
-fun String.toFormattedSpannable(): SpannableStringBuilder{
+fun String.asFormattedSpannable(): SpannableStringBuilder{
     val tagi = ArrayList<Tag>()
     var i = 0
     while (i < this.length - 1) {
@@ -273,7 +273,7 @@ fun Long.toDateWithDelay(delay: Int) = Date(this - delay*1000)
 //fun GodzinyJSON.asGodzinyCardItem(time : String) : GodzinyCardItem = GodzinyCardItem()
 
 
-fun Long.asFormattedTime() : String = "${this / 1000 / 60} m ${this / 1000 % 60} s"
+fun Long.asFormattedTime() : String = "${this / 1000 / 60} min ${this / 1000 % 60} s"
 
 fun Godzina.asLessonTime() : String = "${this.startTime.hours}:${this.startTime.minutes} - ${this.endTime.hours}:${this.endTime.minutes}"
 
@@ -292,7 +292,7 @@ fun Date.tommorow(): Date = Date(this.time + 86400000L)
 fun Int.asSemesterID() : String = "${13400+this}"
 
 fun TodayDateAtMidnight(): Date{
-    val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
     val today = Date()
     return formatter.parse(formatter.format(today))
 }
@@ -309,7 +309,7 @@ fun Date.addTime(hours: Int? = null, minutes: Int? = null): Date? {
     return calendar.time
 }
 
-fun List<Subject>.asSections(onClickListener: GradeItem.OnClickListener) : List<Section> = this.map {subject ->
+fun List<Subject>.asSections(onClickListener: GradeItem.OnClickListener, spanCount: Int) : List<Section> = this.map {subject ->
     Section(
         GradeHeaderItem(
             subject
@@ -319,7 +319,8 @@ fun List<Subject>.asSections(onClickListener: GradeItem.OnClickListener) : List<
             GradeItem(
                 it,
                 subject.name,
-                onClickListener
+                onClickListener,
+                spanCount
             )
         })
     }

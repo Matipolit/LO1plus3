@@ -28,12 +28,13 @@ import pl.matmar.matipolit.lo1plus.domain.Grade
 import pl.matmar.matipolit.lo1plus.ui.grades.GradeHeaderItemDecoration
 import pl.matmar.matipolit.lo1plus.ui.grades.GradeInsetItemDecoration
 import pl.matmar.matipolit.lo1plus.ui.grades.GradesAverageHeaderItemDecoration
-import pl.matmar.matipolit.lo1plus.utils.GRADES_SPAN
 import pl.matmar.matipolit.lo1plus.utils.asSections
+import pl.matmar.matipolit.lo1plus.utils.getScreenWidth
 import pl.matmar.matipolit.lo1plus.utils.isRefreshNeeded
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 import java.util.*
+import kotlin.math.floor
 
 
 class GradesFragment : Fragment(), KodeinAware{
@@ -142,7 +143,8 @@ class GradesFragment : Fragment(), KodeinAware{
     private fun bindUI(){
         viewModel.grades.observe(this, Observer {
             it?.let {
-                    var averageHeaderItem: GradesAverageHeaderItem? = null
+                val spanCount = floor((context!!.getScreenWidth()-8f)/88).toInt()
+                var averageHeaderItem: GradesAverageHeaderItem? = null
                     if (it.averageVal != null && it.averageText != null) {
                         averageHeaderItem =
                             GradesAverageHeaderItem(
@@ -156,7 +158,8 @@ class GradesFragment : Fragment(), KodeinAware{
                             decorationsAdded = false
                             scroll = recycler_view.layoutManager?.onSaveInstanceState()
                             Timber.d("Scroll: $scroll")
-                        })
+                        }, spanCount),
+                        spanCount
                     )
                 }
             viewModel.grades.removeObservers(this)
@@ -167,11 +170,11 @@ class GradesFragment : Fragment(), KodeinAware{
         this.findNavController().navigate(GradesFragmentDirections.actionGradesFragmentToGradeDetailFragment(grade, subjectName))
     }
 
-    private fun initRecyclerView(averageHeaderItem: GradesAverageHeaderItem?, sections: List<Section>){
-        //TODO dynamically estimate span count according to screen size
+    private fun initRecyclerView(averageHeaderItem: GradesAverageHeaderItem?, sections: List<Section>, mSpanCount: Int){
         Timber.d("Init recyclerView")
         val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
-            spanCount = GRADES_SPAN
+            spanCount = mSpanCount
+            Timber.d("spanCount: $mSpanCount")
             averageHeaderItem?.let {
                 add(it)
             }

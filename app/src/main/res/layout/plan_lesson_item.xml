@@ -22,7 +22,10 @@
             android:gravity="center"
             android:background="@drawable/oval"
             android:textColor="@color/colorAdaptableInvertedHigh"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
             android:textSize="@dimen/text_size_smaller"
             android:text="@{`` + lesson.index}"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,15 +49,15 @@
             android:id="@+id/content_first_line_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/ultra_small_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
             android:textColor="@color/colorAdaptableHigh"
             android:textSize="@dimen/text_size_normal"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/index_text"
             app:splitLekcjaDataFirst="@{lesson}"
-            android:layout_marginStart="@dimen/small_margin"
-            android:layout_marginTop="@dimen/ultra_small_margin"
-            android:layout_marginEnd="@dimen/small_margin"
             tools:text="Fizyka [2f2]" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -67,8 +70,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content_first_line_text"
             app:splitLekcjaDataSecond="@{lesson}"
-            android:layout_marginStart="@dimen/small_margin"
-            android:layout_marginEnd="@dimen/small_margin"
+            app:lekcjaSecondVisibility="@{lesson}"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
             tools:text="sala: 210" />
 
 
