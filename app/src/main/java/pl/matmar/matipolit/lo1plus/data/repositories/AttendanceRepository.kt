@@ -4,21 +4,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pl.matmar.matipolit.lo1plus.data.database.LO1Database
 import pl.matmar.matipolit.lo1plus.data.database.asDomainModel
+import pl.matmar.matipolit.lo1plus.data.network.AttResponse
 import pl.matmar.matipolit.lo1plus.data.network.MyApi
-import pl.matmar.matipolit.lo1plus.data.network.PlanResponse
 import pl.matmar.matipolit.lo1plus.data.network.SafeApiRequest
 import pl.matmar.matipolit.lo1plus.data.network.asDatabaseModel
-import pl.matmar.matipolit.lo1plus.domain.PlanWrapper
+import pl.matmar.matipolit.lo1plus.domain.AttendanceWrapper
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.asFormattedString
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PlanRepository(private val api: MyApi,
-                     private val database: LO1Database):SafeApiRequest(){
+class AttendanceRepository(private val api: MyApi,
+                           private val database: LO1Database): SafeApiRequest(){
 
-    suspend fun refreshPlan(_userID : String, cal: Calendar){
+    suspend fun refreshAtt(_userID : String, cal: Calendar){
         withContext(Dispatchers.IO){
 
             val format = SimpleDateFormat("dd.MM.yyyy", Locale.US)
@@ -27,10 +27,10 @@ class PlanRepository(private val api: MyApi,
             Timber.d("Date: $date")
 
             val response = apiRequest {
-                api.plan(_userID, date) }
+                api.attendance(_userID, date) }
 
             if (response.correct == "true"){
-                savePlan(response, cal)
+                saveAtt(response, cal)
             }else{
                 response.info?.let {
                     throw ApiException(it)
@@ -39,11 +39,11 @@ class PlanRepository(private val api: MyApi,
         }
     }
 
-    private fun savePlan(planResponse: PlanResponse, cal: Calendar) =
-        database.planDao.upsert(planResponse.asDatabaseModel(cal))
+    private fun saveAtt(attResponse: AttResponse, cal: Calendar) =
+        database.attDao.upsert(attResponse.asDatabaseModel(cal))
 
-    private fun clearPlans(){
-        Timber.d("Clearing plans")
+    private fun clearAtts(){
+        Timber.d("Clearing attendances")
         val cal = Calendar.getInstance()
             .apply {
                 set(Calendar.HOUR_OF_DAY, 0)
@@ -58,13 +58,14 @@ class PlanRepository(private val api: MyApi,
         cal.add(Calendar.WEEK_OF_YEAR, -10)
         val minCal = cal
         Timber.d(minCal.asFormattedString())
-        database.planDao.clearPlans(minCal.timeInMillis, maxCal.timeInMillis)
+        database.attDao.clearAtts(minCal.timeInMillis, maxCal.timeInMillis)
     }
 
-    fun getPlan(cal: Calendar): PlanWrapper? =
-        database.planDao.getPlan(cal.timeInMillis)?.asDomainModel()
+    fun getAtt(cal: Calendar): AttendanceWrapper? =
+        database.attDao.getAttendance(cal.timeInMillis)?.asDomainModel()
 
     init {
-        clearPlans()
+        clearAtts()
     }
+
 }

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="weekDay"
-            type="pl.matmar.matipolit.lo1plus.domain.PlanDay" />
+            type="pl.matmar.matipolit.lo1plus.domain.AttDay" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

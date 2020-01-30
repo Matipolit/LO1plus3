@@ -255,6 +255,45 @@ fun String.toCardColorInt(): Int = when(this){
     else -> R.color.colorPlanLekcji
 }
 
+fun String.asAttType(): Int = when(this){
+    "Obecność" -> 1
+    "Nieobecność nieusprawiedliwiona" -> 2
+    "Nieobecność usprawiedliwiona" -> 3
+    "Nieobecność z przyczyn szkolnych" -> 4
+    "Spóźnienie nieusprawiedliwione" -> 5
+    "Spóźnienie usprawiedliwione" -> 6
+    "Zwolnienie" -> 7
+    "Oddział nieobecny" -> 8
+    "Usprawiedliwienie" -> 9
+    else -> 0
+}
+
+fun Int.asAttPresence(): Boolean? = when(this){
+    1 -> true
+    2 -> false
+    3 -> false
+    4 -> true
+    5 -> true
+    6 -> true
+    7 -> null
+    8 -> null
+    9 -> false
+    else -> null
+}
+
+fun Int.asAttColorInt() : Int = when(this){
+    1 -> R.color.colorAtt1
+    2 -> R.color.colorAtt2
+    3 -> R.color.colorAtt3
+    4 -> R.color.colorAtt4
+    5 -> R.color.colorAtt5
+    6 -> R.color.colorAtt6
+    7 -> R.color.colorAtt7
+    8 -> R.color.colorAtt8
+    9 -> R.color.colorAtt9
+    else -> R.color.colorAccent
+}
+
 fun List<HomeCard>.asDatabaseModel(): Array<DatabaseCard> {
     return map {
             DatabaseCard(

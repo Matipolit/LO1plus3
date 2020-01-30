@@ -5,10 +5,11 @@
     <data>
         <variable
             name="lesson"
-            type="pl.matmar.matipolit.lo1plus.domain.PlanLesson" />
+            type="pl.matmar.matipolit.lo1plus.domain.AttLesson" />
         <variable
             name="hours"
             type="java.lang.String" />
+        <import type="pl.matmar.matipolit.lo1plus.R" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,6 +23,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/oval"
+            android:backgroundTint="@color/colorPrimary"
             android:textColor="@color/colorAdaptableInvertedHigh"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginTop="@dimen/small_margin"
@@ -47,35 +49,48 @@
             tools:text="8:00 8:45" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/content_first_line_text"
-            android:layout_width="match_parent"
+            android:id="@+id/content_text"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginTop="@dimen/ultra_small_margin"
             android:layout_marginEnd="@dimen/normal_margin"
+            android:text="@{lesson.data}"
             android:textColor="@color/colorAdaptableHigh"
             android:textSize="@dimen/text_size_normal"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/type_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/index_text"
-            app:splitLekcjaDataFirst="@{lesson}"
-            tools:text="Fizyka [2f2]" />
+            tools:text="J. angielski- p.rozsz" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/content_second_line_text"
-            android:layout_width="match_parent"
+            android:id="@+id/type_text"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginEnd="@dimen/normal_margin"
             android:textColor="@color/colorAdaptableMedium"
             android:textSize="@dimen/text_size_smaller"
+            android:text="@{lesson.type}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content_text"
+            app:viewVisibilityFrom="@{lesson.type}"
+            tools:text="Nieobecność nieusprawiedliwiona" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/type_icon"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
+            android:src="@drawable/oval"
+            app:tintFromResource="@{lesson.color}"
+            tools:tint="@color/colorAtt2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content_first_line_text"
-            app:lekcjaSecondVisibility="@{lesson}"
-            app:splitLekcjaDataSecond="@{lesson}"
-            tools:text="sala: 210" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
 

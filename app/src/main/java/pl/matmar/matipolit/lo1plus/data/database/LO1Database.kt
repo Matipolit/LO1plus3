@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 
 @Database(
-    entities = [User::class, DatabaseCard::class, DatabaseGodziny::class, DatabaseGrades::class, DatabasePlan::class], version = 5, exportSchema = false)
+    entities = [User::class, DatabaseCard::class, DatabaseGodziny::class, DatabaseGrades::class, DatabasePlan::class, DatabaseAttendance::class], version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class LO1Database : RoomDatabase() {
 
@@ -17,6 +17,7 @@ abstract class LO1Database : RoomDatabase() {
     abstract val homeDao: HomeDao
     abstract val gradesDao: GradesDao
     abstract val planDao : PlanDao
+    abstract val attDao : AttDao
     companion object{
 
         var MIGRATION_2_3: Migration = object : Migration(2, 3) {
@@ -93,6 +94,19 @@ interface PlanDao{
 
     @Query("DELETE FROM databaseplan WHERE timeInMilis < :timeMin AND timeInMilis > :timeMax")
     fun clearPlans(timeMin: Long, timeMax: Long)
+
+}
+
+@Dao
+interface AttDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upsert(attendance: DatabaseAttendance)
+
+    @Query("SELECT * FROM databaseattendance WHERE timeInMilis = :timeMillis")
+    fun getAttendance(timeMillis: Long) : DatabaseAttendance?
+
+    @Query("DELETE FROM databaseattendance WHERE timeInMilis < :timeMin AND timeInMilis > :timeMax")
+    fun clearAtts(timeMin: Long, timeMax: Long)
 
 }
 /*private lateinit var INSTANCE: UserDatabase

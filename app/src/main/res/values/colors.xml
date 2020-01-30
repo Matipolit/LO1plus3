@@ -44,6 +44,18 @@
     <color name="color1">#d5595b</color>
     <color name="colorDefaultGrade">#40619b</color>
 
+    <!-- ATTENDANCE -->
+    <color name="colorAtt1">#93b446</color>
+    <color name="colorAtt2">#ffa687</color>
+    <color name="colorAtt3">#fcc150</color>
+    <color name="colorAtt4">#a9c9fd</color>
+    <color name="colorAtt5">#ede049</color>
+    <color name="colorAtt6">#bbdd5f</color>
+    <color name="colorAtt7">#ddbbe5</color>
+    <color name="colorAtt8">#3c3c3c</color>
+    <color name="colorAtt9">#66ffcc</color>
+
+
     <!-- UI -->
     <color name="materialBackground">#FFFFFF</color>
     <color name="errorColor">#B00020</color>

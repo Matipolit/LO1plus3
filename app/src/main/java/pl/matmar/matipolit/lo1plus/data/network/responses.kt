@@ -1,10 +1,12 @@
 package pl.matmar.matipolit.lo1plus.data.network
 
 import com.google.gson.Gson
+import pl.matmar.matipolit.lo1plus.data.database.DatabaseAttendance
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseGrades
 import pl.matmar.matipolit.lo1plus.data.database.DatabasePlan
+import pl.matmar.matipolit.lo1plus.domain.Attendance
 import pl.matmar.matipolit.lo1plus.domain.Plan
-import pl.matmar.matipolit.lo1plus.domain.PlanLekcji
+import pl.matmar.matipolit.lo1plus.domain.PlanWrapper
 import pl.matmar.matipolit.lo1plus.domain.Subject
 import java.util.*
 
@@ -45,14 +47,24 @@ data class GradesResponse(
 data class PlanResponse(
     val correct: String,
     val info: String?,
-    val planLekcji: PlanLekcji,
+    val planLekcji: Plan,
     val klasa: String?
 
 )
 
-fun PlanResponse.asDomainModel():Plan = Plan(this.planLekcji, this.klasa)
+data class AttResponse(
+    val correct: String,
+    val info: String?,
+    val frekwencja: Attendance,
+    val klasa: String?
+
+)
+
+fun PlanResponse.asDomainModel():PlanWrapper = PlanWrapper(this.planLekcji, this.klasa)
 
 fun PlanResponse.asDatabaseModel(cal: Calendar): DatabasePlan = DatabasePlan(this.planLekcji, this.klasa, cal)
+
+fun AttResponse.asDatabaseModel(cal: Calendar): DatabaseAttendance = DatabaseAttendance(this.frekwencja, this.klasa, cal)
 
 fun GradesResponse.asDatabaseModel() : DatabaseGrades =
     DatabaseGrades(Gson().toJson(this.oceny), this.semestr, this.semestr1ID, this.klasa, this.date)

@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), AppInterface {
         R.id.homeFragment,
         R.id.gradesFragment,
         R.id.planFragment,
+        R.id.attendanceFragment,
         R.id.settingsFragment
     )
 

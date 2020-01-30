@@ -152,17 +152,19 @@ class PlanFragment : Fragment(), KodeinAware{
     }
 
     private fun bindUI() {
-        viewModel.plan.observe(this, Observer {
+        viewModel.planWrapper.observe(this, Observer {
+            Timber.d(it.toString())
             it?.let {
-                val sections = it.planLekcji.asSections()
+
+                val sections = it.plan.asSections()
                 if(sections.isNotEmpty()){
                     displayRecycler()
-                    initRecyclerView(it.planLekcji.asSections())
+                    initRecyclerView(it.plan.asSections())
                 }else{
                     displayInfo(R.drawable.ic_home_plan, "Brak lekcji w wybranym tygodniu")
                 }
             }?: kotlin.run {
-                displayInfo(R.drawable.ic_disconnected, "Plan z wybranego tygodnia nie został pobrany do trybu online")
+                displayInfo(R.drawable.ic_disconnected, "Plan z wybranego tygodnia nie został pobrany do trybu offline")
             }
             //viewModel.plan.removeObservers(this)
         })

@@ -1,14 +1,15 @@
 package pl.matmar.matipolit.lo1plus.utils
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.google.android.material.card.MaterialCardView
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.domain.Grade
 import pl.matmar.matipolit.lo1plus.domain.Grades
-import pl.matmar.matipolit.lo1plus.domain.Lekcja
-import pl.matmar.matipolit.lo1plus.domain.WeekDay
+import pl.matmar.matipolit.lo1plus.domain.PlanLesson
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -78,6 +79,11 @@ fun MaterialCardView.setCardColor(grade: Grade?) {
     }
 }
 
+@BindingAdapter("tintFromResource")
+fun ImageView.setTintFromResource(color: Int) {
+    this.setColorFilter(ContextCompat.getColor(context, color), android.graphics.PorterDuff.Mode.MULTIPLY)
+}
+
 @BindingAdapter("roundedGradesAvarage")
 fun TextView.setRoundedGradesAverage(grades: Grades?) {
     grades?.let {
@@ -87,24 +93,24 @@ fun TextView.setRoundedGradesAverage(grades: Grades?) {
 
 
 @BindingAdapter("noYearWeekDayDate")
-fun TextView.setNoYearWeekDayDate(weekDay: WeekDay?) {
-    weekDay?.let {
-        val splitted = it.date.split(".")
+fun TextView.setNoYearWeekDayDate(date: String?) {
+    date?.let {
+        val splitted = it.split(".")
         text = "${splitted[0]}.${splitted[1]}"
     }
 }
 
 @BindingAdapter("splitLekcjaDataFirst")
-fun TextView.setSplitLekcjaDataFirst(lekcja: Lekcja?) {
-    lekcja?.let {
+fun TextView.setSplitLekcjaDataFirst(planLesson: PlanLesson?) {
+    planLesson?.let {
         val splitted = it.data.split("\n")
         text = splitted[0].asFormattedSpannable()
     }
 }
 
 @BindingAdapter("splitLekcjaDataSecond")
-fun TextView.setSplitLekcjaDataSecond(lekcja: Lekcja?) {
-    lekcja?.let {
+fun TextView.setSplitLekcjaDataSecond(planLesson: PlanLesson?) {
+    planLesson?.let {
         val data = it.data
         val splitted = data.split("\n")
         if(splitted.size > 1){
@@ -115,8 +121,8 @@ fun TextView.setSplitLekcjaDataSecond(lekcja: Lekcja?) {
 }
 
 @BindingAdapter("lekcjaSecondVisibility")
-fun View.setLekcjaSecondVisibility(lekcja: Lekcja?) {
-    lekcja?.let {
+fun View.setLekcjaSecondVisibility(planLesson: PlanLesson?) {
+    planLesson?.let {
         val splitted = it.data.split("\n")
         if(splitted.size > 1){
             visibility = View.VISIBLE

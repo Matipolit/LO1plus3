@@ -120,7 +120,7 @@ fun DatabaseGrades.asDomainModel() : Grades{
 
 @Entity
 data class DatabasePlan(
-    val plan: PlanLekcji,
+    val plan: Plan,
     val klasa: String?,
     val cal: Calendar
 ){
@@ -128,4 +128,16 @@ data class DatabasePlan(
     var timeInMilis: Long = cal.timeInMillis
 }
 
-fun DatabasePlan.asDomainModel() = Plan(plan, klasa)
+fun DatabasePlan.asDomainModel() = PlanWrapper(plan, klasa)
+
+@Entity
+data class DatabaseAttendance(
+    val attendance: Attendance,
+    val klasa: String?,
+    val cal: Calendar
+){
+    @PrimaryKey(autoGenerate = false)
+    var timeInMilis: Long = cal.timeInMillis
+}
+
+fun DatabaseAttendance.asDomainModel() = AttendanceWrapper(attendance, klasa)

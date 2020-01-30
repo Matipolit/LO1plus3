@@ -11,6 +11,11 @@
     <item
         android:title="Plan lekcji"
         android:id="@+id/planFragment" />
+
+    <item
+        android:title="Frekwencja"
+        android:id="@+id/attendanceFragment" />
+
     <item
         android:title="@string/drawer_menu_settings_item"
         android:id="@+id/settingsFragment" />

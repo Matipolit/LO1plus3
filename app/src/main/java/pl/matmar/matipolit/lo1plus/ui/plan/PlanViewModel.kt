@@ -9,7 +9,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.matmar.matipolit.lo1plus.data.repositories.PlanRepository
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
-import pl.matmar.matipolit.lo1plus.domain.Plan
+import pl.matmar.matipolit.lo1plus.domain.PlanWrapper
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.NoInternetException
 import pl.matmar.matipolit.lo1plus.utils.asFormattedString
@@ -40,8 +40,8 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
     val calendar : LiveData<Calendar>
         get() = _calendar
 
-    private val _plan = MutableLiveData<Plan>()
-    val plan : LiveData<Plan>
+    private val _plan = MutableLiveData<PlanWrapper>()
+    val planWrapper : LiveData<PlanWrapper>
         get() = _plan
 
     private val _onStartedEvent = MutableLiveData<Boolean>()

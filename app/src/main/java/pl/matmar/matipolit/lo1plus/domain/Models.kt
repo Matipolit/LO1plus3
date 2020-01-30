@@ -3,11 +3,11 @@ package pl.matmar.matipolit.lo1plus.domain
 import android.os.Parcelable
 import com.xwray.groupie.Section
 import kotlinx.android.parcel.Parcelize
+import pl.matmar.matipolit.lo1plus.ui.attendance.AttendanceDayHeaderItem
+import pl.matmar.matipolit.lo1plus.ui.attendance.AttendanceLessonItem
 import pl.matmar.matipolit.lo1plus.ui.plan.PlanDayHeaderItem
 import pl.matmar.matipolit.lo1plus.ui.plan.PlanLessonItem
-import pl.matmar.matipolit.lo1plus.utils.asFormattedSpannable
-import pl.matmar.matipolit.lo1plus.utils.isNumeric
-import pl.matmar.matipolit.lo1plus.utils.toCardType
+import pl.matmar.matipolit.lo1plus.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -159,41 +159,38 @@ data class Grades(
     }
 }
 
-data class Plan(
-    val planLekcji: PlanLekcji,
+data class PlanWrapper(
+    val plan: Plan,
     val klasa: String?
 )
 
-data class PlanLekcji(
+class Plan(
     val godziny: List<String>,
-    val tydzien: List<WeekDay>
+    val tydzien: List<PlanDay>
 ){
-    val godzinySplit = godziny.map {
-        it.split(" ")
-    }
-    var begDate: Date? = null
-    var endDate: Date? = null
     init {
-        if(godziny.size >= 2){
-            begDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.first().date)
-            endDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.last().date)
+        var godzinySplit = godziny.map {
+            it.split(" ")
         }
+        var begDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.first().date)
+        var endDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.last().date)
     }
+
 
 }
 
-data class WeekDay(
+data class PlanDay(
     val name: String,
     val date: String,
-    val lekcje: List<Lekcja>
+    val lekcje: List<PlanLesson>
 )
 
-data class Lekcja(
+data class PlanLesson(
     val index: Int,
     val data: String
 )
 
-fun PlanLekcji.asSections() : List<Section>{
+fun Plan.asSections() : List<Section>{
     return this.tydzien.map {
         Section().apply {
             setHeader(
@@ -206,6 +203,65 @@ fun PlanLekcji.asSections() : List<Section>{
                         it,
                         godzinyFormatted
                     )
+            })
+        }
+    }
+}
+
+data class AttendanceWrapper(
+    val attendance: Attendance,
+    val klasa: String?
+)
+
+data class Attendance(
+    val procent: String,
+    val godziny: List<String>,
+    val tydzien: List<AttDay>
+){
+    init {
+        val godzinySplit = godziny.map {
+            it.split(" ")
+        }
+        var begDate: Date? = null
+        var endDate: Date? = null
+        if(godziny.size >= 2){
+            begDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.first().date)
+            endDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).parse(tydzien.last().date)
+        }
+
+    }
+
+}
+
+data class AttDay(
+    val name: String,
+    val date: String,
+    val lekcje: List<AttLesson>
+)
+
+data class AttLesson(
+    val index: Int,
+    val data: String,
+    val type: String,
+    val attType: Int = type.asAttType()
+) {
+    fun getPresence(): Boolean? = type.asAttType().asAttPresence()
+    fun getColor(): Int = type.asAttType().asAttColorInt()
+}
+
+fun Attendance.asSections() : List<Section>{
+    return this.tydzien.map {
+        Section().apply {
+            setHeader(
+                AttendanceDayHeaderItem(it)
+            )
+            addAll(it.lekcje.map {
+                val godz = godziny[it.index-1].split(" ")
+                val godzinyFormatted = "${godz[0]} - ${godz[1]}"
+                AttendanceLessonItem(
+                    it,
+                    godzinyFormatted
+                )
             })
         }
     }

@@ -47,6 +47,12 @@ interface MyApi{
         @Query("date")date: String?
     ) : Response<PlanResponse>
 
+    @POST("frekwencja")
+    suspend fun attendance(
+        @Query("userID")userID: String,
+        @Query("date")date: String?
+    ) : Response<AttResponse>
+
 
     companion object{
         operator fun invoke(networkConnectionInterceptor: NetworkConnectionInterceptor) : MyApi{

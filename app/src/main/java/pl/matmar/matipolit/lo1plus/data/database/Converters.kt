@@ -2,20 +2,33 @@ package pl.matmar.matipolit.lo1plus.data.database
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import pl.matmar.matipolit.lo1plus.domain.PlanLekcji
+import pl.matmar.matipolit.lo1plus.domain.Attendance
+import pl.matmar.matipolit.lo1plus.domain.Plan
 import java.util.*
 
 class Converters {
     @TypeConverter
-    fun fromString(value: String): PlanLekcji {
+    fun fromStringToPlan(value: String): Plan {
         val gson = Gson()
-        return gson.fromJson(value, PlanLekcji::class.java)
+        return gson.fromJson(value, Plan::class.java)
     }
 
     @TypeConverter
-    fun toString(planLekcji: PlanLekcji): String? {
+    fun fromPlanToString(plan: Plan): String? {
         val gson = Gson()
-        return gson.toJson(planLekcji)
+        return gson.toJson(plan)
+    }
+
+    @TypeConverter
+    fun fromStringToAtt(value: String): Attendance {
+        val gson = Gson()
+        return gson.fromJson(value, Attendance::class.java)
+    }
+
+    @TypeConverter
+    fun fromAttToString(attendance: Attendance): String? {
+        val gson = Gson()
+        return gson.toJson(attendance)
     }
 
     @TypeConverter
