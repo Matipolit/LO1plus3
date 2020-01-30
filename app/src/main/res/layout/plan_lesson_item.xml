@@ -12,7 +12,8 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/small_margin">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/index_text"
@@ -61,18 +62,19 @@
             tools:text="Fizyka [2f2]" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/content_secont_line_text"
+            android:id="@+id/content_second_line_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAdaptableMedium"
-            android:textSize="@dimen/text_size_smaller"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content_first_line_text"
-            app:splitLekcjaDataSecond="@{lesson}"
-            app:lekcjaSecondVisibility="@{lesson}"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginEnd="@dimen/normal_margin"
+            android:textColor="@color/colorAdaptableMedium"
+            android:textSize="@dimen/text_size_smaller"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content_first_line_text"
+            app:lekcjaSecondVisibility="@{lesson}"
+            app:splitLekcjaDataSecond="@{lesson}"
             tools:text="sala: 210" />
 
 

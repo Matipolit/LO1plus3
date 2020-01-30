@@ -12,6 +12,7 @@ import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
 import pl.matmar.matipolit.lo1plus.domain.Plan
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.NoInternetException
+import pl.matmar.matipolit.lo1plus.utils.asFormattedString
 import timber.log.Timber
 import java.util.*
 
@@ -71,15 +72,18 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
         _onStartedEvent.value = true
         viewModelScope.launch {
             try {
+                cal.set(Calendar.DAY_OF_WEEK, cal.firstDayOfWeek)
                 repository.refreshPlan(userId, cal)
                 _onSuccessEvent.value = "Pomyślnie odświeżono plan"
                 getPlan()
                 return@launch
             }catch (e: ApiException){
                 _onFailureEvent.value = e.message
+                getPlan()
                 return@launch
             }catch (e: NoInternetException){
                 _onFailureEvent.value = e.message
+                getPlan()
                 return@launch
             }
         }
@@ -92,13 +96,19 @@ class PlanViewModel(mRepository: PlanRepository, mUserRepository: UserRepository
     fun nextWeek(){
         cal.add(Calendar.WEEK_OF_YEAR, 1)
         _calendar.value = cal
-        Timber.d("Added one week: $cal")
+        user.value?.userID?.let {
+            refreshPlan(it)
+        }
+        Timber.d("Added one week: ${cal.asFormattedString()}")
     }
 
     fun prevWeek(){
         cal.add(Calendar.WEEK_OF_YEAR, -1)
         _calendar.value = cal
-        Timber.d("Substracted one week: $cal")
+        user.value?.userID?.let {
+            refreshPlan(it)
+        }
+        Timber.d("Substracted one week: ${cal.asFormattedString()}")
     }
 
     init {

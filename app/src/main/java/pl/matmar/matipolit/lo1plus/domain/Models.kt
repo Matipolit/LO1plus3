@@ -66,20 +66,25 @@ data class Subject(
     val przewidywana_roczna: String,
     val ocena_roczna: String
 ){
-    val sredniaFloat = srednia.toFloat()
-    val sredniaText : String? = when {
-        !ocena_roczna.equals("-") -> "Ocena roczna"
-        !przewidywana_roczna.equals("-") -> "Ocena przewidywana roczna"
-        !ocena_śródroczna.equals("-") -> "Ocena śródroczna"
-        !przewidywana_śródroczna.equals("-") -> "Ocena przewidywana śródroczna"
-        else -> null
-    }
-    val sredniaVal : String? = when {
-        !ocena_roczna.equals("-") -> ocena_roczna
-        !przewidywana_roczna.equals("-") -> przewidywana_roczna
-        !ocena_śródroczna.equals("-") -> ocena_śródroczna
-        !przewidywana_śródroczna.equals("-") -> przewidywana_śródroczna
-        else -> null
+    var sredniaFloat : Float? = null
+    var sredniaText : String? = null
+    var sredniaVal : String? = null
+    init {
+        sredniaFloat = srednia.toFloat()
+        sredniaText = when{
+            ocena_roczna != "-" -> "Ocena roczna"
+            przewidywana_roczna != "-" -> "Ocena przewidywana roczna"
+            ocena_śródroczna != "-" -> "Ocena śródroczna"
+            przewidywana_śródroczna != "-" -> "Ocena przewidywana śródroczna"
+            else -> null
+        }
+        sredniaVal = when {
+            ocena_roczna != "-" -> ocena_roczna
+            przewidywana_roczna != "-" -> przewidywana_roczna
+            ocena_śródroczna != "-" -> ocena_śródroczna
+            przewidywana_śródroczna != "-" -> przewidywana_śródroczna
+            else -> null
+        }
     }
 }
 
@@ -90,7 +95,7 @@ data class Grades(
     val klasa: String?,
     val date: Date?
 ){
-    val subjectAverage = oceny.map { it.sredniaFloat }.average()
+    //val subjectAverage = oceny.map { it.sredniaFloat }.average()
     var averageText : String? = null
     var averageVal : Float? = null
     init {
@@ -190,15 +195,16 @@ data class Lekcja(
 
 fun PlanLekcji.asSections() : List<Section>{
     return this.tydzien.map {
-        Section(
-            PlanDayHeaderItem(
-                it
+        Section().apply {
+            setHeader(
+                PlanDayHeaderItem(it)
             )
-        ).apply {
             addAll(it.lekcje.map {
+                val godz = godziny[it.index-1].split(" ")
+                val godzinyFormatted = "${godz[0]} - ${godz[1]}"
                 PlanLessonItem(
                         it,
-                        godziny[it.index-1]
+                        godzinyFormatted
                     )
             })
         }

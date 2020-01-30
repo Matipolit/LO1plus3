@@ -3,6 +3,7 @@ package pl.matmar.matipolit.lo1plus.utils
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
@@ -20,8 +21,13 @@ fun Context.toast(message: String){
 fun Context.getScreenWidth(): Float{
     val displayMetrics: DisplayMetrics = this.getResources().getDisplayMetrics()
     val dpHeight = displayMetrics.heightPixels / displayMetrics.density
-    val dpWidth = displayMetrics.widthPixels / displayMetrics.density
-    return dpWidth
+    return displayMetrics.widthPixels / displayMetrics.density
+}
+
+fun dpToPx(dp: Float, context: Context): Float {
+    val metrics = context.resources.displayMetrics
+    val fpixels = metrics.density * dp
+    return (fpixels + 0.5f)
 }
 
 fun ProgressBar.show(){
@@ -32,14 +38,20 @@ fun ProgressBar.hide(){
     visibility = View.GONE
 }
 
-fun View.snackbar(message: String, showButton:Boolean = true, buttonPrompt:String = "OK"){
+fun View.snackbar(message: String, showButton:Boolean = true, buttonPrompt:String = "OK", bottomMargin: Int? = null){
+    val view = this
     if(this.isAttachedToWindow){
-        Snackbar.make(this, message, Snackbar.LENGTH_LONG).also { snackbar ->
+        Snackbar.make(this, message, Snackbar.LENGTH_LONG).apply {
             if(showButton){
-                snackbar.setAction(buttonPrompt){
-                    snackbar.dismiss()
+                this.setAction(buttonPrompt){
+                    this.dismiss()
                 }
             }
+            bottomMargin?.let {
+                this.view.layoutParams = (this.view.layoutParams as FrameLayout.LayoutParams)
+                    .apply {setMargins(leftMargin, topMargin, rightMargin, it)}
+            }
+
         }.show()
     }
 }

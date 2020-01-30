@@ -21,6 +21,8 @@
     <color name="materialBackground">#121212</color>
     <color name="errorColor">#CF6679</color>
     <color name="NormalElevation">#17FFFFFF</color>
+    <color name="highlighter">#121212</color>
+
 
     <!-- TEXT -->
     <color name="colorAdaptableHigh">#DEFFFFFF</color>

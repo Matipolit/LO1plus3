@@ -330,3 +330,7 @@ fun getOrNull(jsonObj: JSONObject, key: String?): Any? {
     return jsonObj.optString(key, null)
 }
 
+fun Calendar.asFormattedString() : String{
+    val format = SimpleDateFormat("dd.MM", Locale.US)
+    return format.format(this.time)
+}

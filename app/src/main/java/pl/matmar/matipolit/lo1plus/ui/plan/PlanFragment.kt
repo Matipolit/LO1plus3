@@ -8,25 +8,28 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.jay.widget.StickyHeadersLinearLayoutManager
 import com.xwray.groupie.Section
-import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.android.synthetic.main.home_fragment.recycler_view
+import kotlinx.android.synthetic.main.plan_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import pl.matmar.matipolit.lo1plus.AppInterface
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.PlanFragmentBinding
 import pl.matmar.matipolit.lo1plus.domain.asSections
+import pl.matmar.matipolit.lo1plus.ui.shared.ui.StickyAdapter
+import pl.matmar.matipolit.lo1plus.utils.dpToPx
 import pl.matmar.matipolit.lo1plus.utils.isRefreshNeeded
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 import java.util.*
+
 
 class PlanFragment : Fragment(), KodeinAware{
     override val kodein by kodein()
@@ -44,6 +47,9 @@ class PlanFragment : Fragment(), KodeinAware{
     private val fragmentJob = SupervisorJob()
     private val fragmentScope = CoroutineScope(fragmentJob + Dispatchers.Main)
     private var userID: String? = null
+    private var bound: Boolean = false
+
+    lateinit var mInterface: AppInterface
 
 
     override fun onCreateView(
@@ -54,11 +60,16 @@ class PlanFragment : Fragment(), KodeinAware{
 
         Timber.d("OnCreate")
 
+        mInterface = activity as AppInterface
+
+
         val binding = PlanFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         val swipeContainer = binding.swipeContainer
+
+        val snackMargin = binding.bottomButtonsConstraint.height
 
         val sharedPref = activity?.getSharedPreferences(
             getString(R.string.const_pref_key), Context.MODE_PRIVATE)
@@ -75,6 +86,7 @@ class PlanFragment : Fragment(), KodeinAware{
                     viewModel.refreshPlan(it)
                 }else{
                     bindUI()
+                    bound = true
                 }
             }
         })
@@ -82,7 +94,7 @@ class PlanFragment : Fragment(), KodeinAware{
         viewModel.onSuccessEvent.observe(this, Observer {
             swipeContainer.isRefreshing = false
             it?.let {
-                binding.root.snackbar(it, showButton = false)
+                snackBar(binding, it, false, snackMargin)
                 sharedPref?.let {
                     with (it.edit()) {
                         putLong(getString(R.string.const_pref_plan_lastrefresh), Date().time)
@@ -90,7 +102,11 @@ class PlanFragment : Fragment(), KodeinAware{
                     }
 
                 }
-                bindUI()
+                if(!bound){
+                    bindUI()
+                    bound = true
+                }
+                //bindUI()
                 viewModel.onSuccessEventFinished()
             }
         })
@@ -101,7 +117,7 @@ class PlanFragment : Fragment(), KodeinAware{
             if (it == true) {
                 Timber.d(it.toString())
                 //context?.toast("Login started")
-                binding.root.snackbar("Odświeżam...", showButton = false)
+                snackBar(binding, "Odświeżam...", false, snackMargin)
                 viewModel.onStartedEventFinished()
             }
         })
@@ -110,17 +126,21 @@ class PlanFragment : Fragment(), KodeinAware{
             swipeContainer.isRefreshing = false
             if (it != null) {
                 //context?.toast(it)
-                binding.recyclerView.snackbar(it, showButton = false)
-                bindUI()
+                snackBar(binding, it, false, snackMargin)
+                //bindUI()
                 viewModel.onFailureEventFinished()
+                if(!bound){
+                    bindUI()
+                    bound = true
+                }
             }
         })
 
-        swipeContainer.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener() {
+        swipeContainer.setOnRefreshListener {
             userID?.let {
                 viewModel.refreshPlan(it)
             }
-        })
+        }
 
         return binding.root
     }
@@ -134,9 +154,17 @@ class PlanFragment : Fragment(), KodeinAware{
     private fun bindUI() {
         viewModel.plan.observe(this, Observer {
             it?.let {
-                initRecyclerView(it.planLekcji.asSections())
+                val sections = it.planLekcji.asSections()
+                if(sections.isNotEmpty()){
+                    displayRecycler()
+                    initRecyclerView(it.planLekcji.asSections())
+                }else{
+                    displayInfo(R.drawable.ic_home_plan, "Brak lekcji w wybranym tygodniu")
+                }
+            }?: kotlin.run {
+                displayInfo(R.drawable.ic_disconnected, "Plan z wybranego tygodnia nie został pobrany do trybu online")
             }
-            viewModel.plan.removeObservers(this)
+            //viewModel.plan.removeObservers(this)
         })
     }
 
@@ -145,15 +173,47 @@ class PlanFragment : Fragment(), KodeinAware{
     ){
         Timber.d("Init recyclerView")
 
-        val mAdapter = GroupAdapter<GroupieViewHolder>().apply {
+        val mAdapter = StickyAdapter(context)
+        mAdapter.apply {
             for(section in sections){
                 add(section)
             }
         }
 
         recycler_view.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = StickyHeadersLinearLayoutManager<StickyAdapter>(context)
             adapter = mAdapter
+            if(!decorationsAdded){
+                addItemDecoration(
+                    DividerItemDecoration(
+                        context,
+                        DividerItemDecoration.VERTICAL
+                    )
+                )
+                decorationsAdded = true
+            }
+        }
+    }
+
+    private fun snackBar(binding: PlanFragmentBinding, message: String, showButton: Boolean, margin: Int? = null){
+        binding.root.snackbar(message, showButton, bottomMargin = margin)
+    }
+
+    private fun displayRecycler(){
+        recycler_view.visibility = View.VISIBLE
+        info_icon.visibility = View.GONE
+        info_text.visibility = View.GONE
+        mInterface.setToolbarElevation(0f)
+    }
+
+    private fun displayInfo(icon: Int, message: String ) {
+        recycler_view.visibility = View.GONE
+        info_icon.visibility = View.VISIBLE
+        info_icon.setImageResource(icon)
+        info_text.visibility = View.VISIBLE
+        info_text.text = message
+        context?.let {
+            mInterface.setToolbarElevation(dpToPx(4f, it))
         }
     }
 

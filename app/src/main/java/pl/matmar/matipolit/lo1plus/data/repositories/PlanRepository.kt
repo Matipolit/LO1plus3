@@ -10,6 +10,7 @@ import pl.matmar.matipolit.lo1plus.data.network.SafeApiRequest
 import pl.matmar.matipolit.lo1plus.data.network.asDatabaseModel
 import pl.matmar.matipolit.lo1plus.domain.Plan
 import pl.matmar.matipolit.lo1plus.utils.ApiException
+import pl.matmar.matipolit.lo1plus.utils.asFormattedString
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,6 +43,7 @@ class PlanRepository(private val api: MyApi,
         database.planDao.upsert(planResponse.asDatabaseModel(cal))
 
     private fun clearPlans(){
+        Timber.d("Clearing plans")
         val cal = Calendar.getInstance()
             .apply {
                 set(Calendar.HOUR_OF_DAY, 0)
@@ -52,8 +54,10 @@ class PlanRepository(private val api: MyApi,
             }
         cal.add(Calendar.WEEK_OF_YEAR, 5)
         val maxCal = cal
+        Timber.d(maxCal.asFormattedString())
         cal.add(Calendar.WEEK_OF_YEAR, -10)
         val minCal = cal
+        Timber.d(minCal.asFormattedString())
         database.planDao.clearPlans(minCal.timeInMillis, maxCal.timeInMillis)
     }
 

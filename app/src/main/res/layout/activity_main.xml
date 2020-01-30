@@ -12,6 +12,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/main_appbar"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:background="@color/materialBackground"

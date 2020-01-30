@@ -55,6 +55,8 @@ class GradesFragment : Fragment(), KodeinAware{
 
     private var userID: String? = null
 
+    private var bound: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -82,6 +84,7 @@ class GradesFragment : Fragment(), KodeinAware{
                     viewModel.refreshGrades(userID!!, 1)
                 }else{
                     bindUI()
+                    bound = true
                 }
             }
         })
@@ -97,7 +100,10 @@ class GradesFragment : Fragment(), KodeinAware{
                     }
 
                 }
-                bindUI()
+                if(!bound){
+                    bindUI()
+                    bound=true
+                }
                 viewModel.onSuccessEventFinished()
             }
         })
@@ -118,7 +124,10 @@ class GradesFragment : Fragment(), KodeinAware{
             if (it != null) {
                 //context?.toast(it)
                 binding.recyclerView.snackbar(it, showButton = false)
-                bindUI()
+                if(!bound){
+                    bindUI()
+                    bound=true
+                }
                 viewModel.onFailureEventFinished()
             }
         })
@@ -143,6 +152,7 @@ class GradesFragment : Fragment(), KodeinAware{
     private fun bindUI(){
         viewModel.grades.observe(this, Observer {
             it?.let {
+                Timber.d(it.toString())
                 val spanCount = floor((context!!.getScreenWidth()-8f)/88).toInt()
                 var averageHeaderItem: GradesAverageHeaderItem? = null
                     if (it.averageVal != null && it.averageText != null) {
@@ -162,7 +172,7 @@ class GradesFragment : Fragment(), KodeinAware{
                         spanCount
                     )
                 }
-            viewModel.grades.removeObservers(this)
+            //viewModel.grades.removeObservers(this)
         })
     }
 

@@ -44,6 +44,8 @@ class HomeFragment : Fragment(), KodeinAware {
     private var decorationsAdded: Boolean = false
     private var godzinyRemoved: Boolean = false
     private var userID: String? = null
+    private var bound: Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +77,7 @@ class HomeFragment : Fragment(), KodeinAware {
                     viewModel.refreshHome(userID!!)
                 }else{
                     bindUI()
+                    bound = true
                 }
             }
         })
@@ -91,7 +94,10 @@ class HomeFragment : Fragment(), KodeinAware {
                     }
 
                 }
-                bindUI()
+                if(!bound){
+                    bindUI()
+                    bound = true
+                }
                 viewModel.onSuccessEventFinished()
             }
         })
@@ -111,7 +117,10 @@ class HomeFragment : Fragment(), KodeinAware {
             if (it != null) {
                 //context?.toast(it)
                 binding.root.snackbar(it, showButton = false)
-                bindUI()
+                if(!bound){
+                    bindUI()
+                    bound = true
+                }
                 viewModel.onFailureEventFinished()
             }
         })
@@ -141,7 +150,7 @@ class HomeFragment : Fragment(), KodeinAware {
                     Timber.d("initializing recyclerview")
                     val homeCards = it
                     initRecyclerView(homeCards.asHomeCardItem())
-                    viewModel.home.removeObservers(this)
+                    //viewModel.home.removeObservers(this)
                 }
             }
         })

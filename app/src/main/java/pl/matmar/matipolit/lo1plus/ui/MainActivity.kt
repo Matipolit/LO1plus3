@@ -15,11 +15,12 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
+import pl.matmar.matipolit.lo1plus.AppInterface
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.ActivityMainBinding
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AppInterface {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
@@ -92,5 +93,9 @@ class MainActivity : AppCompatActivity() {
         }else{
             super.onBackPressed()
         }
+    }
+
+    override fun setToolbarElevation(elevation: Float) {
+        binding.mainAppbar.elevation = elevation
     }
 }

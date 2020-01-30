@@ -4,15 +4,18 @@ import com.xwray.groupie.databinding.BindableItem
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.PlanLessonItemBinding
 import pl.matmar.matipolit.lo1plus.domain.Lekcja
+import pl.matmar.matipolit.lo1plus.ui.shared.ui.StickyItem
 
 class PlanLessonItem(
     val lesson: Lekcja,
     val hours: String
-) : BindableItem<PlanLessonItemBinding>() {
+) : BindableItem<PlanLessonItemBinding>(), StickyItem {
     override fun getLayout(): Int = R.layout.plan_lesson_item
 
     override fun bind(viewBinding: PlanLessonItemBinding, position: Int) {
         viewBinding.lesson = lesson
         viewBinding.hours = hours
     }
+
+    override fun isSticky(): Boolean = false
 }

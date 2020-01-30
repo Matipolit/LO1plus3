@@ -48,6 +48,7 @@
     <color name="materialBackground">#FFFFFF</color>
     <color name="errorColor">#B00020</color>
     <color name="NormalElevation">#00FFFFFF</color>
+    <color name="highlighter">#FFE0E0E0</color>
 
     <!-- OTHER -->
     <color name="colorTransparent">#00000000</color>

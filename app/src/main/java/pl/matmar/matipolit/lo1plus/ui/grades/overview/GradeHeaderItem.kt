@@ -4,6 +4,7 @@ import com.xwray.groupie.databinding.BindableItem
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.GradeHeaderLayoutBinding
 import pl.matmar.matipolit.lo1plus.domain.Subject
+import timber.log.Timber
 
 class GradeHeaderItem (
     val subject: Subject
@@ -12,6 +13,10 @@ class GradeHeaderItem (
 
     override fun bind(viewBinding: GradeHeaderLayoutBinding, position: Int) {
         viewBinding.subject = subject
+    }
+
+    init {
+        Timber.d("${subject.sredniaFloat}")
     }
 
 }
