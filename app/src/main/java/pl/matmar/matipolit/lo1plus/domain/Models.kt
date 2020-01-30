@@ -3,8 +3,8 @@ package pl.matmar.matipolit.lo1plus.domain
 import android.os.Parcelable
 import com.xwray.groupie.Section
 import kotlinx.android.parcel.Parcelize
-import pl.matmar.matipolit.lo1plus.ui.attendance.AttendanceDayHeaderItem
-import pl.matmar.matipolit.lo1plus.ui.attendance.AttendanceLessonItem
+import pl.matmar.matipolit.lo1plus.ui.attendance.overview.AttendanceDayHeaderItem
+import pl.matmar.matipolit.lo1plus.ui.attendance.overview.AttendanceLessonItem
 import pl.matmar.matipolit.lo1plus.ui.plan.PlanDayHeaderItem
 import pl.matmar.matipolit.lo1plus.ui.plan.PlanLessonItem
 import pl.matmar.matipolit.lo1plus.utils.*
@@ -253,7 +253,9 @@ fun Attendance.asSections() : List<Section>{
     return this.tydzien.map {
         Section().apply {
             setHeader(
-                AttendanceDayHeaderItem(it)
+                AttendanceDayHeaderItem(
+                    it
+                )
             )
             addAll(it.lekcje.map {
                 val godz = godziny[it.index-1].split(" ")

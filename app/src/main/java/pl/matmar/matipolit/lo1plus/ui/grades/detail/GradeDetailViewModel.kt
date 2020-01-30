@@ -8,7 +8,6 @@ import pl.matmar.matipolit.lo1plus.domain.Grade
 class GradeDetailViewModel(grade: Grade) : ViewModel() {
 
     private val _selectedGrade = MutableLiveData<Grade>()
-
     val selectedGrade: LiveData<Grade>
         get() = _selectedGrade
 

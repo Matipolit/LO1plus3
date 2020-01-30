@@ -1,4 +1,4 @@
-package pl.matmar.matipolit.lo1plus.ui.attendance
+package pl.matmar.matipolit.lo1plus.ui.attendance.overview
 
 import android.content.Context
 import android.os.Bundle
@@ -22,6 +22,7 @@ import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.AppInterface
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.AttendanceFragmentBinding
+import pl.matmar.matipolit.lo1plus.databinding.AttendanceOverviewFragmentBinding
 import pl.matmar.matipolit.lo1plus.domain.asSections
 import pl.matmar.matipolit.lo1plus.ui.shared.ui.StickyAdapter
 import pl.matmar.matipolit.lo1plus.utils.dpToPx
@@ -31,15 +32,15 @@ import timber.log.Timber
 import java.util.*
 
 
-class AttendanceFragment : Fragment(), KodeinAware{
+class AttendanceOverviewFragment : Fragment(), KodeinAware{
     override val kodein by kodein()
 
 
-    private val factory: AttendanceViewModelFactory by instance()
+    private val factory: AttendanceOverviewViewModelFactory by instance()
 
-    private val viewModel: AttendanceViewModel by lazy {
+    private val viewModel: AttendanceOverviewViewModel by lazy {
         ViewModelProviders.of(this, factory)
-            .get(AttendanceViewModel::class.java)
+            .get(AttendanceOverviewViewModel::class.java)
     }
 
     private var decorationsAdded: Boolean = false
@@ -58,12 +59,14 @@ class AttendanceFragment : Fragment(), KodeinAware{
         savedInstanceState: Bundle?
     ): View? {
 
+        //TODO: add menu with navigation to summary fragment
+
         Timber.d("OnCreate")
 
         mInterface = activity as AppInterface
 
 
-        val binding = AttendanceFragmentBinding.inflate(inflater)
+        val binding = AttendanceOverviewFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
@@ -195,7 +198,7 @@ class AttendanceFragment : Fragment(), KodeinAware{
         }
     }
 
-    private fun snackBar(binding: AttendanceFragmentBinding, message: String, showButton: Boolean, margin: Int? = null){
+    private fun snackBar(binding: AttendanceOverviewFragmentBinding, message: String, showButton: Boolean, margin: Int? = null){
         binding.root.snackbar(message, showButton, bottomMargin = margin)
     }
 

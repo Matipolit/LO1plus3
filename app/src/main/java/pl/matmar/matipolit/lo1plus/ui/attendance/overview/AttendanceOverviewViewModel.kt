@@ -1,4 +1,4 @@
-package pl.matmar.matipolit.lo1plus.ui.attendance
+package pl.matmar.matipolit.lo1plus.ui.attendance.overview
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +16,7 @@ import pl.matmar.matipolit.lo1plus.utils.asFormattedString
 import timber.log.Timber
 import java.util.*
 
-class AttendanceViewModel(mRepository: AttendanceRepository, mUserRepository: UserRepository): ViewModel(){
+class AttendanceOverviewViewModel(mRepository: AttendanceRepository, mUserRepository: UserRepository): ViewModel(){
 
     private val repository = mRepository
     private val userRepository = mUserRepository

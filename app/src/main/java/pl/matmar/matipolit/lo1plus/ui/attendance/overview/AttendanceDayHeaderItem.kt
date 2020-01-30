@@ -1,4 +1,4 @@
-package pl.matmar.matipolit.lo1plus.ui.attendance
+package pl.matmar.matipolit.lo1plus.ui.attendance.overview
 
 import com.xwray.groupie.databinding.BindableItem
 import pl.matmar.matipolit.lo1plus.R

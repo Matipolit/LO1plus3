@@ -153,9 +153,7 @@ class PlanFragment : Fragment(), KodeinAware{
 
     private fun bindUI() {
         viewModel.planWrapper.observe(this, Observer {
-            Timber.d(it.toString())
             it?.let {
-
                 val sections = it.plan.asSections()
                 if(sections.isNotEmpty()){
                     displayRecycler()

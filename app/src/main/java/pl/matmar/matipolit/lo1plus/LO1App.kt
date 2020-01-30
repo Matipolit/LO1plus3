@@ -12,7 +12,7 @@ import pl.matmar.matipolit.lo1plus.data.database.LO1Database
 import pl.matmar.matipolit.lo1plus.data.network.MyApi
 import pl.matmar.matipolit.lo1plus.data.network.NetworkConnectionInterceptor
 import pl.matmar.matipolit.lo1plus.data.repositories.*
-import pl.matmar.matipolit.lo1plus.ui.attendance.AttendanceViewModelFactory
+import pl.matmar.matipolit.lo1plus.ui.attendance.overview.AttendanceOverviewViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.auth.AuthViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradesViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.home.HomeViewModelFactory
@@ -46,7 +46,12 @@ class LO1App : Application(), KodeinAware {
             bind() from provider { HomeViewModelFactory(instance(), instance()) }
             bind() from provider { GradesViewModelFactory(instance(), instance()) }
             bind() from provider { PlanViewModelFactory(instance(), instance()) }
-            bind() from provider { AttendanceViewModelFactory(instance(), instance()) }
+            bind() from provider {
+                AttendanceOverviewViewModelFactory(
+                    instance(),
+                    instance()
+                )
+            }
 
             bind() from provider { SettingsViewModelFactory(instance())}
 

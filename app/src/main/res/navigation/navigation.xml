@@ -66,6 +66,22 @@
         android:label="Plan lekcji" />
     <fragment
         android:id="@+id/attendanceFragment"
-        android:name="pl.matmar.matipolit.lo1plus.ui.attendance.AttendanceFragment"
-        android:label="Frekwencja" />
+        android:name="pl.matmar.matipolit.lo1plus.ui.attendance.overview.AttendanceOverviewFragment"
+        android:label="Frekwencja" >
+        <action
+            android:id="@+id/action_attendanceFragment_to_attendanceSummaryFragment"
+            app:destination="@id/attendanceSummaryFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendanceSummaryFragment"
+        android:name="pl.matmar.matipolit.lo1plus.ui.attendance.summary.AttendanceSummaryFragment"
+        android:label="AttendanceSummaryFragment" >
+        <argument
+            android:name="attendance"
+            app:argType="pl.matmar.matipolit.lo1plus.domain.Attendance"/>
+    </fragment>
 </navigation>
