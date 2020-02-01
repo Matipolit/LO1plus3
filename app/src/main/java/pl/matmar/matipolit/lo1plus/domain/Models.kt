@@ -213,11 +213,12 @@ data class AttendanceWrapper(
     val klasa: String?
 )
 
+@Parcelize
 data class Attendance(
     val procent: String,
     val godziny: List<String>,
     val tydzien: List<AttDay>
-){
+) : Parcelable {
     init {
         val godzinySplit = godziny.map {
             it.split(" ")
@@ -233,18 +234,20 @@ data class Attendance(
 
 }
 
+@Parcelize
 data class AttDay(
     val name: String,
     val date: String,
     val lekcje: List<AttLesson>
-)
+) : Parcelable
 
+@Parcelize
 data class AttLesson(
     val index: Int,
     val data: String,
     val type: String,
     val attType: Int = type.asAttType()
-) {
+) : Parcelable {
     fun getPresence(): Boolean? = type.asAttType().asAttPresence()
     fun getColor(): Int = type.asAttType().asAttColorInt()
 }

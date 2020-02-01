@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import pl.matmar.matipolit.lo1plus.AppInterface
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.ActivityMainBinding
+import pl.matmar.matipolit.lo1plus.utils.dpToPx
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity(), AppInterface {
@@ -62,6 +63,12 @@ class MainActivity : AppCompatActivity(), AppInterface {
                 else -> {
                     binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                     binding.mainToolbar.visibility = View.VISIBLE
+                }
+            }
+            when(destination.id){
+                R.id.planFragment, R.id.attendanceFragment -> {}
+                else -> {
+                    setToolbarElevation(dpToPx(4f, this))
                 }
             }
         }

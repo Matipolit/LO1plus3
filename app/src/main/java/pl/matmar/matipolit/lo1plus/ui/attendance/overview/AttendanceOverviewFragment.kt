@@ -2,12 +2,11 @@ package pl.matmar.matipolit.lo1plus.ui.attendance.overview
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.jay.widget.StickyHeadersLinearLayoutManager
 import com.xwray.groupie.Section
@@ -21,12 +20,13 @@ import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.AppInterface
 import pl.matmar.matipolit.lo1plus.R
-import pl.matmar.matipolit.lo1plus.databinding.AttendanceFragmentBinding
 import pl.matmar.matipolit.lo1plus.databinding.AttendanceOverviewFragmentBinding
+import pl.matmar.matipolit.lo1plus.domain.Attendance
 import pl.matmar.matipolit.lo1plus.domain.asSections
 import pl.matmar.matipolit.lo1plus.ui.shared.ui.StickyAdapter
 import pl.matmar.matipolit.lo1plus.utils.dpToPx
 import pl.matmar.matipolit.lo1plus.utils.isRefreshNeeded
+import pl.matmar.matipolit.lo1plus.utils.setMenuIconTint
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 import java.util.*
@@ -64,6 +64,8 @@ class AttendanceOverviewFragment : Fragment(), KodeinAware{
         Timber.d("OnCreate")
 
         mInterface = activity as AppInterface
+
+        setHasOptionsMenu(true)
 
 
         val binding = AttendanceOverviewFragmentBinding.inflate(inflater)
@@ -220,6 +222,34 @@ class AttendanceOverviewFragment : Fragment(), KodeinAware{
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.attendance_overview_menu, menu)
+
+        context?.let {
+            setMenuIconTint(it, menu, R.id.summary_item, R.color.colorAdaptableHigh)
+
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.summary_item -> {
+                navigateToSummary(viewModel.attWrapper.value?.attendance)
+                super.onOptionsItemSelected(item)
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun navigateToSummary(attendance: Attendance?){
+        attendance?.let {
+            this.findNavController().navigate(AttendanceOverviewFragmentDirections.actionAttendanceFragmentToAttendanceSummaryFragment(it))
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

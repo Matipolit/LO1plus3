@@ -22,6 +22,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/oval"
+            android:backgroundTint="@color/colorPrimary"
             android:textColor="@color/colorAdaptableInvertedHigh"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginTop="@dimen/small_margin"

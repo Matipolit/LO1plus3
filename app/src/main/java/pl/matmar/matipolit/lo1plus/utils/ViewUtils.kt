@@ -2,10 +2,13 @@ package pl.matmar.matipolit.lo1plus.utils
 
 import android.content.Context
 import android.util.DisplayMetrics
+import android.view.Menu
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -28,6 +31,13 @@ fun dpToPx(dp: Float, context: Context): Float {
     val metrics = context.resources.displayMetrics
     val fpixels = metrics.density * dp
     return (fpixels + 0.5f)
+}
+
+fun setMenuIconTint(context: Context, menu: Menu, id: Int, color: Int){
+    var drawable = menu.findItem(id).icon
+    drawable = DrawableCompat.wrap(drawable!!)
+    DrawableCompat.setTint(drawable, ContextCompat.getColor(context, color))
+    menu.findItem(id).icon = drawable
 }
 
 fun ProgressBar.show(){

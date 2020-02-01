@@ -79,7 +79,7 @@
     <fragment
         android:id="@+id/attendanceSummaryFragment"
         android:name="pl.matmar.matipolit.lo1plus.ui.attendance.summary.AttendanceSummaryFragment"
-        android:label="AttendanceSummaryFragment" >
+        android:label="Podsumowanie" >
         <argument
             android:name="attendance"
             app:argType="pl.matmar.matipolit.lo1plus.domain.Attendance"/>
