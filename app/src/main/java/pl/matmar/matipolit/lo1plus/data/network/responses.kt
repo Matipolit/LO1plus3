@@ -1,6 +1,7 @@
 package pl.matmar.matipolit.lo1plus.data.network
 
 import com.google.gson.Gson
+import org.json.JSONObject
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseAttendance
 import pl.matmar.matipolit.lo1plus.data.database.DatabaseGrades
 import pl.matmar.matipolit.lo1plus.data.database.DatabasePlan
@@ -57,7 +58,11 @@ data class AttResponse(
     val info: String?,
     val frekwencja: Attendance,
     val klasa: String?
+)
 
+data class PlansResponse(
+    val legend: PlansLegend,
+    val plany: JSONObject
 )
 
 fun PlanResponse.asDomainModel():PlanWrapper = PlanWrapper(this.planLekcji, this.klasa)

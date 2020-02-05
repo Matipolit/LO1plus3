@@ -53,6 +53,10 @@ interface MyApi{
         @Query("date")date: String?
     ) : Response<AttResponse>
 
+    @POST("planyLekcji")
+    suspend fun plans(
+    ) : Response<PlansResponse>
+
 
     companion object{
         operator fun invoke(networkConnectionInterceptor: NetworkConnectionInterceptor) : MyApi{

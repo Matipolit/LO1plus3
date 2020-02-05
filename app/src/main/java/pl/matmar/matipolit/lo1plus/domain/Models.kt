@@ -271,3 +271,23 @@ fun Attendance.asSections() : List<Section>{
         }
     }
 }
+
+data class Plans(
+    val legend: PlansLegend,
+    val plany: PlansPlans
+)
+
+data class PlansLegend(
+    val Oddziały: PlansLegendCategory,
+    val Nauczyciele: PlansLegendCategory,
+    val Sale: PlansLegendCategory
+)
+
+data class PlansLegendCategory(
+    val id: String,
+    val options: List<PlansLegendOption>
+)
+data class PlansLegendOption(
+    val name: String,
+    val value: Int
+)
