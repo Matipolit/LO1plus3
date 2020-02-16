@@ -84,4 +84,8 @@
             android:name="attendance"
             app:argType="pl.matmar.matipolit.lo1plus.domain.Attendance"/>
     </fragment>
+    <fragment
+        android:id="@+id/plansFragment"
+        android:name="pl.matmar.matipolit.lo1plus.ui.plans.PlansFragment"
+        android:label="PlansFragment" />
 </navigation>

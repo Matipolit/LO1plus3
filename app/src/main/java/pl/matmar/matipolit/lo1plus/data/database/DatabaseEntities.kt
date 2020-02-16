@@ -10,10 +10,11 @@ import pl.matmar.matipolit.lo1plus.utils.*
 import timber.log.Timber
 import java.util.*
 
-const val CURRENT_USERDB_ID = 0
+const val CURRENT_USER_ID = 0
 const val CURRENT_GODZINY_ID = 0
 const val CURRENT_GRADES_ID = 0
 const val CURRENT_PLAN_ID = 0
+const val CURRENT_PLANS_ID = 0
 
 @Entity
 data class User(
@@ -23,7 +24,7 @@ data class User(
     var email: String?
 ){
     @PrimaryKey(autoGenerate = false)
-    var databaseId: Int = CURRENT_USERDB_ID
+    var databaseId: Int = CURRENT_USER_ID
 }
 
 /*@Entity
@@ -141,3 +142,23 @@ data class DatabaseAttendance(
 }
 
 fun DatabaseAttendance.asDomainModel() = AttendanceWrapper(attendance, klasa)
+
+@Entity
+data class DatabasePlansLegend(
+    val plansLegend: PlansLegend
+){
+    @PrimaryKey(autoGenerate = false)
+    var databaseId: Int = CURRENT_PLANS_ID
+}
+
+fun DatabasePlansLegend.asDomainModel() = this.plansLegend
+
+@Entity
+data class DatabasePlansPlan(
+    val plansPlan: PlansPlan
+){
+    @PrimaryKey(autoGenerate = false)
+    var index: String = plansPlan.type + plansPlan.id.toString()
+}
+
+fun DatabasePlansPlan.asDomainModel() = this.plansPlan

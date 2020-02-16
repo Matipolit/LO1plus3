@@ -18,22 +18,18 @@ class GradesRepository(private val api: MyApi,
                        private val database: LO1Database
 ) : SafeApiRequest(){
     suspend fun refreshGrades(_userID : String, semesterID: Int? = null){
+        withContext(Dispatchers.IO){
+            val response = apiRequest { api.grades(_userID, semesterID?.asSemesterID()) }
 
-        if(isFetchNeeded()){
-            withContext(Dispatchers.IO){
-                val response = apiRequest { api.grades(_userID, semesterID?.asSemesterID()) }
-
-                if(response.correct == "true"){
-                    saveGrades(response)
-                }else{
-                    response.info?.let {
-                        throw ApiException(it)
-                    }
-                throw ApiException("Błąd w żądaniu na serwer")
+            if(response.correct == "true"){
+                saveGrades(response)
+            }else{
+                response.info?.let {
+                    throw ApiException(it)
                 }
+            throw ApiException("Błąd w żądaniu na serwer")
             }
         }
-
     }
 
     private fun saveGrades(gradesResponse: GradesResponse) =
@@ -43,7 +39,4 @@ class GradesRepository(private val api: MyApi,
         it?.asDomainModel()
     }
 
-    private fun isFetchNeeded(): Boolean{
-        return true
-    }
 }

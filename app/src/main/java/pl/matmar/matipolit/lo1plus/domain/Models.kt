@@ -3,6 +3,9 @@ package pl.matmar.matipolit.lo1plus.domain
 import android.os.Parcelable
 import com.xwray.groupie.Section
 import kotlinx.android.parcel.Parcelize
+import org.json.JSONObject
+import pl.matmar.matipolit.lo1plus.data.database.DatabasePlansLegend
+import pl.matmar.matipolit.lo1plus.data.database.DatabasePlansPlan
 import pl.matmar.matipolit.lo1plus.ui.attendance.overview.AttendanceDayHeaderItem
 import pl.matmar.matipolit.lo1plus.ui.attendance.overview.AttendanceLessonItem
 import pl.matmar.matipolit.lo1plus.ui.plan.PlanDayHeaderItem
@@ -181,7 +184,7 @@ class Plan(
 
 data class PlanDay(
     val name: String,
-    val date: String,
+    val date: String?,
     val lekcje: List<PlanLesson>
 )
 
@@ -274,14 +277,18 @@ fun Attendance.asSections() : List<Section>{
 
 data class Plans(
     val legend: PlansLegend,
-    val plany: PlansPlans
+    val plany: JSONObject
 )
 
 data class PlansLegend(
     val Oddziały: PlansLegendCategory,
     val Nauczyciele: PlansLegendCategory,
     val Sale: PlansLegendCategory
-)
+){
+    fun getCategoriesList() = listOf<PlansLegendCategory>(Oddziały, Nauczyciele, Sale)
+}
+
+fun PlansLegend.asDatabaseModel() = DatabasePlansLegend(this)
 
 data class PlansLegendCategory(
     val id: String,
@@ -291,3 +298,46 @@ data class PlansLegendOption(
     val name: String,
     val value: Int
 )
+
+data class PlansPlan(
+    val type: String,
+    val id: Int,
+    val godziny: List<String>,
+    val tydzien: List<PlansDay>
+)
+
+fun PlansPlan.asSections() : List<Section>{
+    return this.tydzien.map {
+        Section().apply {
+            setHeader(
+                PlanDayHeaderItem(it.asPlanDay())
+            )
+            addAll(it.lekcje.map {
+                val godz = godziny[it.index-1].split("-")
+                val godzinyFormatted = "${godz[0]} - ${godz[1]}"
+                PlanLessonItem(
+                    it.asPlanLesson(),
+                    godzinyFormatted
+                )
+            })
+        }
+    }
+}
+
+fun PlansPlan.asDatabaseModel() = DatabasePlansPlan(this)
+
+data class PlansDay(
+    val name: String,
+    val lekcje: List<PlansLesson>
+)
+
+fun PlansDay.asPlanDay() : PlanDay
+    = PlanDay(this.name, null, this.lekcje.map { it.asPlanLesson() })
+
+
+data class PlansLesson(
+    val index: Int,
+    val data: String
+)
+
+fun PlansLesson.asPlanLesson() = PlanLesson(this.index, this.data)

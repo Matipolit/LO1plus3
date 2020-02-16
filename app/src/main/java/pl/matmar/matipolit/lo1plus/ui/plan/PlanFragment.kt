@@ -157,7 +157,7 @@ class PlanFragment : Fragment(), KodeinAware{
                 val sections = it.plan.asSections()
                 if(sections.isNotEmpty()){
                     displayRecycler()
-                    initRecyclerView(it.plan.asSections())
+                    initRecyclerView(sections)
                 }else{
                     displayInfo(R.drawable.ic_home_plan, "Brak lekcji w wybranym tygodniu")
                 }
