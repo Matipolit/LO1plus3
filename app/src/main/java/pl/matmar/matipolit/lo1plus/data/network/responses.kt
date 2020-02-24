@@ -70,8 +70,7 @@ fun AttResponse.asDatabaseModel(cal: Calendar): DatabaseAttendance = DatabaseAtt
 
 data class PlansResponse(
     val legend: PlansLegend?,
-    val plany: String?
-//TODO: plany value not working
+    val plany: Map<String, ResponsePlansPlan>
 )
 
 fun String.asDatabasePlansPlans(legend: PlansLegend): List<DatabasePlansPlan>{
@@ -87,3 +86,7 @@ fun String.asDatabasePlansPlans(legend: PlansLegend): List<DatabasePlansPlan>{
     }
     return list
 }
+
+fun List<PlansPlan>.asDatabasePlansPlans() : List<DatabasePlansPlan> = this.map { DatabasePlansPlan(it) }
+
+fun Map<String, ResponsePlansPlan>.asDomainModel() : List<PlansPlan> = this.map { PlansPlan(it.component1()[0].toString(), it.component1().substring(1).toInt(), it.component2().godziny, it.component2().tydzien) }

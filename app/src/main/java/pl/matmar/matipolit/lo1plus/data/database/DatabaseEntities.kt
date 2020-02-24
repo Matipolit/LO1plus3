@@ -158,7 +158,7 @@ data class DatabasePlansPlan(
     val plansPlan: PlansPlan
 ){
     @PrimaryKey(autoGenerate = false)
-    var index: String = plansPlan.type + plansPlan.id.toString()
+    var index: String = plansPlan.type + plansPlan.id.toString().padStart(3, '0')
 }
 
 fun DatabasePlansPlan.asDomainModel() = this.plansPlan

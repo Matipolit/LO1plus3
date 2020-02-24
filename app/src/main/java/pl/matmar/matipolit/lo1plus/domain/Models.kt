@@ -306,6 +306,11 @@ data class PlansPlan(
     val tydzien: List<PlansDay>
 )
 
+data class ResponsePlansPlan(
+    val godziny: List<String>,
+    val tydzien: List<PlansDay>
+)
+
 fun PlansPlan.asSections() : List<Section>{
     return this.tydzien.map {
         Section().apply {

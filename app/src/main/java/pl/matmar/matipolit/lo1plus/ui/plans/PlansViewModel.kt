@@ -73,6 +73,6 @@ class PlansViewModel(mRepository: PlansRepository, mUserRepository: UserReposito
     }
 
     fun getPlan(id: String) {
-        _currentPlan.value = repository.getPlan(id)
+        _currentPlan.value = repository.getPlan(id.padStart(3, '0'))
     }
 }
