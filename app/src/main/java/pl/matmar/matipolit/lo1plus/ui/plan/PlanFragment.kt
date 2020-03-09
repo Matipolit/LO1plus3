@@ -30,10 +30,8 @@ import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
 import java.util.*
 
-
 class PlanFragment : Fragment(), KodeinAware{
     override val kodein by kodein()
-
 
     private val factory: PlanViewModelFactory by instance()
 
@@ -51,7 +49,6 @@ class PlanFragment : Fragment(), KodeinAware{
 
     lateinit var mInterface: AppInterface
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,7 +58,6 @@ class PlanFragment : Fragment(), KodeinAware{
         Timber.d("OnCreate")
 
         mInterface = activity as AppInterface
-
 
         val binding = PlanFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this

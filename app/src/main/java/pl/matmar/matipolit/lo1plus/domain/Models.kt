@@ -299,6 +299,8 @@ data class PlansLegendOption(
     val value: Int
 )
 
+fun List<PlansLegendOption>.asStringList() = this.map { it.name }
+
 data class PlansPlan(
     val type: String,
     val id: Int,

@@ -1,6 +1,7 @@
 package pl.matmar.matipolit.lo1plus.ui.plans
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jay.widget.StickyHeadersLinearLayoutManager
 import com.xwray.groupie.Section
 import kotlinx.android.synthetic.main.home_fragment.recycler_view
 import kotlinx.android.synthetic.main.plan_fragment.*
-import kotlinx.android.synthetic.main.plan_fragment.info_icon
-import kotlinx.android.synthetic.main.plan_fragment.info_text
-import kotlinx.android.synthetic.main.plans_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,8 +24,10 @@ import org.kodein.di.generic.instance
 import pl.matmar.matipolit.lo1plus.AppInterface
 import pl.matmar.matipolit.lo1plus.R
 import pl.matmar.matipolit.lo1plus.databinding.PlansFragmentBinding
+import pl.matmar.matipolit.lo1plus.domain.PlansLegendOption
 import pl.matmar.matipolit.lo1plus.domain.PlansPlan
 import pl.matmar.matipolit.lo1plus.domain.asSections
+import pl.matmar.matipolit.lo1plus.domain.asStringList
 import pl.matmar.matipolit.lo1plus.ui.shared.ui.StickyAdapter
 import pl.matmar.matipolit.lo1plus.utils.dpToPx
 import pl.matmar.matipolit.lo1plus.utils.isRefreshNeeded
@@ -82,9 +83,7 @@ class PlansFragment : Fragment(), KodeinAware{
             lastPlanID = sharedPref.getString(getString(R.string.const_pref_plans_lastplanid), null)
         }
 
-        lastPlanID?.let {
-            viewModel.getPlan(it)
-        }
+        viewModel.getPlan(lastPlanID)
 
         if(isRefreshNeeded(context, lastRefresh)){
             viewModel.refreshPlans()
@@ -92,7 +91,6 @@ class PlansFragment : Fragment(), KodeinAware{
             bindUI()
             bound = true
         }
-
 
 
         viewModel.onSuccessEvent.observe(this, Observer {
@@ -104,7 +102,6 @@ class PlansFragment : Fragment(), KodeinAware{
                         putLong(getString(pl.matmar.matipolit.lo1plus.R.string.const_pref_plans_lastrefresh), java.util.Date().time)
                         commit()
                     }
-
                 }
                 if(!bound){
                     bindUI()
@@ -140,6 +137,13 @@ class PlansFragment : Fragment(), KodeinAware{
             }
         })
 
+        viewModel.onSelectEvent.observe(this, Observer {
+            if(it){
+                displayChooseDialog()
+                viewModel.onSelectEventFinished()
+            }
+        })
+
         swipeContainer.setOnRefreshListener {
             viewModel.refreshPlans()
         }
@@ -155,9 +159,13 @@ class PlansFragment : Fragment(), KodeinAware{
                     displayRecycler()
                     initRecyclerView(sections)
                 }else{
+                    Timber.d("No lessons in current plan")
                     displayInfo(R.drawable.ic_home_plan, "Brak lekcji w wybranym planie", false)
                 }
-            }?:displayInfo(R.drawable.ic_no_plan, "Nie wybrano jeszcze żadnego planu", true)
+            }?: kotlin.run {
+                Timber.d("No plan chosen")
+                displayInfo(R.drawable.ic_no_plan, "Nie wybrano jeszcze żadnego planu", true)
+            }
 
         })
     }
@@ -187,14 +195,14 @@ class PlansFragment : Fragment(), KodeinAware{
     }
 
     private fun snackBar(binding: PlansFragmentBinding, message: String, showButton: Boolean, margin: Int? = null){
-        binding.root.snackbar(message, showButton, bottomMargin = margin)
+        binding.coordinator.snackbar(message, showButton, bottomMargin = margin)
     }
 
     private fun displayRecycler(){
         recycler_view.visibility = View.VISIBLE
         info_icon.visibility = View.GONE
         info_text.visibility = View.GONE
-        choose_button.visibility = View.GONE
+        //choose_button.visibility = View.GONE
         mInterface.setToolbarElevation(0f)
     }
 
@@ -204,14 +212,43 @@ class PlansFragment : Fragment(), KodeinAware{
         info_icon.setImageResource(icon)
         info_text.visibility = View.VISIBLE
         info_text.text = message
-        if(showButton) {
+        /*if(showButton) {
             choose_button.visibility = View.VISIBLE
             choose_button.text = "Wybierz plan"
         }else{
             choose_button.visibility = View.GONE
-        }
+        }*/
         context?.let {
             mInterface.setToolbarElevation(dpToPx(4f, it))
         }
+    }
+
+    private fun displayChooseDialog(){
+        val legend = viewModel.legend.value
+        if(legend!=null){
+            MaterialAlertDialogBuilder(context)
+                .setTitle("Wybierz kategorię")
+                .setItems(resources.getStringArray(R.array.plans_category_names), DialogInterface.OnClickListener { dialog, which ->
+                    when(which){
+                        0 -> displayChooseDialogLevel2(legend.Oddziały.options, legend.Oddziały.id)
+                        1 -> displayChooseDialogLevel2(legend.Nauczyciele.options, legend.Nauczyciele.id)
+                        2 -> displayChooseDialogLevel2(legend.Sale.options, legend.Sale.id)
+                    }
+
+                })
+                .show()
+        }
+
+    }
+
+    private fun displayChooseDialogLevel2(options: List<PlansLegendOption>?, stringIndex: String){
+        if(options != null){
+            MaterialAlertDialogBuilder(context)
+                .setTitle("Wybierz plan")
+                .setItems(options.asStringList().toTypedArray(), DialogInterface.OnClickListener{ dialog, which ->
+                    viewModel.getPlan("$stringIndex$which")
+                })
+        }
+
     }
 }

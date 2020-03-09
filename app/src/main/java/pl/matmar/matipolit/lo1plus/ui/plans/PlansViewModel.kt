@@ -44,6 +44,10 @@ class PlansViewModel(mRepository: PlansRepository, mUserRepository: UserReposito
     val onFailureEvent : LiveData<String>
         get() = _onFailureEvent
 
+    private val _onSelectEvent = MutableLiveData<Boolean>()
+    val onSelectEvent : LiveData<Boolean>
+        get() = _onSelectEvent
+
     fun onStartedEventFinished(){
         _onStartedEvent.value = false
     }
@@ -54,6 +58,14 @@ class PlansViewModel(mRepository: PlansRepository, mUserRepository: UserReposito
 
     fun onFailureEventFinished(){
         _onFailureEvent.value = null
+    }
+
+    fun onSelectEventFinished(){
+        _onSelectEvent.value = false
+    }
+
+    fun onSelectEvent(){
+        _onSelectEvent.value = true
     }
 
     fun refreshPlans(){
@@ -72,7 +84,14 @@ class PlansViewModel(mRepository: PlansRepository, mUserRepository: UserReposito
         }
     }
 
-    fun getPlan(id: String) {
-        _currentPlan.value = repository.getPlan(id.padStart(3, '0'))
+    fun getPlan(id: String?) {
+        if(id!=null) {
+            _currentPlan.value = repository.getPlan(id.padStart(3, '0'))
+        }else{
+            _currentPlan.value = null
+        }
+    }
+
+    init {
     }
 }
