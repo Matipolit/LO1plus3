@@ -164,7 +164,7 @@ class AttendanceOverviewFragment : Fragment(), KodeinAware{
                     displayRecycler()
                     initRecyclerView(it.attendance.asSections())
                 }else{
-                    displayInfo(R.drawable.ic_menu_attendance, "Brak lekcji w wybranym tygodniu")
+                    displayInfo(R.drawable.ic_menu_attendance, "Brak frekwencji w wybranym tygodniu")
                 }
             }?: kotlin.run {
                 displayInfo(R.drawable.ic_disconnected, "Frekwencja z wybranego tygodnia nie została pobrana do trybu offline")

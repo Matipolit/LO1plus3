@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 
 @Database(
-    entities = [User::class, DatabaseCard::class, DatabaseGodziny::class, DatabaseGrades::class, DatabasePlan::class, DatabaseAttendance::class], version = 6, exportSchema = false)
+    entities = [User::class, DatabaseCard::class, DatabaseGodziny::class, DatabaseGrades::class, DatabasePlan::class, DatabaseAttendance::class, DatabasePlansLegend::class, DatabasePlansPlan::class], version = 7, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class LO1Database : RoomDatabase() {
 
@@ -18,6 +18,8 @@ abstract class LO1Database : RoomDatabase() {
     abstract val gradesDao: GradesDao
     abstract val planDao : PlanDao
     abstract val attDao : AttDao
+    abstract val plansDao : PlansDao
+
     companion object{
 
         var MIGRATION_2_3: Migration = object : Migration(2, 3) {
@@ -50,10 +52,10 @@ interface UserDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(user: User) : Long
 
-    @Query("SELECT * FROM user WHERE databaseId = $CURRENT_USERDB_ID")
+    @Query("SELECT * FROM user WHERE databaseId = $CURRENT_USER_ID LIMIT 1")
     fun getUser() : LiveData<User>
 
-    @Query("DELETE FROM user WHERE databaseId = $CURRENT_USERDB_ID")
+    @Query("DELETE FROM user WHERE databaseId = $CURRENT_USER_ID")
     fun deleteUser()
 
 }
@@ -70,26 +72,28 @@ interface HomeDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsertGodziny(godziny: DatabaseGodziny?)
 
-    @Query("SELECT * FROM databasegodziny")
+    @Query("SELECT * FROM databasegodziny LIMIT 1")
     fun getGodziny() : LiveData<DatabaseGodziny?>
 
 }
 
 @Dao
 interface GradesDao{
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(grades: DatabaseGrades)
 
-    @Query("SELECT * FROM databasegrades")
+    @Query("SELECT * FROM databasegrades LIMIT 1")
     fun getGrades() : LiveData<DatabaseGrades>
 }
 
 @Dao
 interface PlanDao{
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(plan: DatabasePlan)
 
-    @Query("SELECT * FROM databaseplan WHERE timeInMilis = :timeMillis")
+    @Query("SELECT * FROM databaseplan WHERE timeInMilis = :timeMillis LIMIT 1")
     fun getPlan(timeMillis: Long) : DatabasePlan?
 
     @Query("DELETE FROM databaseplan WHERE timeInMilis < :timeMin AND timeInMilis > :timeMax")
@@ -99,25 +103,34 @@ interface PlanDao{
 
 @Dao
 interface AttDao{
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(attendance: DatabaseAttendance)
 
-    @Query("SELECT * FROM databaseattendance WHERE timeInMilis = :timeMillis")
+    @Query("SELECT * FROM databaseattendance WHERE timeInMilis = :timeMillis LIMIT 1")
     fun getAttendance(timeMillis: Long) : DatabaseAttendance?
 
     @Query("DELETE FROM databaseattendance WHERE timeInMilis < :timeMin AND timeInMilis > :timeMax")
     fun clearAtts(timeMin: Long, timeMax: Long)
 
 }
-/*private lateinit var INSTANCE: UserDatabase
 
-fun getDatabase(context: Context): UserDatabase {
-    synchronized(UserDatabase::class.java) {
-        if(!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(context.applicationContext,
-                UserDatabase::class.java,
-                "user").build()
-        }
-    }
-    return INSTANCE
-}*/
+@Dao
+interface PlansDao{
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upsertLegend(plansLegend: DatabasePlansLegend)
+
+    @Query("SELECT * FROM DatabasePlansLegend LIMIT 1")
+    fun getLegend() : LiveData<DatabasePlansLegend>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upsertPlan(plansPlan: DatabasePlansPlan)
+
+    @Query("SELECT * FROM databaseplansplan WHERE `index` = :id LIMIT 1")
+    fun getPlan(id: String) : DatabasePlansPlan?
+
+    @Query("SELECT * FROM databaseplansplan")
+    fun getAllPlans() : LiveData<List<DatabasePlansPlan>>
+
+}

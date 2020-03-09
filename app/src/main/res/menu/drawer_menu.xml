@@ -17,6 +17,10 @@
         android:id="@+id/attendanceFragment" />
 
     <item
+        android:title="Plany Lekcji"
+        android:id="@+id/plansFragment"/>
+
+    <item
         android:title="@string/drawer_menu_settings_item"
         android:id="@+id/settingsFragment" />
 

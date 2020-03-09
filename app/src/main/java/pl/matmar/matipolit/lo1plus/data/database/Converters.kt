@@ -4,6 +4,8 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import pl.matmar.matipolit.lo1plus.domain.Attendance
 import pl.matmar.matipolit.lo1plus.domain.Plan
+import pl.matmar.matipolit.lo1plus.domain.PlansLegend
+import pl.matmar.matipolit.lo1plus.domain.PlansPlan
 import java.util.*
 
 class Converters {
@@ -29,6 +31,30 @@ class Converters {
     fun fromAttToString(attendance: Attendance): String? {
         val gson = Gson()
         return gson.toJson(attendance)
+    }
+
+    @TypeConverter
+    fun fromStringToPlansLegend(value: String): PlansLegend {
+        val gson = Gson()
+        return gson.fromJson(value, PlansLegend::class.java)
+    }
+
+    @TypeConverter
+    fun fromPlansLegendToString(plansLegend: PlansLegend): String? {
+        val gson = Gson()
+        return gson.toJson(plansLegend)
+    }
+
+    @TypeConverter
+    fun fromStringToPlansPlan(value: String): PlansPlan {
+        val gson = Gson()
+        return gson.fromJson(value, PlansPlan::class.java)
+    }
+
+    @TypeConverter
+    fun fromPlansPlanToString(plansPlan: PlansPlan): String? {
+        val gson = Gson()
+        return gson.toJson(plansPlan)
     }
 
     @TypeConverter

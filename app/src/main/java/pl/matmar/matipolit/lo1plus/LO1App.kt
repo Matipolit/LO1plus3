@@ -17,6 +17,7 @@ import pl.matmar.matipolit.lo1plus.ui.auth.AuthViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.grades.overview.GradesViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.home.HomeViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.plan.PlanViewModelFactory
+import pl.matmar.matipolit.lo1plus.ui.plans.PlansViewModelFactory
 import pl.matmar.matipolit.lo1plus.ui.settings.SettingsViewModelFactory
 import timber.log.Timber
 
@@ -39,6 +40,7 @@ class LO1App : Application(), KodeinAware {
             bind() from singleton { GradesRepository(instance(), instance()) }
             bind() from singleton { PlanRepository(instance(), instance()) }
             bind() from singleton { AttendanceRepository(instance(), instance()) }
+            bind() from singleton { PlansRepository(instance(), instance()) }
 
 
 
@@ -46,12 +48,9 @@ class LO1App : Application(), KodeinAware {
             bind() from provider { HomeViewModelFactory(instance(), instance()) }
             bind() from provider { GradesViewModelFactory(instance(), instance()) }
             bind() from provider { PlanViewModelFactory(instance(), instance()) }
-            bind() from provider {
-                AttendanceOverviewViewModelFactory(
-                    instance(),
-                    instance()
-                )
-            }
+            bind() from provider { AttendanceOverviewViewModelFactory(instance(), instance()) }
+            bind() from provider { PlansViewModelFactory(instance(), instance()) }
+
 
             bind() from provider { SettingsViewModelFactory(instance())}
 

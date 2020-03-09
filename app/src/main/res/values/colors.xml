@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#2f50b3</color>
-    <color name="colorPrimaryDark">#1e3e9d</color>
+    <color name="colorPrimaryDark">#002982</color>
     <color name="colorAccent">#eb0071</color>
 
     <!-- HOME CARDS -->
