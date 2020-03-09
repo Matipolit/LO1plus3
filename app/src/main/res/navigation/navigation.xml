@@ -87,5 +87,5 @@
     <fragment
         android:id="@+id/plansFragment"
         android:name="pl.matmar.matipolit.lo1plus.ui.plans.PlansFragment"
-        android:label="PlansFragment" />
+        android:label="Plany lekcji" />
 </navigation>

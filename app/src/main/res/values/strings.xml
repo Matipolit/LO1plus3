@@ -23,6 +23,8 @@
     <string name="const_pref_plans_lastrefresh">pref_plans_lastrefresh</string>
 
     <string name="const_pref_plans_lastplanid">pref_plans_lastplanid</string>
+    <string name="const_pref_plans_lastplanname">pref_plans_lastplanname</string>
+    <string name="const_pref_plans_lastplantype">pref_plans_lastplantype</string>
 
 
 

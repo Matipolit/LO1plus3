@@ -11,21 +11,29 @@
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_weight="1"
+            android:layout_gravity="top"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:clipChildren="false"
-            tools:visibility="gone" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/info_icon"
@@ -57,21 +65,41 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/fab"
-                style="@style/Widget.MaterialComponents.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_home_plan"
+                app:icon="@drawable/ic_home_plan"
                 app:backgroundTint="@color/colorAccent"
-                app:tint="@color/colorAdaptableInvertedHigh"
+                app:iconTint="@color/colorAdaptableInvertedHigh"
+                app:iconTintMode="src_atop"
+                android:textColor="@color/colorAdaptableInvertedHigh"
+                android:text="Wybierz plan"
                 android:onClick="@{() -> viewModel.onSelectEvent()}"
                 android:contentDescription="Wybierz plan"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="@dimen/normal_margin"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:foreground="@color/NormalElevation"
+            android:background="@color/materialBackground"
+            android:elevation="@dimen/elevation_toolbar"
+            android:layout_gravity="bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/small_margin"
+                android:text="@{viewModel.currentPlanName}"
+                tools:text="1Ag Pitagorejska" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

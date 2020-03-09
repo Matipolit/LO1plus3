@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jay.widget.StickyHeadersLinearLayoutManager
 import com.xwray.groupie.Section
@@ -33,6 +34,7 @@ import pl.matmar.matipolit.lo1plus.utils.dpToPx
 import pl.matmar.matipolit.lo1plus.utils.isRefreshNeeded
 import pl.matmar.matipolit.lo1plus.utils.snackbar
 import timber.log.Timber
+
 
 class PlansFragment : Fragment(), KodeinAware{
 
@@ -77,13 +79,20 @@ class PlansFragment : Fragment(), KodeinAware{
 
         var lastRefresh : Long? = null
         var lastPlanID : String? = null
+        var lastPlanName : String? = null
+        var lastPlanType : String? = null
+
 
         sharedPref?.let {
             lastRefresh = sharedPref.getLong(getString(R.string.const_pref_plans_lastrefresh), 0L)
             lastPlanID = sharedPref.getString(getString(R.string.const_pref_plans_lastplanid), null)
+            lastPlanName = sharedPref.getString(getString(R.string.const_pref_plans_lastplanname), null)
+            lastPlanType = sharedPref.getString(getString(R.string.const_pref_plans_lastplantype), null)
+
+
         }
 
-        viewModel.getPlan(lastPlanID)
+        viewModel.getPlan(lastPlanID, lastPlanName, lastPlanType)
 
         if(isRefreshNeeded(context, lastRefresh)){
             viewModel.refreshPlans()
@@ -148,6 +157,12 @@ class PlansFragment : Fragment(), KodeinAware{
             viewModel.refreshPlans()
         }
 
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) binding.fab.shrink() else if (dy < 0) binding.fab.extend()
+            }
+        })
+
         return binding.root
     }
 
@@ -190,6 +205,7 @@ class PlansFragment : Fragment(), KodeinAware{
                     )
 
                 )
+                decorationsAdded = true
             }
         }
     }
@@ -224,30 +240,35 @@ class PlansFragment : Fragment(), KodeinAware{
     }
 
     private fun displayChooseDialog(){
-        val legend = viewModel.legend.value
-        if(legend!=null){
-            MaterialAlertDialogBuilder(context)
-                .setTitle("Wybierz kategorię")
-                .setItems(resources.getStringArray(R.array.plans_category_names), DialogInterface.OnClickListener { dialog, which ->
-                    when(which){
-                        0 -> displayChooseDialogLevel2(legend.Oddziały.options, legend.Oddziały.id)
-                        1 -> displayChooseDialogLevel2(legend.Nauczyciele.options, legend.Nauczyciele.id)
-                        2 -> displayChooseDialogLevel2(legend.Sale.options, legend.Sale.id)
-                    }
+        viewModel.legend.observe(this, Observer {
+            it?.let {
+                Timber.d("legend not null")
+                MaterialAlertDialogBuilder(context)
+                    .setTitle("Wybierz kategorię")
+                    .setItems(resources.getStringArray(R.array.plans_category_names), DialogInterface.OnClickListener { dialog, which ->
+                        when(which){
+                            0 -> displayChooseDialogLevel2(it.Oddziały.options, it.Oddziały.id, "oddział")
+                            1 -> displayChooseDialogLevel2(it.Nauczyciele.options, it.Nauczyciele.id, "nauczyciel")
+                            2 -> displayChooseDialogLevel2(it.Sale.options, it.Sale.id, "sala")
+                        }
 
-                })
-                .show()
-        }
+                    })
+                    .show()
+                viewModel.legend.removeObservers(this)
+            }
+        })
 
     }
 
-    private fun displayChooseDialogLevel2(options: List<PlansLegendOption>?, stringIndex: String){
+    private fun displayChooseDialogLevel2(options: List<PlansLegendOption>?, stringIndex: String, type:String){
         if(options != null){
+            val array = options.asStringList().toTypedArray()
             MaterialAlertDialogBuilder(context)
                 .setTitle("Wybierz plan")
-                .setItems(options.asStringList().toTypedArray(), DialogInterface.OnClickListener{ dialog, which ->
-                    viewModel.getPlan("$stringIndex$which")
+                .setItems(array, DialogInterface.OnClickListener{ dialog, which ->
+                    viewModel.getPlan("$stringIndex${(which+1).toString().padStart(3, '0')}", array[which], type)
                 })
+                .show()
         }
 
     }

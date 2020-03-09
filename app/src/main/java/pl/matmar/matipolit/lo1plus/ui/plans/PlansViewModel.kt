@@ -9,10 +9,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.matmar.matipolit.lo1plus.data.repositories.PlansRepository
 import pl.matmar.matipolit.lo1plus.data.repositories.UserRepository
-import pl.matmar.matipolit.lo1plus.domain.PlansLegend
 import pl.matmar.matipolit.lo1plus.domain.PlansPlan
 import pl.matmar.matipolit.lo1plus.utils.ApiException
 import pl.matmar.matipolit.lo1plus.utils.NoInternetException
+import timber.log.Timber
 
 class PlansViewModel(mRepository: PlansRepository, mUserRepository: UserRepository) : ViewModel(){
 
@@ -24,13 +24,15 @@ class PlansViewModel(mRepository: PlansRepository, mUserRepository: UserReposito
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _legend = MutableLiveData<PlansLegend>()
-    val legend : LiveData<PlansLegend>
-        get() = _legend
+    val legend = repository.legend
 
     private val _currentPlan = MutableLiveData<PlansPlan>()
     val currentPlan : LiveData<PlansPlan>
         get() = _currentPlan
+
+    private val _currentPlanName = MutableLiveData<String>()
+    val currentPlanName : LiveData<String>
+        get() = _currentPlanName
 
     private val _onStartedEvent = MutableLiveData<Boolean>()
     val onStartedEvent : LiveData<Boolean>
@@ -84,14 +86,19 @@ class PlansViewModel(mRepository: PlansRepository, mUserRepository: UserReposito
         }
     }
 
-    fun getPlan(id: String?) {
-        if(id!=null) {
-            _currentPlan.value = repository.getPlan(id.padStart(3, '0'))
+    fun getPlan(index: String?, name:String?, type: String?) {
+        if(index!=null) {
+            _currentPlanName.value = "$type: $name"
+            Timber.d("name: ${_currentPlanName.value}")
+            _currentPlan.value = repository.getPlan(index)
+            Timber.d("Got plan ${currentPlan.value}\nWith index $index")
         }else{
             _currentPlan.value = null
+            _currentPlanName.value = ""
         }
     }
 
     init {
+        _currentPlanName.value = "Wybierz plan"
     }
 }
