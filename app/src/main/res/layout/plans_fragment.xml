@@ -82,12 +82,14 @@
                 android:layout_margin="@dimen/normal_margin"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:foreground="@color/NormalElevation"
             android:background="@color/materialBackground"
-            android:elevation="@dimen/elevation_toolbar"
+            android:elevation="@dimen/elevation_giant"
+            android:visibility="gone"
             android:layout_gravity="bottom">
 
             <TextView

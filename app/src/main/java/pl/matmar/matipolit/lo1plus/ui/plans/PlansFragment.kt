@@ -16,6 +16,9 @@ import com.jay.widget.StickyHeadersLinearLayoutManager
 import com.xwray.groupie.Section
 import kotlinx.android.synthetic.main.home_fragment.recycler_view
 import kotlinx.android.synthetic.main.plan_fragment.*
+import kotlinx.android.synthetic.main.plan_fragment.info_icon
+import kotlinx.android.synthetic.main.plan_fragment.info_text
+import kotlinx.android.synthetic.main.plans_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -173,13 +176,15 @@ class PlansFragment : Fragment(), KodeinAware{
                 if(sections.isNotEmpty()){
                     displayRecycler()
                     initRecyclerView(sections)
+                    bottom_bar.visibility = View.VISIBLE
                 }else{
                     Timber.d("No lessons in current plan")
-                    displayInfo(R.drawable.ic_home_plan, "Brak lekcji w wybranym planie", false)
+                    displayInfo(R.drawable.ic_no_plan, "Brak lekcji w wybranym planie", false)
                 }
             }?: kotlin.run {
                 Timber.d("No plan chosen")
                 displayInfo(R.drawable.ic_no_plan, "Nie wybrano jeszcze żadnego planu", true)
+                bottom_bar.visibility = View.GONE
             }
 
         })
@@ -247,9 +252,9 @@ class PlansFragment : Fragment(), KodeinAware{
                     .setTitle("Wybierz kategorię")
                     .setItems(resources.getStringArray(R.array.plans_category_names), DialogInterface.OnClickListener { dialog, which ->
                         when(which){
-                            0 -> displayChooseDialogLevel2(it.Oddziały.options, it.Oddziały.id, "oddział")
-                            1 -> displayChooseDialogLevel2(it.Nauczyciele.options, it.Nauczyciele.id, "nauczyciel")
-                            2 -> displayChooseDialogLevel2(it.Sale.options, it.Sale.id, "sala")
+                            0 -> displayChooseDialogLevel2(it.Oddziały.options, it.Oddziały.id, "Oddział")
+                            1 -> displayChooseDialogLevel2(it.Nauczyciele.options, it.Nauczyciele.id, "Nauczyciel")
+                            2 -> displayChooseDialogLevel2(it.Sale.options, it.Sale.id, "Sala")
                         }
 
                     })
