@@ -117,9 +117,9 @@ class AttendanceOverviewFragment : Fragment(), KodeinAware{
         })
 
         viewModel.onStartedEvent.observe(this, Observer {
-            swipeContainer.isRefreshing = true
             Timber.d("onStartedEvent")
             if (it == true) {
+                swipeContainer.isRefreshing = true
                 Timber.d(it.toString())
                 //context?.toast("Login started")
                 snackBar(binding, "Odświeżam...", false, snackMargin)

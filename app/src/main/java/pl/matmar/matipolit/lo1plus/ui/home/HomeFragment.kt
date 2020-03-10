@@ -103,9 +103,9 @@ class HomeFragment : Fragment(), KodeinAware {
         })
 
         viewModel.onStartedEvent.observe(this, Observer {
-            swipeContainer.isRefreshing = true
             Timber.d("onStartedEvent")
             if (it == true) {
+                swipeContainer.isRefreshing = true
                 //context?.toast("Login started")
                 binding.root.snackbar("Odświeżam...", showButton = false)
                 viewModel.onStartedEventFinished()
