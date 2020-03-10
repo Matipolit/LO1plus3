@@ -11,11 +11,22 @@
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:clipChildren="false">
+            android:orientation="vertical">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinator"
+                android:layout_weight="1"
+                android:layout_gravity="top"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -23,7 +34,7 @@
                 android:layout_height="0dp"
                 android:clipToPadding="false"
                 android:clipChildren="false"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_frame"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +47,7 @@
                 android:layout_gravity="center"
                 tools:src="@drawable/ic_disconnected"
                 android:tint="@color/colorAdaptableDisabled"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_frame"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -55,6 +66,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/info_icon"
                 tools:layout_editor_absoluteX="16dp"
                 tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -63,9 +78,7 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:clipChildren="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_gravity="bottom">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/bottom_buttons_constraint"
                     android:elevation="@dimen/elevation_giant"
@@ -117,7 +130,8 @@
                         tools:text="06.01 - 12.01" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

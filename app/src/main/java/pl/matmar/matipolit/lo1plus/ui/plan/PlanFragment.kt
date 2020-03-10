@@ -65,8 +65,6 @@ class PlanFragment : Fragment(), KodeinAware{
 
         val swipeContainer = binding.swipeContainer
 
-        val snackMargin = binding.bottomButtonsConstraint.height
-
         val sharedPref = activity?.getSharedPreferences(
             getString(R.string.const_pref_key), Context.MODE_PRIVATE)
 
@@ -90,7 +88,7 @@ class PlanFragment : Fragment(), KodeinAware{
         viewModel.onSuccessEvent.observe(this, Observer {
             swipeContainer.isRefreshing = false
             it?.let {
-                snackBar(binding, it, false, snackMargin)
+                snackBar(binding, it, false)
                 sharedPref?.let {
                     with (it.edit()) {
                         putLong(getString(R.string.const_pref_plan_lastrefresh), Date().time)
@@ -113,7 +111,7 @@ class PlanFragment : Fragment(), KodeinAware{
                 swipeContainer.isRefreshing = true
                 Timber.d(it.toString())
                 //context?.toast("Login started")
-                snackBar(binding, "Odświeżam...", false, snackMargin)
+                snackBar(binding, "Odświeżam...", false)
                 viewModel.onStartedEventFinished()
             }
         })
@@ -122,7 +120,7 @@ class PlanFragment : Fragment(), KodeinAware{
             swipeContainer.isRefreshing = false
             if (it != null) {
                 //context?.toast(it)
-                snackBar(binding, it, false, snackMargin)
+                snackBar(binding, it, false)
                 //bindUI()
                 viewModel.onFailureEventFinished()
                 if(!bound){
@@ -191,8 +189,8 @@ class PlanFragment : Fragment(), KodeinAware{
         }
     }
 
-    private fun snackBar(binding: PlanFragmentBinding, message: String, showButton: Boolean, margin: Int? = null){
-        binding.root.snackbar(message, showButton, bottomMargin = margin)
+    private fun snackBar(binding: PlanFragmentBinding, message: String, showButton: Boolean){
+        binding.coordinator.snackbar(message, showButton)
     }
 
     private fun displayRecycler(){

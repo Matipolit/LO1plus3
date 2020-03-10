@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -48,7 +47,7 @@ fun ProgressBar.hide(){
     visibility = View.GONE
 }
 
-fun View.snackbar(message: String, showButton:Boolean = true, buttonPrompt:String = "OK", bottomMargin: Int? = null){
+fun View.snackbar(message: String, showButton:Boolean = true, buttonPrompt:String = "OK"){
     val view = this
     if(this.isAttachedToWindow){
         Snackbar.make(this, message, Snackbar.LENGTH_LONG).apply {
@@ -56,10 +55,6 @@ fun View.snackbar(message: String, showButton:Boolean = true, buttonPrompt:Strin
                 this.setAction(buttonPrompt){
                     this.dismiss()
                 }
-            }
-            bottomMargin?.let {
-                this.view.layoutParams = (this.view.layoutParams as FrameLayout.LayoutParams)
-                    .apply {setMargins(leftMargin, topMargin, rightMargin, it)}
             }
 
         }.show()

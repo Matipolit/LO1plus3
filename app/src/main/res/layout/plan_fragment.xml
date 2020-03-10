@@ -11,113 +11,125 @@
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:clipChildren="false">
+            android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:clipToPadding="false"
-                android:clipChildren="false"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_frame"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone" />
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinator"
+                android:layout_weight="1"
+                android:layout_gravity="top"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/info_icon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center"
-                tools:src="@drawable/ic_disconnected"
-                android:tint="@color/colorAdaptableDisabled"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_frame"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:clipToPadding="false"
+                    android:clipChildren="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="gone" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/info_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/normal_margin"
-                android:gravity="center"
-                tools:text="Plan z wybranego tygodnia nie został pobrany do trybu online"
-                android:textColor="@color/colorAdaptableDisabled"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintTop_toBottomOf="@+id/info_icon"
-                tools:layout_editor_absoluteX="16dp"
-                tools:visibility="visible" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/info_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    tools:src="@drawable/ic_disconnected"
+                    android:tint="@color/colorAdaptableDisabled"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/info_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:gravity="center"
+                    tools:text="Plan z wybranego tygodnia nie został pobrany do trybu online"
+                    android:textColor="@color/colorAdaptableDisabled"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintTop_toBottomOf="@+id/info_icon"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:visibility="visible" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/bottom_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:clipToPadding="false"
-                android:clipChildren="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottom_buttons_constraint"
-                android:elevation="@dimen/elevation_giant"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="@color/NormalElevation"
-                android:background="@color/materialBackground">
-
-                <ImageButton
-                    android:id="@+id/arrow_right_icon"
-                    android:layout_width="wrap_content"
+                android:clipChildren="false">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottom_buttons_constraint"
+                    android:elevation="@dimen/elevation_giant"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/normal_margin"
-                    android:scaleType="fitStart"
-                    android:onClick="@{() -> viewModel.nextWeek()}"
-                    android:tint="@color/colorAdaptableMedium"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/date_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_arrow_right" />
+                    android:foreground="@color/NormalElevation"
+                    android:background="@color/materialBackground">
 
-                <ImageButton
-                    android:id="@+id/arrow_left_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/normal_margin"
-                    android:scaleType="fitEnd"
-                    android:onClick="@{() -> viewModel.prevWeek()}"
-                    android:tint="@color/colorAdaptableMedium"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/date_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_arrow_left" />
+                    <ImageButton
+                        android:id="@+id/arrow_right_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:scaleType="fitStart"
+                        android:onClick="@{() -> viewModel.nextWeek()}"
+                        android:tint="@color/colorAdaptableMedium"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/date_text"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_right" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/date_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small_margin"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:textColor="@color/colorAdaptableMedium"
-                    app:firstLastDaysOfWeek="@{viewModel.calendar}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="06.01 - 12.01" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageButton
+                        android:id="@+id/arrow_left_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/normal_margin"
+                        android:scaleType="fitEnd"
+                        android:onClick="@{() -> viewModel.prevWeek()}"
+                        android:tint="@color/colorAdaptableMedium"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/date_text"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_left" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/date_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_marginBottom="@dimen/small_margin"
+                        android:textColor="@color/colorAdaptableMedium"
+                        app:firstLastDaysOfWeek="@{viewModel.calendar}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="06.01 - 12.01" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

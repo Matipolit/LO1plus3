@@ -216,7 +216,7 @@ class PlansFragment : Fragment(), KodeinAware{
     }
 
     private fun snackBar(binding: PlansFragmentBinding, message: String, showButton: Boolean, margin: Int? = null){
-        binding.coordinator.snackbar(message, showButton, bottomMargin = margin)
+        binding.coordinator.snackbar(message, showButton)
     }
 
     private fun displayRecycler(){
