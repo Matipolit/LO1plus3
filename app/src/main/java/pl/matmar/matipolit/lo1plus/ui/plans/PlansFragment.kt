@@ -2,6 +2,7 @@ package pl.matmar.matipolit.lo1plus.ui.plans
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -61,6 +62,8 @@ class PlansFragment : Fragment(), KodeinAware{
 
     private var currentPlan : PlansPlan? = null
 
+    var sharedPref: SharedPreferences? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,7 +80,7 @@ class PlansFragment : Fragment(), KodeinAware{
 
         val swipeContainer = binding.swipeContainer
 
-        val sharedPref = activity?.getSharedPreferences(
+        sharedPref = activity?.getSharedPreferences(
             getString(R.string.const_pref_key), Context.MODE_PRIVATE)
 
         var lastRefresh : Long? = null
@@ -87,10 +90,10 @@ class PlansFragment : Fragment(), KodeinAware{
 
 
         sharedPref?.let {
-            lastRefresh = sharedPref.getLong(getString(R.string.const_pref_plans_lastrefresh), 0L)
-            lastPlanID = sharedPref.getString(getString(R.string.const_pref_plans_lastplanid), null)
-            lastPlanName = sharedPref.getString(getString(R.string.const_pref_plans_lastplanname), null)
-            lastPlanType = sharedPref.getString(getString(R.string.const_pref_plans_lastplantype), null)
+            lastRefresh = it.getLong(getString(R.string.const_pref_plans_lastrefresh), 0L)
+            lastPlanID = it.getString(getString(R.string.const_pref_plans_lastplanid), null)
+            lastPlanName = it.getString(getString(R.string.const_pref_plans_lastplanname), null)
+            lastPlanType = it.getString(getString(R.string.const_pref_plans_lastplantype), null)
 
 
         }
@@ -272,6 +275,14 @@ class PlansFragment : Fragment(), KodeinAware{
                 .setTitle("Wybierz plan")
                 .setItems(array, DialogInterface.OnClickListener{ dialog, which ->
                     viewModel.getPlan("$stringIndex${(which+1).toString().padStart(3, '0')}", array[which], type)
+                    sharedPref?.let {
+                        with (it.edit()) {
+                            putString(getString(pl.matmar.matipolit.lo1plus.R.string.const_pref_plans_lastplanid), "$stringIndex${(which+1).toString().padStart(3, '0')}")
+                            putString(getString(pl.matmar.matipolit.lo1plus.R.string.const_pref_plans_lastplanname), array[which])
+                            putString(getString(pl.matmar.matipolit.lo1plus.R.string.const_pref_plans_lastplantype), type)
+                            apply()
+                        }
+                    }
                 })
                 .show()
         }
